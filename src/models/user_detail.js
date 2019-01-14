@@ -1,6 +1,7 @@
 // import node modules
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
+const Int32 = require('mongoose-int32')
 
 // define a schema
 const UserDetailSchema = new mongoose.Schema ({
@@ -10,10 +11,10 @@ const UserDetailSchema = new mongoose.Schema ({
     pdeck           : ObjectId,
     blocked         : [ObjectId],
     current_game    : ObjectId,
-    games_played    : Number,
-    games_won       : Number,
-    jcards_played   : Number,
-    jcards_won      : Number,
+    games_played    : Int32,
+    games_won       : Int32,
+    jcards_played   : Int32,
+    jcards_won      : Int32,
 });
 
 // compile model from schema
