@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // set up mongoDB connection
 // Example URI ---> mongodb+srv://weblab:6jYctMizX5Y5ie6W@catbook-fsjig.mongodb.net/catbookdb?retryWrites=true
-const mongoURL = "mongodb+srv://asdf:dummy@cluster0-guxp5.gcp.mongodb.net/test?retryWrites=true";
+const mongoURL = "mongodb+srv://asdf:dummy@cluster0-guxp5.gcp.mongodb.net/snapstack?retryWrites=true";
 const options = {
   useNewUrlParser: true
 };
