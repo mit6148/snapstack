@@ -9,8 +9,7 @@ const io = require('socket.io')(http);
 // local dependencies
 const db = require('./db');
 const passport = require('./passport');
-const views = require('./routes/views');
-const api = require('./routes/api');
+const api = require('./api');
 const publicPath = path.resolve(__dirname, '..', 'client', 'dist');
 
 // initialize express app
@@ -51,7 +50,6 @@ app.get('/logout', function(req, res) {
 });
 
 // set routes
-app.use('/', views);
 app.use('/api', api );
 app.use(express.static(publicPath));
 
