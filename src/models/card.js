@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // define a schema
-const PCardSchema = new mongoose.Schema ({
+const CardSchema = new mongoose.Schema ({
   text				: String,
   text_creator_id	: ObjectId,
   image_id			: ObjectId,
@@ -12,4 +12,4 @@ const PCardSchema = new mongoose.Schema ({
 });
 
 // compile model from schema
-module.exports = mongoose.model('PCard', PCardSchema);
+module.exports = mongoose.model('Card', CardSchema);
