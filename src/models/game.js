@@ -7,7 +7,7 @@ const Int32 = require('mongoose-int32');
 const GameSchema = new mongoose.Schema ({
   creator_id	: ObjectId,
   players		: [ObjectId],
-  gpcards		: [ObjectId], // play cards, with more info about who played it
+  submitted_cards		: [ObjectId], // submitted cards, with more info about who played it
   jcard_id		: ObjectId, // current judge card
   jdeck			: ObjectId,
   pdeck			: ObjectId,
