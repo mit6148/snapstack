@@ -17,14 +17,7 @@ const GameSchema = new mongoose.Schema ({
   cards_to_win	: Number,
   timeout 		: Number,
   time_started	: Number,
-  game_state	: Number, 
-  
-  /* waiting = 0, 
-  pre-play = 1, 
-  play = 2, 
-  look = 3, 
-  judge = 4, 
-  game over = 5*/
+  game_state	: Number, // waiting = 0, pre-play = 1, play = 2, look = 3, judge = 4, game over = 5
 
 });
 
