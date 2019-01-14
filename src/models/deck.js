@@ -1,13 +1,13 @@
 // import node modules
 const mongoose = require('mongoose');
-const ObjectID = mongoose.Schema.Types.ObjectID;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 // define a schema
 const DeckSchema = new mongoose.Schema ({
   name 		: String,
-  cards		: [ObjectID],
-  creator_id: ObjectID,
-  
+  cards		: [ObjectId],
+  creator_id: ObjectId,
+
 });
 
 // compile model from schema
