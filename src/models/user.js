@@ -10,7 +10,10 @@ const UserSchema = new mongoose.Schema ({
   avatar        : Buffer,
   description   : String,
   email         : String,
-  profile_id    : ObjectId
+  profile_id    : ObjectId,
+  jdeck         : ObjectId,
+  pdeck         : ObjectId,
+  current_game  : ObjectId,
 });
 
 // compile model from schema
