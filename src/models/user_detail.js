@@ -6,11 +6,9 @@ const Int32 = require('mongoose-int32')
 // define a schema
 const UserDetailSchema = new mongoose.Schema ({
     friends_list    : [ObjectId],
+    friend_requests : [ObjectId],
     invites         : [ObjectId],
-    jdeck           : ObjectId,
-    pdeck           : ObjectId,
     blocked         : [ObjectId],
-    current_game    : ObjectId,
     games_played    : Int32,
     games_won       : Int32,
     jcards_played   : Int32,
