@@ -6,14 +6,12 @@ const ObjectId = mongoose.Schema.Types.ObjectId
 const UserSchema = new mongoose.Schema ({
   name          : String,
   googleid      : String,
-  username      : String,
   avatar        : Buffer,
   description   : String,
   email         : String,
-  profile_id    : ObjectId,
-  jdeck         : ObjectId,
-  pdeck         : ObjectId,
+  details_id    : ObjectId,
   current_game  : ObjectId,
+  media         : Map,
 });
 
 // compile model from schema

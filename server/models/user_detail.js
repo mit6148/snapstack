@@ -5,14 +5,7 @@ const Int32 = require('mongoose-int32')
 
 // define a schema
 const UserDetailSchema = new mongoose.Schema ({
-    friends_list    : [ObjectId],
-    friend_requests : [ObjectId],
-    invites         : [ObjectId],
-    blocked         : [ObjectId],
-    games_played    : Int32,
-    games_won       : Int32,
-    jcards_played   : Int32,
-    jcards_won      : Int32,
+    saved_pairs     : [{jcard: ObjectId, pcard: ObjectId}]
 });
 
 // compile model from schema
