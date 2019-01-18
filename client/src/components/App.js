@@ -9,7 +9,7 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            user: null
+            user_id: null
         };
     }
 
@@ -18,11 +18,12 @@ export default class App extends React.Component {
     }
 
     render() {
-        if (this.state.user === null) {
+        if (this.state.user_id === null) {
             return this.withNavButtons(
                 <Switch>
+                    <Route exact path="/" render={() => <Login appState={this.state} />} />
                     <Route exact path="/about" render={() => <About appState={this.state} />} />
-                    <Route path="/" render={() => <Login appState={this.state} />} />
+                    <Redirect from="*" to="/" />
                 </Switch>
             );
         }
@@ -33,6 +34,7 @@ export default class App extends React.Component {
                     <Route exact path="/profile/:id" render={() => <Profile appState={this.state} />} />
                     <Route exact path="/about" render={() => <About appState={this.state} />} />
                     <Route exact path="/game/:code" render={() => <GameContainer appState={this.state} />} />
+                    <Redirect from="*" to="/" />
                 </Switch>
             );
         }
@@ -41,7 +43,7 @@ export default class App extends React.Component {
     withNavButtons = (element) => {
         return (
             <div>
-                <NavButtons appState={this.state} page={element.type} logout={this.logout} />
+                <NavButtons {...element.props} page={element.type} logout={this.logout} />
                 {element}
             </div>
         );
@@ -49,13 +51,13 @@ export default class App extends React.Component {
 
     getUser = () => {
         this.setState({
-            user: '12345' // TODO
+            user_id: '12345' // TODO
         });
     }
 
     logout = () => {
         this.setState({
-            user: null
+            user_id: null
         });
     }
 }
