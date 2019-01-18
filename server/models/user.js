@@ -5,7 +5,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId
 // define a schema
 const UserSchema = new mongoose.Schema ({
   name          : String,
-  googleid      : String,
+  facebookId    : {type: String, index: {unique: true}},
   avatar        : Buffer,
   description   : String,
   email         : String,

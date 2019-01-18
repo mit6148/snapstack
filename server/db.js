@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 // Example URI ---> mongodb+srv://weblab:6jYctMizX5Y5ie6W@catbook-fsjig.mongodb.net/catbookdb?retryWrites=true
 const mongoURL = "mongodb+srv://asdf:dummy@cluster0-guxp5.gcp.mongodb.net/snapstack?retryWrites=true";
 const options = {
-  useNewUrlParser: true
+  useNewUrlParser: true,
+  useCreateIndex: true
 };
 mongoose.connect(mongoURL, options);
 mongoose.Promise = global.Promise;

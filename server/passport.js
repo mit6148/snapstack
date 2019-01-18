@@ -1,16 +1,17 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const fs = require('fs');
+const path = require('path');
 
 const User = require('./models/user');
 
 // set up passport configs
 passport.use(new FacebookStrategy({
   clientID: 543314346187914,
-  clientSecret: fs.readFileSync('secret.txt', 'utf8'),
-  callbackURL: '/auth/facebook/callback',
+  clientSecret: fs.readFileSync(path.resolve(__dirname, 'secret.txt'), 'utf8'),
+  callbackURL: 'http://localhost:3000/auth/facebook/callback',
   enableProof: true,
-  profileFields: ['id', 'email', 'link', 'name_format', 'profile_pic']
+  profileFields: ['id', 'displayName', 'picture.type(large)']
 }, function(accessToken, refreshToken, profile, done) {
   console.log(profile);
   User.findOne({
@@ -21,7 +22,7 @@ passport.use(new FacebookStrategy({
     if (!user) {
       const user = new User({
         name: profile.displayName,
-        googleid: profile.id
+        facebookId: profile.id
       });
 
       user.save(function(err) {

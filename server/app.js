@@ -10,7 +10,7 @@ const io = require('socket.io')(http);
 const db = require('./db');
 const passport = require('./passport');
 const api = require('./api');
-const publicPath = path.resolve(__dirname, '..', 'client', 'dist');
+const publicPath = path.resolve(__dirname, ''..', 'client', 'dist'');
 
 // initialize express app
 const app = express();
@@ -31,7 +31,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // authentication routes
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['profile'] }));
+app.get('/auth/facebook', passport.authenticate('facebook'));
 
 app.get(
   '/auth/facebook/callback',
