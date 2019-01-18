@@ -31,12 +31,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // authentication routes
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }));
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['profile'] }));
 
 app.get(
-  '/auth/google/callback',
+  '/auth/facebook/callback',
   passport.authenticate(
-    'google',
+    'facebook',
     { failureRedirect: '/login' }
   ),
   function(req, res) {

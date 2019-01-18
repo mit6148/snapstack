@@ -1,16 +1,20 @@
 const passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
+const fs = require('fs');
 
 const User = require('./models/user');
 
 // set up passport configs
-passport.use(new GoogleStrategy({
-  clientID: '802188459296-h1gska49bie30n68mti8d07tosc5rc7d.apps.googleusercontent.com',
-  clientSecret: 'h7n4UrnZk18vLKjBH6uzPn0u',
-  callbackURL: '/auth/google/callback'
+passport.use(new FacebookStrategy({
+  clientID: 543314346187914,
+  clientSecret: fs.readFileSync('secret.txt', 'utf8'),
+  callbackURL: '/auth/facebook/callback',
+  enableProof: true,
+  profileFields: ['id', 'email', 'link', 'name_format', 'profile_pic']
 }, function(accessToken, refreshToken, profile, done) {
+  console.log(profile);
   User.findOne({
-    'googleid': profile.id
+    'facebookId': profile.id
   }, function(err, user) {
     if (err) return done(err);
 
