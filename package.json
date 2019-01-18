@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mit6148/bunnybomb123-melodyphu-nsinghal7#readme",
   "dependencies": {
+    "@google-cloud/storage": "^2.3.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "mongoose": "^5.4.3",
