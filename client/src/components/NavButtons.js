@@ -22,7 +22,7 @@ export default class NavButtons extends React.Component {
             case 'About':
                 return (
                     <LogoNavBtn appState={this.props.appState} />
-                    <ProfileNavBtn appState={this.props.appState} />
+                    {this.props.appState.user === null ? null : <ProfileNavBtn appState={this.props.appState} />}
                     <AboutNavBtn appState={this.props.appState} selected={true} />
                 );
             case 'GameContainer':
