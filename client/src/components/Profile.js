@@ -4,7 +4,7 @@ export default class Profile extends React.Component {
     render() {
         return (
             <div>
-                <NavButtons appState={this.props.appState} page="profile" />
+                Profile
             </div>
         );
     }
