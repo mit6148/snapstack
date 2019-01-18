@@ -5,24 +5,26 @@ export default class NavButtons extends React.Component {
         switch(this.props.page) {
             case 'Root':
                 return (
+                    <HomeNavBtn appState={this.props.appState} selected={true} />
                     <ProfileNavBtn appState={this.props.appState} />
                     <AboutNavBtn appState={this.props.appState} />
                 );
             case 'Login':
                 return (
+                    <HomeNavBtn appState={this.props.appState} selected={true} />
                     <AboutNavBtn appState={this.props.appState} />
                 );
             case 'Profile':
                 return (
-                    <LogoNavBtn appState={this.props.appState} />
-                    <ProfileNavBtn appState={this.props.appState} selected={true} />
+                    <HomeNavBtn appState={this.props.appState} />
+                    <ProfileNavBtn appState={this.props.appState} selected={this.props.match.params.id === this.props.appState.user_id} />
                     <AboutNavBtn appState={this.props.appState} />
                     <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} />
                 );
             case 'About':
                 return (
-                    <LogoNavBtn appState={this.props.appState} />
-                    {this.props.appState.user === null ? null : <ProfileNavBtn appState={this.props.appState} />}
+                    <HomeNavBtn appState={this.props.appState} />
+                    {this.props.appState.user_id === null ? null : <ProfileNavBtn appState={this.props.appState} />}
                     <AboutNavBtn appState={this.props.appState} selected={true} />
                 );
             case 'GameContainer':
