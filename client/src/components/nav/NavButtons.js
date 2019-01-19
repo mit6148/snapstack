@@ -33,7 +33,7 @@ export default class NavButtons extends React.Component {
                 return (
                     <HomeNavBtn appState={this.props.appState} />
                     <ProfileNavBtn appState={this.props.appState} selected={this.props.params.id === this.props.appState.userId} />
-                    <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} />
+                    {this.props.params.id === this.props.appState.userId ? <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} /> : null}
                 );
             case 'About':
                 return (
