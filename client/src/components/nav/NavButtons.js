@@ -3,7 +3,6 @@ import HomeNavBtn from "./HomeNavBtn";
 import AboutNavBtn from "./AboutNavBtn";
 import ProfileNavBtn from "./ProfileNavBtn";
 import LogoutNavBtn from "./LogoutNavBtn";
-import QuitNavBtn from "./QuitNavBtn";
 
 export default class NavButtons extends React.Component {
     render() {
@@ -18,12 +17,16 @@ export default class NavButtons extends React.Component {
         switch(this.props.page) {
             case 'Login':
                 return (
-                    <AboutNavBtn appState={this.props.appState} />
+                    <React.Fragment>
+                        <AboutNavBtn appState={this.props.appState} />
+                    </React.Fragment>
                 );
             case 'Home':
                 return (
-                    <AboutNavBtn appState={this.props.appState} />
-                    <ProfileNavBtn appState={this.props.appState} />
+                    <React.Fragment>
+                        <AboutNavBtn appState={this.props.appState} />
+                        <ProfileNavBtn appState={this.props.appState} />
+                    </React.Fragment>
                 );
             case 'GameContainer':
                 return (
@@ -31,13 +34,17 @@ export default class NavButtons extends React.Component {
                 );
             case 'Profile':
                 return (
-                    <HomeNavBtn appState={this.props.appState} />
-                    <ProfileNavBtn appState={this.props.appState} selected={this.props.params.id === this.props.appState.userId} />
-                    {this.props.params.id === this.props.appState.userId ? <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} /> : null}
+                    <React.Fragment>
+                        <HomeNavBtn appState={this.props.appState} />
+                        <ProfileNavBtn appState={this.props.appState} selected={this.props.params.id === this.props.appState.userId} />
+                        {this.props.params.id === this.props.appState.userId ? <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} /> : null}
+                    </React.Fragment>
                 );
             case 'About':
                 return (
-                    <HomeNavBtn appState={this.props.appState} />
+                    <React.Fragment>
+                        <HomeNavBtn appState={this.props.appState} />
+                    </React.Fragment>
                 );
         }
     }
