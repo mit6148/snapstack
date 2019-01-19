@@ -20,7 +20,7 @@ const db = require('./db');
 const passport = require('./passport');
 const passportSocketIo = require('passport.socketio');
 const api = require('./api');
-const publicPath = path.resolve(__dirname, '..', 'client', 'dist');
+const publicPath = path.resolve(__dirname, 'test');
 
 // set POST request body parser
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -63,7 +63,7 @@ app.get('/logout', function(req, res) {
 
 // set routes
 app.use('/api', api );
-app.use(express.static(publicPath));
+app.use('/', express.static(publicPath));
 
 
 // 404 route
