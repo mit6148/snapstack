@@ -39,6 +39,8 @@ module.exports = {
     hot: true,
     proxy: {
       '/api': 'http://localhost:3000',
+      '/about': 'http://localhost:3000',
+      '/profile': 'http://localhost:3000'
     }
   }
 };

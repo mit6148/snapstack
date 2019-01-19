@@ -5,7 +5,7 @@ export default class GameContainer extends React.Component {
     render() {
         return (
             <div>
-            	<NavButtons page='GameContainer' quitGame={this.props.quitGame} />
+            	<NavButtons appState={this.props.appState} page='GameContainer' quitGame={this.props.quitGame} />
                 Game
             </div>
         );

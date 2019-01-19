@@ -5,14 +5,14 @@ import GameContainer from "./GameContainer";
 
 export default class Root extends React.Component {
     render() {
-        if (this.props.appState.user_id === null) {
+        if (this.props.appState.userId === null) {
             return (
                 <div>
                     <Login appState={this.props.appState} />
                 </div>
             );
         }
-        else if (this.props.appState.game_code === null) {
+        else if (this.props.appState.gameCode === null) {
             return (
                 <div>
                     <Home appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} />

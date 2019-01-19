@@ -8,33 +8,33 @@ export default class Home extends React.Component {
         super(props);
 
         this.state = {
-            gameCode: 'XZXZ', // TODO
-            joinGamePopup: null,
-            quitGameWarningPopup: null
+            joinGamePopup: false,
+            newGameWarningPopup: false,
+            joinGameWarningPopup: false
         };
     }
 
     render() {
         return (
             <div>
-                <NavButtons page='Home' />
+                <NavButtons appState={this.props.appState} page='Home' />
                 <Title />
                 <div className="home_btn" onClick={this.onNewGame}>New Game</div>
                 <div className="home_btn" onClick={this.onJoinGame}>Join Game</div>
-                {joinGamePopup ? // TODO
+                {this.state.joinGamePopup ? // TODO
                     <Popup onClose={() => this.setState({joinGamePopup: false})}>
                         Enter game code:
                         <input type="text" />
                         <div onClick={() => this.props.enterGame('XZXZ')}>Play!</div>
                     </Popup>
                 : null}
-                {newGameWarningPopup ?
+                {this.state.newGameWarningPopup ?
                     <Popup onClose={() => this.setState({newGameWarningPopup: false})}>
                         This will quit your ongoing game. Are you sure?
                         <div onClick={() => {this.props.quitGame(); this.onNewGame();}}>Yes</div>
                     </Popup>
                 : null}
-                {joinGameWarningPopup ?
+                {this.state.joinGameWarningPopup ?
                     <Popup onClose={() => this.setState({joinGameWarningPopup: false})}>
                         This will quit your ongoing game. Are you sure?
                         <div onClick={() => {this.props.quitGame(); this.onJoinGame();}}>Yes</div>
