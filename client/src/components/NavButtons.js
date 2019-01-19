@@ -1,4 +1,9 @@
 import React from "react";
+import HomeNavBtn from "./HomeNavBtn";
+import AboutNavBtn from "./AboutNavBtn";
+import ProfileNavBtn from "./ProfileNavBtn";
+import LogoutNavBtn from "./LogoutNavBtn";
+import QuitNavBtn from "./QuitNavBtn";
 
 export default class NavButtons extends React.Component {
     render() {
@@ -11,33 +16,28 @@ export default class NavButtons extends React.Component {
 
     getNavButtons = () => {
         switch(this.props.page) {
-            case 'Root':
-                return (
-                    <HomeNavBtn appState={this.props.appState} selected={true} />
-                    <ProfileNavBtn appState={this.props.appState} />
-                    <AboutNavBtn appState={this.props.appState} />
-                );
             case 'Login':
                 return (
-                    <HomeNavBtn appState={this.props.appState} selected={true} />
                     <AboutNavBtn appState={this.props.appState} />
+                );
+            case 'Home':
+                return (
+                    <AboutNavBtn appState={this.props.appState} />
+                    <ProfileNavBtn appState={this.props.appState} />
+                );
+            case 'GameContainer':
+                return (
+                    null
                 );
             case 'Profile':
                 return (
                     <HomeNavBtn appState={this.props.appState} />
-                    <ProfileNavBtn appState={this.props.appState} selected={this.props.match.params.id === this.props.appState.user_id} />
-                    <AboutNavBtn appState={this.props.appState} />
+                    <ProfileNavBtn appState={this.props.appState} selected={this.props.params.id === this.props.appState.userId} />
                     <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} />
                 );
             case 'About':
                 return (
                     <HomeNavBtn appState={this.props.appState} />
-                    {this.props.appState.user_id === null ? null : <ProfileNavBtn appState={this.props.appState} />}
-                    <AboutNavBtn appState={this.props.appState} selected={true} />
-                );
-            case 'GameContainer':
-                return (
-                    <QuitNavBtn appState={this.props.appState} />
                 );
         }
     }
