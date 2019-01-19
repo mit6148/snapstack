@@ -1,25 +1,27 @@
 import React from "react";
 
 export default class Root extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            gameCode: 'XZXZ' // TODO
-        };
-    }
-
     render() {
-        return (
-            <div>
-                <Title />
-                <Link to={"/game/"+this.state.gameCode} className="home_btn">New Game</Link>
-                <div className="home_btn" onClick={this.onJoinGame}>Join Game</div>
-            </div>
-        );
-    }
-
-    onJoinGame = () => {
-
+        if (this.props.appState.user_id === null) {
+            return (
+                <div>
+                    <Login appState={this.props.appState} />
+                </div>
+            );
+        }
+        else if (this.props.appState.game_code === null) {
+            return (
+                <div>
+                    <Home appState={this.props.appState} />
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>
+                    <GameContainer appState={this.props.appState} />
+                </div>
+            );
+        }
     }
 }
