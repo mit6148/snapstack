@@ -3,6 +3,8 @@ import NavButtons from "../nav/NavButtons";
 import Title from "../univ/Title";
 import Popup from "../univ/Popup";
 
+import "../../css/home.css";
+
 export default class Home extends React.Component {
     constructor(props) {
         super(props);

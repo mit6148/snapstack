@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
+
+$black: #3B3B3D; // headers, captions, etc.
+$dark-gray: #636266; // shadows on light-grey background
+$light-gray: #CCCCCC; // background color
+$white: #F4F4F4; // light text, card borders, chat messages, etc.
+
+$purple: #D5C3DB; // primary accents, nav_btns, etc.
+$purple-shadow: #BCACC1; 
+$blue: #0683E2; // play cards, important text, secondary accents
+$blue-shadow: #0677CE;
+$green: #12B780; // judge cards, important text, secondary accents
+$green-shadow: #10A070;
+
+.nav_btn {
+	display: inline-block;
+	border-radius: 60px;
+	box-shadow: 0px 0px 2px $purple-shadow;
+	padding: 0.5em 0.6em;
+
+	background: $purple;
+	border: none;
+	padding: 15px;
+	color: white;
+
+	#home_nav_btn {
+
+	}
+	#about_nav_btn {
+
+	}
+	#profile_nav_btn {
+
+	}
+	#logout_nav_btn {
+
+	}
+}
+
+.nav_btn:hover {
+	background: $purple-shadow;
+}
+
