@@ -2,9 +2,11 @@
   "name": "snapstack",
   "version": "0.0.0",
   "description": "snapstack game!",
-  "main": "src/app.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --config ./webpack.config.js --mode development --port 5000",
+    "start": "node server/app.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +19,11 @@
   },
   "homepage": "https://github.com/mit6148/bunnybomb123-melodyphu-nsinghal7#readme",
   "dependencies": {
+    "@babel/core": "^7.2.2",
     "@google-cloud/storage": "^2.3.4",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
     "connect-mongo": "^2.0.3",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.2.0",
@@ -33,6 +39,7 @@
   "devDependencies": {
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "webpack": "^4.28.4"
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1"
   }
 }

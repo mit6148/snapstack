@@ -15,7 +15,7 @@ export default class Root extends React.Component {
         else if (this.props.appState.game_code === null) {
             return (
                 <div>
-                    <Home appState={this.props.appState} enterGame={this.props.enterGame} />
+                    <Home appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} />
                 </div>
             );
         }
