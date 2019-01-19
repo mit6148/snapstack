@@ -20,7 +20,7 @@ const db = require('./db');
 const passport = require('./passport');
 const passportSocketIo = require('passport.socketio');
 const api = require('./api');
-const publicPath = path.resolve(__dirname, 'test');
+const publicPath = path.resolve(__dirname, '..', 'client', 'dist');
 
 // set POST request body parser
 app.use(bodyParser.urlencoded({ extended: false }));
