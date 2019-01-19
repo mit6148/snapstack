@@ -1,6 +1,7 @@
 import React from "react";
 import NavButtons from "../nav/NavButtons";
 import Title from "../univ/Title";
+import Popup from "../univ/Popup";
 
 export default class Home extends React.Component {
     constructor(props) {
