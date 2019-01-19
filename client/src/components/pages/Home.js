@@ -31,13 +31,13 @@ export default class Home extends React.Component {
                 {newGameWarningPopup ?
                     <Popup onClose={() => this.setState({newGameWarningPopup: false})}>
                         This will quit your ongoing game. Are you sure?
-                        <div onClick={() => {this.props.quitGame(); this.onNewGame();}}Yes</div>
+                        <div onClick={() => {this.props.quitGame(); this.onNewGame();}}>Yes</div>
                     </Popup>
                 : null}
                 {joinGameWarningPopup ?
                     <Popup onClose={() => this.setState({joinGameWarningPopup: false})}>
                         This will quit your ongoing game. Are you sure?
-                        <div onClick={() => {this.props.quitGame(); this.onJoinGame();}}Yes</div>
+                        <div onClick={() => {this.props.quitGame(); this.onJoinGame();}}>Yes</div>
                     </Popup>
                 : null}
             </div>
