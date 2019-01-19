@@ -4,8 +4,7 @@ const path = require('path');
 
 // set up mongoDB connection
 // Example URI ---> mongodb+srv://weblab:6jYctMizX5Y5ie6W@catbook-fsjig.mongodb.net/catbookdb?retryWrites=true
-const mongoURL = ("mongodb+srv://snapstack-server:"
-                  + fs.readFileSync(path.resolve(__dirname, 'db-secret.txt'), 'utf-8')
+const mongoURL = ("mongodb+srv://snapstack-server:" + process.env.DB_SECRET
                   + "@cluster0-guxp5.gcp.mongodb.net/snapstack?retryWrites=true");
 const options = {
   useNewUrlParser: true,

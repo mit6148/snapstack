@@ -8,7 +8,7 @@ const User = require('./models/user');
 // set up passport configs
 passport.use(new FacebookStrategy({
   clientID: 543314346187914,
-  clientSecret: fs.readFileSync(path.resolve(__dirname, 'secret.txt'), 'utf8'),
+  clientSecret: process.env.FB_SECRET,
   callbackURL: 'http://localhost:3000/auth/facebook/callback',
   enableProof: true,
   profileFields: ['id', 'displayName', 'picture.type(large)']

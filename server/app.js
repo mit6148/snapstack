@@ -1,8 +1,10 @@
 // libraries
+require('dotenv').config();
 const http = require('http');
 const bodyParser = require('body-parser');
 const express = require('express');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 
 // initialize express app
@@ -16,18 +18,24 @@ const onConnection = require('./gameLogic');
 // local dependencies
 const db = require('./db');
 const passport = require('./passport');
+const passportSocketIo = require('passport.socketio');
 const api = require('./api');
-const publicPath = path.resolve(__dirname, '..', 'client', 'dist');
+const publicPath = path.resolve(__dirname, 'test');
 
 // set POST request body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+
+
 // set up sessions
+const sessionStore = new MongoStore({'mongooseConnection': db});
 app.use(session({
-  secret: 'session-secret',
+  key: process.env.SESS_KEY,
+  secret: process.env.SESS_SECRET,
   resave: 'false',
-  saveUninitialized: 'true'
+  saveUninitialized: 'true',
+  store: sessionStore
 }));
 
 // hook up passport
