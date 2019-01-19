@@ -11,7 +11,7 @@ export default class App extends React.Component {
         super(props);
 
         this.state = {
-            userId: null
+            userId: null,
             gameCode: null
         };
     }
@@ -36,13 +36,15 @@ export default class App extends React.Component {
 
     getUser = () => {
         this.setState({
-            userId: '12345' // TODO
+            userId: '12345', // TODO
+            gameCode: null
         });
     }
 
     logout = () => {
         this.setState({
-            userId: null
+            userId: null,
+            gameCode: null
         });
     }
 
@@ -50,6 +52,8 @@ export default class App extends React.Component {
         this.setState({
             gameCode: gameCode
         });
+
+        let socket = null; // TODO
     }
 
     quitGame = () => {
