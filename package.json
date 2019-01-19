@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/mit6148/bunnybomb123-melodyphu-nsinghal7#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.12",
+    "@fortawesome/free-solid-svg-icons": "^5.6.3",
+    "@fortawesome/react-fontawesome": "^0.1.4",
     "connect-mongo": "^2.0.3",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.2.0",
