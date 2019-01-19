@@ -1,8 +1,10 @@
 import React from "react";
 import "../css/app.css";
 import Route from "react-router-dom/es/Route";
-import Switch from "react-router-dom/es/Switch"
-import Root from "./Root"
+import Switch from "react-router-dom/es/Switch";
+import Root from "./Root";
+import About from "./About";
+import Profile from "./Profile";
 
 export default class App extends React.Component {
     constructor(props) {

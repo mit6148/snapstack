@@ -1,4 +1,9 @@
 import React from "react";
+import HomeNavBtn from "./HomeNavBtn";
+import AboutNavBtn from "./AboutNavBtn";
+import ProfileNavBtn from "./ProfileNavBtn";
+import LogoutNavBtn from "./LogoutNavBtn";
+import QuitNavBtn from "./QuitNavBtn";
 
 export default class NavButtons extends React.Component {
     render() {
@@ -19,8 +24,8 @@ export default class NavButtons extends React.Component {
             case 'Home':
                 return (
                     <HomeNavBtn appState={this.props.appState} selected={true} />
-                    <ProfileNavBtn appState={this.props.appState} />
                     <AboutNavBtn appState={this.props.appState} />
+                    <ProfileNavBtn appState={this.props.appState} />
                 );
             case 'GameContainer':
                 return (
@@ -29,15 +34,15 @@ export default class NavButtons extends React.Component {
             case 'Profile':
                 return (
                     <HomeNavBtn appState={this.props.appState} />
-                    <ProfileNavBtn appState={this.props.appState} selected={this.props.params.id === this.props.appState.userId} />
                     <AboutNavBtn appState={this.props.appState} />
+                    <ProfileNavBtn appState={this.props.appState} selected={this.props.params.id === this.props.appState.userId} />
                     <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} />
                 );
             case 'About':
                 return (
                     <HomeNavBtn appState={this.props.appState} />
-                    {this.props.appState.userId === null ? null : <ProfileNavBtn appState={this.props.appState} />}
                     <AboutNavBtn appState={this.props.appState} selected={true} />
+                    {this.props.appState.userId === null ? null : <ProfileNavBtn appState={this.props.appState} />}
                 );
         }
     }

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "react-router-dom/es/Link";
 
 export default class AboutNavBtn extends React.Component {
     render() {

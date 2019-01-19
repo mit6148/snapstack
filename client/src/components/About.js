@@ -1,4 +1,5 @@
 import React from "react";
+import NavButtons from "./NavButtons";
 
 export default class About extends React.Component {
     render() {

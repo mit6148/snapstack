@@ -1,4 +1,7 @@
 import React from "react";
+import Login from "./Login";
+import Home from "./Home";
+import GameContainer from "./GameContainer";
 
 export default class Root extends React.Component {
     render() {
@@ -12,14 +15,14 @@ export default class Root extends React.Component {
         else if (this.props.appState.game_code === null) {
             return (
                 <div>
-                    <Home appState={this.props.appState} />
+                    <Home appState={this.props.appState} enterGame={this.props.enterGame} />
                 </div>
             );
         }
         else {
             return (
                 <div>
-                    <GameContainer appState={this.props.appState} />
+                    <GameContainer appState={this.props.appState} quitGame={this.props.quitGame} />
                 </div>
             );
         }
