@@ -26,5 +26,10 @@
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "webpack": "^4.28.4"
   }
 }
