@@ -24,6 +24,8 @@
     "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.5",
     "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "connect-mongo": "^2.0.3",
     "cookie-parser": "^1.4.3",
     "dotenv": "^6.2.0",
