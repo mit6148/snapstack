@@ -1,6 +1,6 @@
 import React from "react";
-import NavButtons from "./NavButtons";
-import Title from "./Title";
+import NavButtons from "../nav/NavButtons";
+import Title from "../univ/Title";
 
 export default class Login extends React.Component {
     render() {
