@@ -3,7 +3,7 @@ import React from "react";
 export default class NavButtons extends React.Component {
     render() {
         return (
-            <div>
+            <div className = 'nav_buttons'>
                 getNavButtons();
             </div>
         );
