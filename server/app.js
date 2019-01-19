@@ -90,4 +90,10 @@ server.listen(port, function() {
 
 
 
+io.use(passportSocketIo.authorize({
+  key: process.env.SESS_KEY,
+  secret: process.env.SESS_SECRET,
+  store: sessionStore
+}));
+
 io.on('connect', socket => onConnection(socket, io));

@@ -1,8 +1,8 @@
 
 
 function onConnection(socket, io) {
-    const user = socket.request._query;
-    console.log("user: " + Object.keys(user));
+    const user = socket.request.user;
+    console.log("user: " + user.name);
 }
 
 
