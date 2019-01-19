@@ -18,6 +18,7 @@
   "homepage": "https://github.com/mit6148/bunnybomb123-melodyphu-nsinghal7#readme",
   "dependencies": {
     "@google-cloud/storage": "^2.3.4",
+    "connect-mongo": "^2.0.3",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
@@ -25,6 +26,7 @@
     "mongoose-int32": "^0.3.1",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
+    "passport.socketio": "^3.7.0",
     "socket.io": "^2.2.0"
   },
   "devDependencies": {
