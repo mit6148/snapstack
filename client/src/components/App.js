@@ -29,7 +29,7 @@ export default class App extends React.Component {
                     <Route exact path="/" render={() => <Root appState={this.state} enterGame={this.enterGame} quitGame={this.quitGame} />} />
                     <Route exact path="/about" render={() => <About appState={this.state} />} />
                     {this.state.user_id === null ? null :
-                        <Route exact path="/profile/:id" render={() => <Profile appState={this.state} logout={this.logout} />} />}
+                        <Route exact path="/profile/:id" render={(props) => <Profile appState={this.state} id={props.match.params.id} logout={this.logout} />} />}
                     <Redirect from="*" to="/" />
                 </Switch>
             </div>

@@ -6,7 +6,7 @@ export default class Login extends React.Component {
     render() {
         return (
             <div>
-            	<NavButtons page='Login' />
+            	<NavButtons appState={this.props.appState} page='Login' />
                 <Title />
                 <a className="home_btn" href="/auth/facebook">Log In</a>
             </div>
