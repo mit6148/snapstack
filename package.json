@@ -17,7 +17,11 @@
   },
   "homepage": "https://github.com/mit6148/bunnybomb123-melodyphu-nsinghal7#readme",
   "dependencies": {
+    "@babel/core": "^7.2.2",
     "@google-cloud/storage": "^2.3.4",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^8.0.5",
+    "babel-polyfill": "^6.26.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
@@ -30,6 +34,7 @@
   "devDependencies": {
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "webpack": "^4.28.4"
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1"
   }
 }
