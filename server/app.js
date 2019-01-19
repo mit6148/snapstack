@@ -4,16 +4,20 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const io = require('socket.io')(http);
+
+// initialize express app
+const app = express();
+const server = http.Server(app);
+
+
+const io = require('socket.io')(server);
+const onConnection = require('./gameLogic');
 
 // local dependencies
 const db = require('./db');
 const passport = require('./passport');
 const api = require('./api');
-const publicPath = path.resolve(__dirname, ''..', 'client', 'dist'');
-
-// initialize express app
-const app = express();
+const publicPath = path.resolve(__dirname, '..', 'client', 'dist');
 
 // set POST request body parser
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -72,7 +76,10 @@ app.use(function(err, req, res, next) {
 
 // port config
 const port = 3000; // config variable
-const server = http.Server(app);
 server.listen(port, function() {
   console.log('Server running on port: ' + port);
 });
+
+
+
+io.on('connect', socket => onConnection(socket, io));

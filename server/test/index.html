@@ -6,4 +6,14 @@
 </head>
 <body>
 <a href="/auth/facebook"> login </a>
+<a onclick="connect()"> connect </a>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+    function connect() {
+        const socket = io();
+        socket.on('connect', () => {
+            console.log("connected");
+        });
+    }
+</script>
 </html>
