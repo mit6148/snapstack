@@ -8,7 +8,7 @@ export default class NavButtons extends React.Component {
     render() {
         return (
             <div className = 'nav_buttons'>
-                getNavButtons();
+                {this.getNavButtons()}
             </div>
         );
     }

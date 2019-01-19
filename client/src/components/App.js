@@ -1,5 +1,6 @@
 import React from "react";
 import Route from "react-router-dom/es/Route";
+import Redirect from "react-router-dom/es/Redirect";
 import Switch from "react-router-dom/es/Switch";
 import Root from "./pages/Root";
 import About from "./pages/About";
@@ -8,6 +9,8 @@ import Profile from "./pages/Profile";
 export default class App extends React.Component {
     constructor(props) {
         super(props);
+
+        console.log('hi');
 
         this.state = {
             userId: null,
