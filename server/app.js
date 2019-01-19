@@ -63,8 +63,14 @@ app.get('/logout', function(req, res) {
 
 // set routes
 app.use('/api', api );
-app.use('/', express.static(publicPath));
+app.get('/profile/:user', function(req, res) {
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+});
 
+app.get('/about', function(req, res) {
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
+});
+app.use('/', express.static(publicPath));
 
 // 404 route
 app.use(function(req, res, next) {

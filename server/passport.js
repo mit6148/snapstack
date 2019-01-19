@@ -13,7 +13,6 @@ passport.use(new FacebookStrategy({
   enableProof: true,
   profileFields: ['id', 'displayName', 'picture.type(large)']
 }, function(accessToken, refreshToken, profile, done) {
-  console.log(profile);
   User.findOne({
     'facebookId': profile.id
   }, function(err, user) {
