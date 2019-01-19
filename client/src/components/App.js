@@ -10,8 +10,6 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
 
-        console.log('hi');
-
         this.state = {
             userId: null,
             gameCode: null
