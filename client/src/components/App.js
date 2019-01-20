@@ -52,8 +52,6 @@ export default class App extends React.Component {
         this.setState({
             gameCode: gameCode
         });
-
-        let socket = null; // TODO
     }
 
     quitGame = () => {

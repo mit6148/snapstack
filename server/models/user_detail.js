@@ -5,7 +5,12 @@ const Int32 = require('mongoose-int32')
 
 // define a schema
 const UserDetailSchema = new mongoose.Schema ({
-    saved_pairs     : [{jcard: ObjectId, pcard: ObjectId}]
+    name            : String,
+    saved_pairs     : [{jcard: ObjectId, pcard: ObjectId}],
+    avatar          : String, // format: "data:[content-type];base64,[base64 encoded image]"
+    description     : String,
+    email           : String,
+    media           : Map,
 });
 
 // compile model from schema

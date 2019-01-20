@@ -1,18 +1,12 @@
-// libraries
-require('dotenv').config();
-const http = require('http');
+require('dotenv').config(); // keep this as first line
+
+const {http, express, app, server, io} = require('./requirements');
 const bodyParser = require('body-parser');
-const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 
-// initialize express app
-const app = express();
-const server = http.Server(app);
 
-
-const io = require('socket.io')(server);
 const {onConnection, getCurrentGame} = require('./gameLogic');
 
 // local dependencies
@@ -102,4 +96,4 @@ io.use(passportSocketIo.authorize({
   store: sessionStore
 }));
 
-io.on('connect', socket => onConnection(socket, io));
+io.on('connect', socket => onConnection(socket));

@@ -1,14 +1,10 @@
 const User = require('./models/user');
+const UserDetail = require('./models/user_detail');
 const PCard = require('./models/pcard');
-const {gameStates} = require("../config");
+const JCard = require('./models/jcard');
+const {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, NUM_JCARDS} = require("../config");
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
-
-let codeToGameMap = {};
-let userToGameMap = {};
-
-function getCurrentGame(user) {
-    return userToGameMap[user._id];
-}
+const {io} = require('./requirements');
 
 function generateRoomCode(length) {
     let code = "";
@@ -17,117 +13,265 @@ function generateRoomCode(length) {
     }
 }
 
-function generateUnusedRoomCode() {
-    const size = Object.keys(codeToGameMap).length;
-    const minLetters = Math.ceil(Math.pow(size + 1, 1.0 / 26)) + 2;
-    while(true) {
-        const code = generateRoomCode(minLetters);
-        if(code in codeToGameMap) {
-            return code;
+function shuffle(array) { // shuffle in place
+    let currentIndex = array.length;
+    while(currentIndex !== 0) {
+        const randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        const temp = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temp;
+    }
+    return array;
+}
+
+
+class PCardRef {
+    constructor(_id, faceup) {
+        this._id = _id;
+        this.faceup = faceup;
+    }
+
+    outputRepPromise(redactCreator) {
+        return PCard.findOne({_id: this._id}).exec()
+            .then(cardInfo => downloadImagePromise(cardInfo.image_ref))
+            .then(image => ({_id: this._id, image: image, text: cardInfo.text,
+                            creator_id: redactCreator ? undefined : card.creator_id}));
+    }
+}
+
+class Player { // do not use constructor, use fromUserPromise
+    constructor(user, detail) {
+        this._id = user._id,
+        this.media = detail.media,
+        this.score = 0;
+        this.hasPlayed = false;
+        this.pCardRef = null;
+        this.connected = true;
+        this.name = detail.name;
+        this.avatar = detail.avatar;
+    }
+
+    getPCardRef() {
+        return this.pCardRef;
+    }
+
+    redacted() {
+        return {_id: this._id, media: this.media, score: this.score, hasPlayed: this.hasPlayed,
+                connected: this.connected, name: this.name, avatar: this.avatar};
+    }
+
+    is(player) {
+        return this._id === player._id;
+    }
+}
+Player._idToPlayerMap = {}; // keep right after class Player definition
+Player.fromUserPromise = (user) => {
+    const found = Player._idToPlayerMap[user._id];
+    if(found) {
+        return Promise.resolve(found);
+    } else {
+        return UserDetail.findOne({_id: user.detail_id}).exec().then(detail => new Player(user, detail));
+    }
+};
+
+
+class Game {
+    constructor(code, cardsToWin) {
+        this.players = []; // first player is judge when relevant
+        this.gameState = gameStates.LOBBY;
+        this.jCards = null; // format: [{text, _id}]
+        this.pCardRefArray = null;
+        this.pCardIndex = null;
+        this.endTime = null;
+        this.gameCode = code;
+        this.cardsToWin = cardsToWin;
+        this.jCardsSeen = [];
+    }
+
+    formatAllPCardsPromise(player) {
+        switch(this.gameState) {
+            case gameStates.SUBMIT:
+                const pCardRef = player.getPCardRef();
+                return pCardRef ? Promise.resolve([]) : pCardRef.outputRepPromise(false).then(card => [card]);
+            case gameStates.JUDGE: case gameStates.ROUND_OVER:
+                return Promise.all(this.pCardRefArray.map(
+                    pCardRef => pCardRef.outputRepPromise(
+                        this.gameState == gameStates.ROUND_OVER)));
+            default:
+                return Promise.resolve(null);
         }
     }
-}
 
-function createGame(user, cardsToWin) {
-    if(user._id in userToGameMap) {
-        removePlayer(user, userToGameMap[user._id].gameCode);
+    generateJCardsPromise() {
+        return JCard.aggregate([
+            {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
+            {$sample: {$size: NUM_JCARDS}} // warning: try to prevent concurrent modification error & memory excess (100MB)
+            ])
+            .then(jCards => {
+                this.jCards = jCards;
+                this.jCardsSeen += jCards.map(card => card._id);
+            });
     }
-    const code = generateUnusedRoomCode();
-    const game = codeToGameMap[code] = {
-        players: [],
-        _idToPlayerMap: {}, // must contain references to same player object
-        gameState: gameStates.LOBBY,
-        judge_id: null,
-        jCards: null,
-        pCardArray: null,
-        pCardIndex: null,
-        gameCode: code,
-        "cardsToWin": cardsToWin,
+
+
+// PUBLIC METHODS
+
+    addPlayer(player) {
+        this.players.push(player);
     }
-    addPlayer(user, game);
-    return game;
+
+    isFull() {
+        return this.players.length >= MAX_PLAYERS;
+    }
+
+    start() {
+        // must randomize player order
+        shuffle(this.players);
+        this.judgeAssign();
+    }
+
+    isJudge(player) {
+        return this.players.length > 0 && this.players[0].is(player);
+    }
+
+// EMIT AND BROADCAST METHODS
+
+    emitRefreshGame(socket, player) {
+        this.formatAllPCardsPromise(player)
+            .then(pCards => socket.emit('refreshGame',
+                this.players.map(player => player.redacted()), this.gameState, this.jCards.map(jCard => jCard.text),
+                pCards, this.pCardIndex, this.endTime, this.cardsToWin, this.gameCode))
+            .catch(err => console.log("emitRefreshGame had error!!!"));
+    }
+
+    judgeAssign() {
+        this.generateJCardsPromise().then(() => {
+            this.gameState = gameStates.JCHOOSE;
+            io.in(this.gameCode)
+                .emit('judgeAssign', this.players.map(player => player._id), this.jCards.map(jCard => jCard.text));
+        });
+    }
+
+    startRoundAndCheckIndex(jCardIndex) {
+        if(this.jCardIndex >= this.jCards.length || this.jCardIndex < 0) {
+            console.log("judge submitted invalid index");
+            return;
+        }
+        this.jCards = [this.jCards[jCardIndex]];
+        this.endTime = Date.now() + TIME_LIMIT_MILLIS;
+        io.in(this.gameCode).emit('roundStart', jCardIndex, this.endTime);
+    }
+
 }
 
-function removePlayer(user, gameCode) {
+class GameManager {
+    constructor() {
+        this.codeToGameMap = {};
+        this.userToGameMap = {};
+    }
 
-}
-
-function addPlayer(user, game) {
-    const player = {
-        _id: user._id,
-        media: {
-            fb: user.facebookLink,
-            insta: user.instaLink
-        },
-        score: 0,
-        hasPlayed: false,
-        pCard_id: null,
-        connected: true,
-        name: user.name,
-        avatar: user.avatar,
-        // can add socket _id/ref here if need be, but then watch out for sending game.players
-    };
-    game.players.push(player);
-    game._idToPlayerMap[user._id] = player;
-    userToGameMap[user._id] = game;
-}
-
-function redact(object, fields) {
-    const ans = {};
-    for(let key in object) {
-        if(!(key in fields)) {
-            ans[key] = object[key];
+    generateUnusedRoomCode() {
+        const size = Object.keys(this.codeToGameMap).length;
+        const minLetters = Math.ceil(Math.pow(size + 1, 1.0 / 26)) + 2;
+        while(true) {
+            const code = generateRoomCode(minLetters);
+            if(code in this.codeToGameMap) {
+                return code;
+            }
         }
     }
-    return ans;
-}
 
-function getImagePromise(imageRef) {
-    return downloadImagePromise(imageRef);
-}
-
-function fullPCardPromise(pCard_id, faceup, redactCreator) {
-    return PCard.findOne({_id: pCard_id}).exec()
-    .then(card => getImagePromise(card.image_ref)
-                .then(image => {_id: card._id, image: image, text: card.text,
-                                creator_id: card.creator_id, faceup: faceup}))
-    .then(card => redactCreator ? redact(card, ["creator"]) : card);
-}
-
-function allPCardsPromise(user, game) {
-    if(game.gameState == gameStates.SUBMIT) {
-        const pCard_id = game._idToPlayerMap[user._id].pCard_id;
-        return pCard_id == null ? Promise.resolve([]) : fullPCardPromise(pCard_id, true, false).then(card => [card]);
-    } else if(game.gameState != gameStates.JUDGE && game.gameState != gameStates.ROUND_OVER) {
-        return Promise.resolve(null);
+    getCurrentGame(userOrPlayer) {
+        return this.userToGameMap[userOrPlayer._id];
     }
-    return Promise.all(game.pCardArray.map(
-        pCardData => fullPCardPromise(pCardData._id, pCardData.faceup, game.gameState != gameStates.ROUND_OVER)));
+
+    removePlayer(player, game) {
+        console.log("@nikhil finish remove player");
+        //TODO(niks)
+    }
+
+    addPlayerToGame(socket, player, game) {
+        const previous = this.userToGameMap[player._id];
+        if(previous) {
+            this.removePlayer(player, previous);
+        }
+        game.addPlayer(player);
+        this.userToGameMap[player._id] = game;
+        socket.join(game.gameCode); // add to room listeners
+        game.emitRefreshGame(socket, player);
+    }
+
+
+// SOCKET EVENT HANDLERS
+
+
+    handleNewGame(socket, player, cardsToWin) {
+        const code = this.generateUnusedRoomCode();
+        const game = new Game(code, cardsToWin);
+        codeToGameMap[code] = game;
+        this.addPlayerToGame(socket, player, game);
+    }
+
+    handleJoinGame(socket, player, gameCode) {
+        const game = this.getCurrentGame(player);
+        if(!game) {
+            socket.emit('rejectConnection', 'Invalid room code');
+        } else if(game.isFull()) {
+            socket.emit('rejectConnection', "Room full :'(");
+        } else {
+            this.addPlayerToGame(socket, player, game);
+            socket.to(gameCode).emit('nuj', player.redacted()); // emit to all but newcomer
+        }
+    }
+
+    handleStartGame(player) {
+        const game = this.getCurrentGame(player);
+        if(!game || game.gameState != gameStates.LOBBY) {
+            return console.log("player " + player._id + " tried to start game in wrong state");
+        }
+        game.start();
+    }
+
+    handleJCardChoice(player, jCardIndex) {
+        const game = this.getCurrentGame(player);
+        if(!game || !game.isJudge(player)) {
+            return console.log("player " + player._id + " tried to choose j card in wrong state");
+        }
+        game.startRoundAndCheckIndex(jCardIndex); // this should be the only mutator
+    }
+
+    handleSubmitCard(socket, player, image, text) {
+        //TODO(niks)
+    }
 }
 
+const manager = new GameManager();
 
-
-function emitRefreshGame(socket, user, game) {
-    allPCardsPromise(user, game)
-    .then(pCards => socket.emit('refreshGame',
-        game.players.map(player => redact(player, ["pCard_id"])),
-        game.gameState, game.judge_id, game.jCards, pCards, game.pCardIndex, game.gameCode, game.cardsToWin));
-}
-
-function onConnection(socket, io) {
+function onConnection(socket) {
     const user = socket.request.user;
     if(!user.logged_in) {
         socket.disconnect(true); // close socket fully
-        return; // stop 
+        return;
     }
 
-    socket.on('newGame', function(cardsToWin) {
-        const game = createGame(user, cardsToWin);
-        socket.join(game);
-        emitRefreshGame(socket, user, game);
-    });
+    Player.fromUserPromise(user)
+        .then(player => {
+            socket.on('newGame', cardsToWin => manager.handleNewGame(socket, player, cardsToWin));
+            socket.on('joinGame', gameCode => manager.handleJoinGame(socket, player, gameCode));
+            socket.on('startGame', () => manager.handleStartGame(player));
+            socket.on('jCardChoice', jCardIndex => manager.handleJCardChoice(player, jCardIndex));
+            socket.on('submitCard', (image, text) => manager.handleSubmitCard(socket, player, image, text));
+        })
+        .catch(err => {
+            console.log("failed to get user --> player: " + err);
+            socket.disconnect(true);
+        });
 }
 
+function getCurrentGame(user) {
+    return manager.getCurrentGame(user);
+}
 
 
 
