@@ -16,13 +16,13 @@ div {
 }
 
 .title {
-	font-size: 140px;
+	font-size: 160px;
 	text-align: center;
 	font-weight: 900;
 
 	letter-spacing: 0.05em;
 
-	background: -webkit-linear-gradient($white, $purple-dark);
+	background: -webkit-linear-gradient($blue-light, $green-light);
   	-webkit-background-clip: text;
   	-webkit-text-fill-color: transparent;
 
@@ -70,5 +70,5 @@ div {
 }
 
 body {
-	background-color: $background-blue;
+	background-color: $light-gray;
 }

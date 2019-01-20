@@ -3,7 +3,7 @@ import React from "react";
 export default class Popup extends React.Component {
     render() {
         return (
-            <div>
+            <div className="popup">
                 <div>
                     {this.props.children}
                 </div>

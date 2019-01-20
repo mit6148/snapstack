@@ -19,7 +19,6 @@ export default class Home extends React.Component {
     render() {
         return (
             <div>
-
                 <div className="home_center">
                     <Title/>
                     <div className="home_btn new_game" onClick={this.onNewGame}>New Game</div>

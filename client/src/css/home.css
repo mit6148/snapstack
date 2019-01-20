@@ -13,11 +13,11 @@ div {
 }
 
 .title {
-  font-size: 140px;
+  font-size: 160px;
   text-align: center;
   font-weight: 900;
   letter-spacing: 0.05em;
-  background: -webkit-linear-gradient(#F4F4F4, #8E7599);
+  background: -webkit-linear-gradient(#0683E2, #12B780);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(2px 5px #7E7C82);
@@ -76,7 +76,7 @@ div {
 }
 
 body {
-  background-color: #99D6F7;
+  background-color: #CCCCCC;
 }
 
 /*# sourceMappingURL=home.css.map */
