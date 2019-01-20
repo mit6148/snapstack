@@ -24,7 +24,7 @@ export default class GameContainer extends React.Component {
             judgeQuit: false // if JCHOOSE, SUBMIT, or JUDGE
         };
 
-        this.socket = connect();
+        this.socket = this.connect();
     }
 
     render() {
@@ -65,17 +65,17 @@ export default class GameContainer extends React.Component {
                 jCards: jCards
             });
         });
-        socket.on('roundStart', (jCardIndex, endTime) =>
+        socket.on('roundStart', (jCardIndex, endTime) => {
             this.setState({
                 gameState: gameStates.SUBMIT,
                 players: new Map(Array.from(this.state.players, ([playerId, player]) => [playerId, update(player, {hasPlayed: {$set: false}})])),
                 jCardIndex: jCardIndex,
                 endTime: endTime
             });
-        )
+        });
         socket.on('turnedIn', (creator_id, pCard_id) => {
             this.setState({
-                players: update(this.state.players, {[creator_id]: {hasPlayed: {$set: true}}})
+                players: update(this.state.players, {[creator_id]: {hasPlayed: {$set: true}}}),
                 pCards: (pCard_id !== null && pCards.length === 1 && creator_id === pCards[0].creator_id)
                             ? update(this.state.pCards, {0: {_id: {$set: pCard_id}}})
                             : this.state.pCards

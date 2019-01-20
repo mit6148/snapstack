@@ -251,6 +251,7 @@ const manager = new GameManager();
 function onConnection(socket) {
     const user = socket.request.user;
     if(!user.logged_in) {
+        console.log('not logged in!');
         socket.disconnect(true); // close socket fully
         return;
     }

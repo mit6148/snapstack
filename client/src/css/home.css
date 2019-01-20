@@ -26,8 +26,8 @@ div {
 /* Flash class and keyframe animation */
 .title:hover {
   color: #f2f;
-  -webkit-animation: flash linear 2s infinite;
-  animation: flash linear 2s infinite;
+  -webkit-animation: flash linear 1s;
+  animation: flash linear 1s;
 }
 
 @-webkit-keyframes flash {
@@ -35,7 +35,7 @@ div {
     opacity: 1;
   }
   50% {
-    opacity: 0.1;
+    opacity: 0.2;
   }
   100% {
     opacity: 1;
@@ -46,7 +46,7 @@ div {
     opacity: 1;
   }
   50% {
-    opacity: 0.1;
+    opacity: 0.2;
   }
   100% {
     opacity: 1;
