@@ -1,6 +1,6 @@
 // dependencies
 const express = require('express');
-const {getCurrentGame} = require('./gameLogic');
+const {getCurrentGameCode} = require('./gameLogic');
 const UserDetail = require('./models/user_detail');
 
 
@@ -22,7 +22,7 @@ router.get('/whoami', function(req, res) {
                  email: detail.email,
                  media: detail.media,
                  _id: req.user._id,
-                 currentGame: getCurrentGame(user)}
+                 currentGameCode: getCurrentGameCode(user)}
                 ))
             .catch(err => {
                 console.log("failed in whoami");
