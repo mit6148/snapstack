@@ -1,6 +1,7 @@
 const User = require('./models/user');
 const PCard = require('./models/pcard');
-const {gameStates} = require("../config.js");
+const {gameStates} = require("../config");
+const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 
 let codeToGameMap = {};
 let userToGameMap = {};
@@ -38,7 +39,7 @@ function createGame(user, cardsToWin) {
         gameState: gameStates.LOBBY,
         judge_id: null,
         jCards: null,
-        pCard_ids: null,
+        pCardArray: null,
         pCardIndex: null,
         gameCode: code,
         "cardsToWin": cardsToWin,
@@ -62,6 +63,7 @@ function addPlayer(user, game) {
         hasPlayed: false,
         pCard_id: null,
         connected: true,
+        name: user.name,
         avatar: user.avatar,
         // can add socket _id/ref here if need be, but then watch out for sending game.players
     };
@@ -81,24 +83,26 @@ function redact(object, fields) {
 }
 
 function getImagePromise(imageRef) {
-
+    return downloadImagePromise(imageRef);
 }
 
-function fullPCardPromise(pCard_id, redactCreator) {
+function fullPCardPromise(pCard_id, faceup, redactCreator) {
     return PCard.findOne({_id: pCard_id}).exec()
     .then(card => getImagePromise(card.image_ref)
-                .then(image => {_id: card._id, image: image, text: card.text, creator: card.creator}))
+                .then(image => {_id: card._id, image: image, text: card.text,
+                                creator_id: card.creator_id, faceup: faceup}))
     .then(card => redactCreator ? redact(card, ["creator"]) : card);
 }
 
 function allPCardsPromise(user, game) {
     if(game.gameState == gameStates.SUBMIT) {
         const pCard_id = game._idToPlayerMap[user._id].pCard_id;
-        return pCard_id == null ? Promise.resolve([]) : fullPCardPromise(pCard_id, false).then(card => [card]);
+        return pCard_id == null ? Promise.resolve([]) : fullPCardPromise(pCard_id, true, false).then(card => [card]);
     } else if(game.gameState != gameStates.JUDGE && game.gameState != gameStates.ROUND_OVER) {
         return Promise.resolve(null);
     }
-    return Promise.all(game.pCard_ids.map(pCard_id => fullPCardPromise(pCard_id, game.gameState != gameStates.ROUND_OVER)));
+    return Promise.all(game.pCardArray.map(
+        pCardData => fullPCardPromise(pCardData._id, pCardData.faceup, game.gameState != gameStates.ROUND_OVER)));
 }
 
 
