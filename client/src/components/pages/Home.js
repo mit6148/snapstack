@@ -20,9 +20,9 @@ export default class Home extends React.Component {
         return (
             <div>
                 <NavButtons appState={this.props.appState} page='Home' />
-                <Title />
-                <div className="home_btn" onClick={this.onNewGame}>New Game</div>
-                <div className="home_btn" onClick={this.onJoinGame}>Join Game</div>
+                <Title/>
+                <div className="home_btn new_game" onClick={this.onNewGame}>New Game</div>
+                <div className="home_btn join_game" onClick={this.onJoinGame}>Join Game</div>
                 {this.state.joinGamePopup ? // TODO
                     <Popup onClose={() => this.setState({joinGamePopup: false})}>
                         Enter game code:

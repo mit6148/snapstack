@@ -12,21 +12,21 @@ export default class Root extends React.Component {
     render() {
         if (this.props.appState.userId === null) {
             return (
-                <div>
+                <div className='login_page'>
                     <Login appState={this.props.appState} />
                 </div>
             );
         }
         else if (this.props.appState.gameCode === null) {
             return (
-                <div>
+                <div className='home_page'>
                     <Home appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} />
                 </div>
             );
         }
         else {
             return (
-                <div>
+                <div className='game_page'>
                     <GameContainer appState={this.props.appState} quitGame={this.props.quitGame} />
                 </div>
             );
