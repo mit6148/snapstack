@@ -1,6 +1,6 @@
 const User = require('./models/user');
 const PCard = require('./models/pcard');
-const {gameStates, MAX_PLAYERS} = require("../config");
+const {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS} = require("../config");
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
@@ -58,6 +58,14 @@ class Player { // do not use constructor, use fromUser
         return {_id: this._id, media: this.media, score: this.score, hasPlayed: this.hasPlayed,
                 connected: this.connected, name: this.name, avatar: this.avatar};
     }
+
+    is(player) {
+        // TODO: remove the debugging statement eventually
+        if(this._id === player._id && this !== player) {
+            console.log("DEBUG: weird things happening in Player.is()");
+        }
+        return this._id === player._id;
+    }
 }
 Player._idToPlayerMap = {}; // keep right after class Player definition
 Player.fromUser = (user) => {
@@ -72,7 +80,7 @@ Player.fromUser = (user) => {
 
 class Game {
     constructor(code, cardsToWin) {
-        this.players = [];
+        this.players = []; // first player is judge when relevant
         this.gameState = gameStates.LOBBY;
         this.jCards = null;
         this.pCardRefArray = null;
@@ -82,7 +90,7 @@ class Game {
         this.cardsToWin = cardsToWin;
     }
 
-    allPCardsPromise(player) {
+    formatAllPCardsPromise(player) {
         switch(this.gameState) {
             case gameStates.SUBMIT:
                 const pCardRef = player.getPCardRef();
@@ -96,6 +104,10 @@ class Game {
         }
     }
 
+    generateJCards() {
+        //TODO(niks);
+    }
+
 
 // PUBLIC METHODS
 
@@ -103,16 +115,45 @@ class Game {
         this.players.push(player);
     }
 
+    isFull() {
+        return this.players.length >= MAX_PLAYERS;
+    }
+
+    start() {
+        // must randomize player order
+        shuffle(this.players);
+        this.judgeAssign();
+    }
+
+    isJudge(player) {
+        return this.players.length > 0 && this.players[0].is(player);
+    }
+
+// EMIT AND BROADCAST METHODS
+
     emitRefreshGame(socket, player) {
-        this.allPCardsPromise(player)
+        this.formatAllPCardsPromise(player)
             .then(pCards => socket.emit('refreshGame',
                 this.players.map(player => player.redacted()), this.gameState, this.jCards,
                 pCards, this.pCardIndex, this.endTime, this.cardsToWin, this.gameCode));
     }
 
-    isFull() {
-        return this.players.length >= MAX_PLAYERS;
+    judgeAssign() {
+        this.generateJCards();
+        this.gameState = gameStates.JCHOOSE;
+        io.in(this.gameCode).emit('judgeAssign', this.players.map(player => player._id), this.jCards);
     }
+
+    startRoundAndCheckIndex(jCardIndex) {
+        if(this.jCardIndex >= this.jCards.length || this.jCardIndex < 0) {
+            console.log("judge submitted invalid index");
+            return;
+        }
+        this.jCards = [this.jCards[jCardIndex]];
+        this.endTime = Date.now() + TIME_LIMIT_MILLIS;
+        io.in(this.gameCode).emit('roundStart', jCardIndex, this.endTime);
+    }
+
 }
 
 class GameManager {
@@ -175,12 +216,20 @@ class GameManager {
         }
     }
 
-    handleStartGame(socket, player) {
+    handleStartGame(player) {
         const game = this.getCurrentGame(player);
         if(!game || game.gameState != gameStates.LOBBY) {
-            return console.log("player " + player._id + "tried to start game in wrong state");
+            return console.log("player " + player._id + " tried to start game in wrong state");
         }
         game.start();
+    }
+
+    handleJCardChoice(player, jCardIndex) {
+        const game = this.getCurrentGame(player);
+        if(!game || !game.isJudge(player)) {
+            return console.log("player " + player._id + " tried to choose j card in wrong state");
+        }
+        game.startRoundAndCheckIndex(jCardIndex); // this should be the only mutator
     }
 }
 
@@ -197,7 +246,8 @@ function onConnection(socket) {
 
     socket.on('newGame', cardsToWin => manager.handleNewGame(socket, player, cardsToWin));
     socket.on('joinGame', gameCode => manager.handleJoinGame(socket, player, gameCode));
-    socket.on('startGame', () => manager.handleStartGame(socket, player));
+    socket.on('startGame', () => manager.handleStartGame(player));
+    socket.on('jCardChoice', jCardIndex => manager.handleJCardChoice(player, jCardIndex));
 }
 
 function getCurrentGame(user) {

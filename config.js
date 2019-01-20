@@ -9,4 +9,6 @@ const gameStates = {
 
 const MAX_PLAYERS = 7;
 
-module.exports = {gameStates, MAX_PLAYERS};
+const TIME_LIMIT_MILLIS = 120000;
+
+module.exports = {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS};
