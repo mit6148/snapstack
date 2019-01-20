@@ -11,7 +11,7 @@ function getAvatarImagePromise(profile) { // always resolves
   return new Promise(function(resolve, reject) {
     const url = profile.photos[0].value;
     request.defaults({encoding: null}).get(url, function(err, response, body) {
-      if(err || response.statusCode != 200 {
+      if(err || response.statusCode != 200) {
         resolve(undefined); // since must handle it the same way anyways
       } else {
         resolve("data:" + response.headers["content-type"] + ";base64," + Buffer.from(body).toString('base64'));
