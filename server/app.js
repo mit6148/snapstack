@@ -13,7 +13,7 @@ const server = http.Server(app);
 
 
 const io = require('socket.io')(server);
-const onConnection = require('./gameLogic');
+const {onConnection, getCurrentGame} = require('./gameLogic');
 
 // local dependencies
 const db = require('./db');

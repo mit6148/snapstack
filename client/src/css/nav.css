@@ -1,0 +1,65 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+.nav_btn, #logout_nav_btn, #profile_nav_btn, #about_nav_btn, #home_nav_btn {
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 60px;
+  box-shadow: 0px 3px 0px #9C81A8;
+  padding: 0.5em 0.6em;
+  background: #BD9DCC;
+  border: none;
+  padding: 15px;
+  color: #F4F4F4;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  font-size: 15px;
+  margin: 5px;
+}
+
+#home_nav_btn {
+  left: 10px;
+  top: 10px;
+}
+
+#about_nav_btn {
+  left: 10px;
+  bottom: 10px;
+}
+
+#profile_nav_btn {
+  right: 10px;
+  top: 10px;
+}
+
+#logout_nav_btn {
+  background: #F4F4F4;
+  color: #3B3B3D;
+  box-shadow: 0px 3px #CCCCCC;
+  right: 10px;
+  bottom: 10px;
+}
+
+.nav_btn:active, #home_nav_btn:active, #about_nav_btn:active, #profile_nav_btn:active, #logout_nav_btn:active {
+  background-color: #9C81A8;
+  box-shadow: 0px 1px #8E7599;
+  transform: translateY(1.5px);
+}
+
+.nav_btn:hover, #home_nav_btn:hover, #about_nav_btn:hover, #profile_nav_btn:hover, #logout_nav_btn:hover {
+  background: #9C81A8;
+  box-shadow: 0px 3px #8E7599;
+}
+
+#logout_nav_btn:hover {
+  background: #CCCCCC;
+  box-shadow: 0px 3px #7E7C82;
+}
+
+#logout_nav_btn:active {
+  background-color: #CCCCCC;
+  box-shadow: 0px 1px #7E7C82;
+  transform: translateY(1.5px);
+}
+
+/*# sourceMappingURL=nav.css.map */

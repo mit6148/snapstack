@@ -4,6 +4,8 @@ import update from 'immutability-helper';
 import NavButtons from "../nav/NavButtons";
 import { gameStates } from "../../../../config.js";
 
+import "../../css/game.css";
+
 export default class GameContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -27,7 +29,7 @@ export default class GameContainer extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="game_page">
             	<NavButtons appState={this.props.appState} page='GameContainer' quitGame={this.props.quitGame} />
                 Game
             </div>
