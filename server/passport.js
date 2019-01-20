@@ -24,7 +24,7 @@ function getAvatarImagePromise(profile) { // always resolves
 passport.use(new FacebookStrategy({
   clientID: 543314346187914,
   clientSecret: process.env.FB_SECRET,
-  callbackURL: 'http://localhost:3000/auth/facebook/callback',
+  callbackURL: '/auth/facebook/callback',
   enableProof: true,
   profileFields: ['id', 'displayName', 'picture.type(large)']
 }, function(accessToken, refreshToken, profile, done) {

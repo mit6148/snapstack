@@ -13,7 +13,7 @@ router.get('/test', function (req, res) {
 
 router.get('/whoami', function(req, res) {
     if(req.isAuthenticated()) {
-        res.send({_id: req.user._id, currentGameCode: getCurrentGameCode(user)});
+        res.send({_id: req.user._id, currentGameCode: getCurrentGameCode(req.user)});
     } else {
         res.send({});
     }

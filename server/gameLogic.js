@@ -271,7 +271,8 @@ function onConnection(socket) {
 }
 
 function getCurrentGameCode(user) {
-    return manager.getCurrentGame(user).gameCode;
+    const game = manager.getCurrentGame(user);
+    return game ? game.gameCode : null;
 }
 
 
