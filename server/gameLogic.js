@@ -1,6 +1,8 @@
 const User = require('./models/user');
+const UserDetail = require('./models/user_detail');
 const PCard = require('./models/pcard');
-const {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS} = require("../config");
+const JCard = require('./models/jcard');
+const {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, NUM_JCARDS} = require("../config");
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
@@ -38,16 +40,16 @@ class PCardRef {
     }
 }
 
-class Player { // do not use constructor, use fromUser
-    constructor(user) {
+class Player { // do not use constructor, use fromUserPromise
+    constructor(user, detail) {
         this._id = user._id,
-        this.media = user.media,
+        this.media = detail.media,
         this.score = 0;
         this.hasPlayed = false;
         this.pCardRef = null;
         this.connected = true;
-        this.name = user.name;
-        this.avatar = user.avatar;
+        this.name = detail.name;
+        this.avatar = detail.avatar;
     }
 
     getPCardRef() {
@@ -60,20 +62,16 @@ class Player { // do not use constructor, use fromUser
     }
 
     is(player) {
-        // TODO: remove the debugging statement eventually
-        if(this._id === player._id && this !== player) {
-            console.log("DEBUG: weird things happening in Player.is()");
-        }
         return this._id === player._id;
     }
 }
 Player._idToPlayerMap = {}; // keep right after class Player definition
-Player.fromUser = (user) => {
+Player.fromUserPromise = (user) => {
     const found = Player._idToPlayerMap[user._id];
     if(found) {
-        return found;
+        return Promise.resolve(found);
     } else {
-        return new Player(user);
+        return UserDetail.findOne({_id: user.detail_id}).exec().then(detail => new Player(user, detail));
     }
 };
 
@@ -82,12 +80,13 @@ class Game {
     constructor(code, cardsToWin) {
         this.players = []; // first player is judge when relevant
         this.gameState = gameStates.LOBBY;
-        this.jCards = null;
+        this.jCards = null; // format: [{text, _id}]
         this.pCardRefArray = null;
         this.pCardIndex = null;
         this.endTime = null;
         this.gameCode = code;
         this.cardsToWin = cardsToWin;
+        this.jCardsSeen = [];
     }
 
     formatAllPCardsPromise(player) {
@@ -104,8 +103,15 @@ class Game {
         }
     }
 
-    generateJCards() {
-        //TODO(niks);
+    generateJCardsPromise() {
+        return JCard.aggregate([
+            {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
+            {$sample: {$size: NUM_JCARDS}} // warning: try to prevent concurrent modification error & memory excess (100MB)
+            ])
+            .then(jCards => {
+                this.jCards = jCards;
+                this.jCardsSeen += jCards.map(card => card._id);
+            });
     }
 
 
@@ -134,14 +140,17 @@ class Game {
     emitRefreshGame(socket, player) {
         this.formatAllPCardsPromise(player)
             .then(pCards => socket.emit('refreshGame',
-                this.players.map(player => player.redacted()), this.gameState, this.jCards,
-                pCards, this.pCardIndex, this.endTime, this.cardsToWin, this.gameCode));
+                this.players.map(player => player.redacted()), this.gameState, this.jCards.map(jCard => jCard.text),
+                pCards, this.pCardIndex, this.endTime, this.cardsToWin, this.gameCode))
+            .catch(err => console.log("emitRefreshGame had error!!!"));
     }
 
     judgeAssign() {
-        this.generateJCards();
-        this.gameState = gameStates.JCHOOSE;
-        io.in(this.gameCode).emit('judgeAssign', this.players.map(player => player._id), this.jCards);
+        this.generateJCardsPromise().then(() => {
+            this.gameState = gameStates.JCHOOSE;
+            io.in(this.gameCode)
+                .emit('judgeAssign', this.players.map(player => player._id), this.jCards.map(jCard => jCard.text));
+        });
     }
 
     startRoundAndCheckIndex(jCardIndex) {
@@ -178,7 +187,7 @@ class GameManager {
     }
 
     removePlayer(player, game) {
-        console.log("todo: finish remove player");
+        console.log("@nikhil finish remove player");
         //TODO(niks)
     }
 
@@ -231,6 +240,10 @@ class GameManager {
         }
         game.startRoundAndCheckIndex(jCardIndex); // this should be the only mutator
     }
+
+    handleSubmitCard(socket, player, image, text) {
+        //TODO(niks)
+    }
 }
 
 const manager = new GameManager();
@@ -242,12 +255,18 @@ function onConnection(socket) {
         return;
     }
 
-    const player = Player.fromUser(user);
-
-    socket.on('newGame', cardsToWin => manager.handleNewGame(socket, player, cardsToWin));
-    socket.on('joinGame', gameCode => manager.handleJoinGame(socket, player, gameCode));
-    socket.on('startGame', () => manager.handleStartGame(player));
-    socket.on('jCardChoice', jCardIndex => manager.handleJCardChoice(player, jCardIndex));
+    Player.fromUserPromise(user)
+        .then(player => {
+            socket.on('newGame', cardsToWin => manager.handleNewGame(socket, player, cardsToWin));
+            socket.on('joinGame', gameCode => manager.handleJoinGame(socket, player, gameCode));
+            socket.on('startGame', () => manager.handleStartGame(player));
+            socket.on('jCardChoice', jCardIndex => manager.handleJCardChoice(player, jCardIndex));
+            socket.on('submitCard', (image, text) => manager.handleSubmitCard(socket, player, image, text));
+        })
+        .catch(err => {
+            console.log("failed to get user --> player: " + err);
+            socket.disconnect(true);
+        });
 }
 
 function getCurrentGame(user) {

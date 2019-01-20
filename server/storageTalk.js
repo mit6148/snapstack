@@ -16,9 +16,9 @@ function generateObjectName() {
 }
 
 
-function uploadImagePromise(image, extension) {
+function uploadImagePromise(image) {
     return new Promise(function(resolve, reject) {
-        const name = generateObjectName() + '.' + extension;
+        const name = generateObjectName();
         const file = bucket.file(name, {generation: 0}); // generation:0 means there can't exist a previous file
         file.createWriteStream()
             .on('error', error => {
