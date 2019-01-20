@@ -22,7 +22,7 @@ export default class Root extends React.Component {
         else {
             return (
                 <div>
-                    <GameContainer appState={this.props.appState} quitGame={this.props.quitGame} />
+                    <GameContainer appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} />
                 </div>
             );
         }

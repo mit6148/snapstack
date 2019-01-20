@@ -46,7 +46,7 @@ export default class Home extends React.Component {
 
     onNewGame = () => {
         if (this.props.appState.gameCode === null) {
-            this.props.enterGame('XZXZ'); //TODO
+            this.props.enterGame('?');
         }
         else {
             this.setState({
