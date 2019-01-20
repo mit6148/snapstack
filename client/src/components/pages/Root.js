@@ -3,6 +3,11 @@ import Login from "./Login";
 import Home from "./Home";
 import GameContainer from "./GameContainer";
 
+import "../../css/game.css";
+import "../../css/home.css";
+import "../../css/login.css";
+import "../../css/nav.css";
+
 export default class Root extends React.Component {
     render() {
         if (this.props.appState.userId === null) {

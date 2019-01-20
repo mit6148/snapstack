@@ -4,6 +4,8 @@ import AboutNavBtn from "./AboutNavBtn";
 import ProfileNavBtn from "./ProfileNavBtn";
 import LogoutNavBtn from "./LogoutNavBtn";
 
+import "../../css/nav.css";
+
 export default class NavButtons extends React.Component {
     render() {
         return (
@@ -18,12 +20,14 @@ export default class NavButtons extends React.Component {
             case 'Login':
                 return (
                     <React.Fragment>
+                        <HomeNavBtn appState={this.props.appState} selected={true} />
                         <AboutNavBtn appState={this.props.appState} />
                     </React.Fragment>
                 );
             case 'Home':
                 return (
                     <React.Fragment>
+                        <HomeNavBtn appState={this.props.appState} selected={true} />
                         <AboutNavBtn appState={this.props.appState} />
                         <ProfileNavBtn appState={this.props.appState} />
                     </React.Fragment>

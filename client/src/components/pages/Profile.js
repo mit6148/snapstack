@@ -1,6 +1,8 @@
 import React from "react";
 import NavButtons from "../nav/NavButtons";
 
+import "../../css/profile.css";
+
 export default class Profile extends React.Component {
     render() {
         return (

@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+.nav_btn {
+  display: inline-block;
+  border-radius: 60px;
+  box-shadow: 0px 0px 10px #BCACC1;
+  padding: 0.5em 0.6em;
+  background: #D5C3DB;
+  border: none;
+  padding: 15px;
+  color: white;
+}
+.nav_btn:hover {
+  background: #BCACC1;
+}
+
+/*# sourceMappingURL=nav.css.map */

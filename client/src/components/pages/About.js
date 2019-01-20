@@ -1,6 +1,8 @@
 import React from "react";
 import NavButtons from "../nav/NavButtons";
 
+import "../../css/about.css";
+
 export default class About extends React.Component {
     render() {
         return (
