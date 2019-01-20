@@ -57,13 +57,6 @@ app.get('/logout', function(req, res) {
 
 // set routes
 app.use('/api', api );
-app.get('/profile/:user', function(req, res) {
-  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
-});
-
-app.get('/about', function(req, res) {
-  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
-});
 app.use('/', express.static(publicPath));
 
 // 404 route
@@ -75,6 +68,7 @@ app.use(function(req, res, next) {
 
 // route error handler
 app.use(function(err, req, res, next) {
+  console.log("failed getting: " + req.url + ": " + err);
   res.status(err.status || 500);
   res.send({
     status: err.status,

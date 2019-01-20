@@ -192,7 +192,7 @@ class GameManager {
     }
 
     addPlayerToGame(socket, player, game) {
-        const previous = this.userToGameMap[player._id];
+        const previous = getCurrentGame(player);
         if(previous) {
             this.removePlayer(player, previous);
         }
@@ -270,10 +270,11 @@ function onConnection(socket) {
         });
 }
 
-function getCurrentGame(user) {
-    return manager.getCurrentGame(user);
+function getCurrentGameCode(user) {
+    const game = manager.getCurrentGame(user);
+    return game ? game.gameCode : null;
 }
 
 
 
-module.exports = {onConnection, getCurrentGame};
+module.exports = {onConnection, getCurrentGameCode};
