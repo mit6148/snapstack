@@ -1,21 +1,50 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
+@import url('https://fonts.googleapis.com/css?family=Questrial|Thasadith');
 
 @import "./_variables.scss";
 
 div {
-	font-family: 'Quicksand', sans-serif;
+	font-family: 'Thasadith', sans-serif;
 	display: block;
 }
 
-.title {
-	font-size: 110px;
-	text-align: center;
-	color: $white;
-	text-shadow: 2px 5px 0px $medium-gray;
-	font-weight: 600;
-
+.home_center {
+	display: block;
+	margin-top: 10%;
+	margin-bottom: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
+.title {
+	font-size: 160px;
+	text-align: center;
+	font-weight: 900;
+
+	letter-spacing: 0.05em;
+
+	background: -webkit-linear-gradient($blue-light, $green-light);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+
+  	filter: drop-shadow(2px 5px $medium-gray);
+}
+
+/* Flash class and keyframe animation */
+.title:hover{
+  color:#f2f;
+	-webkit-animation: flash linear 2s infinite;
+	animation: flash linear 2s infinite;
+}
+@-webkit-keyframes flash {
+	0% { opacity: 1; } 
+	50% { opacity: .1; } 
+	100% { opacity: 1; }
+}
+@keyframes flash {
+	0% { opacity: 1; } 
+	50% { opacity: .1; } 
+	100% { opacity: 1; }
+}
 .home_btn {
 	color: $white;
 	font-size: 25px;
@@ -41,5 +70,5 @@ div {
 }
 
 body {
-	background-color: $background-blue;
+	background-color: $light-gray;
 }

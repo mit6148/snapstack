@@ -28,8 +28,6 @@
 	margin: 5px;
 }
 
-
-
 #home_nav_btn {
 	@extend .nav_btn;
 	left: $nav_btn_margin;
@@ -47,9 +45,9 @@
 }
 #logout_nav_btn {
 	@extend .nav_btn;
-	background: $white;
-	color: $black;
-	box-shadow: 0px 3px $light-gray;
+	// background: $white;
+	// color: $black;
+	// box-shadow: 0px 3px $light-gray;
 
 	right: $nav_btn_margin;
 	bottom: $nav_btn_margin;
@@ -66,14 +64,14 @@
 	box-shadow: 0px 3px $purple-dark;
 }
 
-#logout_nav_btn:hover {
-	background: $light-gray;
-	box-shadow: 0px 3px $medium-gray;
-}
+// #logout_nav_btn:hover {
+// 	background: $light-gray;
+// 	box-shadow: 0px 3px $medium-gray;
+// }
 
-#logout_nav_btn:active {
-	background-color: $light-gray;
-	box-shadow: 0px 1px $medium-gray;
-	transform: translateY(1.5px);
-}
+// #logout_nav_btn:active {
+// 	background-color: $light-gray;
+// 	box-shadow: 0px 1px $medium-gray;
+// 	transform: translateY(1.5px);
+// }
 
