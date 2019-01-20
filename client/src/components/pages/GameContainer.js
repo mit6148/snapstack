@@ -68,6 +68,7 @@ export default class GameContainer extends React.Component {
         socket.on('roundStart', (jCardIndex, endTime) =>
             this.setState({
                 gameState: gameStates.SUBMIT,
+                players: new Map(Array.from(this.state.players, ([playerId, player]) => [playerId, update(player, {hasPlayed: {$set: false}})])),
                 jCardIndex: jCardIndex,
                 endTime: endTime
             });
@@ -83,7 +84,7 @@ export default class GameContainer extends React.Component {
         socket.on('pCards', pCards => {
             this.setState({
                 gameState: gameStates.JUDGE,
-                pCards: pCards
+                pCards: pCards // TODO flip own card facedown first
             });
         });
         socket.on('flip', pCardIndex => {
@@ -106,7 +107,7 @@ export default class GameContainer extends React.Component {
             let winnerId = creator_ids[pCardIndex];
             this.setState({
                 gameState: gameStates.ROUND_OVER,
-                players: update(this.state.players, {[winnerId]: {score: {$apply: (score => score + 1)}}}),
+                players: update(this.state.players, {[winnerId]: {score: (score => score + 1)}}),
                 pCards: this.state.pCards.map((pCard, index) => update(pCard, {creator_id: {$set: creator_ids[index]}})),
                 pCardIndex: pCardIndex,
                 winnerId: winnerId
