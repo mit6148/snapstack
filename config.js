@@ -7,4 +7,6 @@ const gameStates = {
     GAME_OVER: 5,
 }
 
-module.exports = {gameStates, playerStates};
+const MAX_PLAYERS = 7;
+
+module.exports = {gameStates, MAX_PLAYERS};
