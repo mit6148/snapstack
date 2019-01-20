@@ -20,28 +20,30 @@ export default class Home extends React.Component {
         return (
             <div>
                 <NavButtons appState={this.props.appState} page='Home' />
-                <Title/>
-                <div className="home_btn new_game" onClick={this.onNewGame}>New Game</div>
-                <div className="home_btn join_game" onClick={this.onJoinGame}>Join Game</div>
-                {this.state.joinGamePopup ? // TODO
-                    <Popup onClose={() => this.setState({joinGamePopup: false})}>
-                        Enter game code:
-                        <input type="text" />
-                        <div onClick={() => this.props.enterGame('XZXZ')}>Play!</div>
-                    </Popup>
-                : null}
-                {this.state.newGameWarningPopup ?
-                    <Popup onClose={() => this.setState({newGameWarningPopup: false})}>
-                        This will quit your ongoing game. Are you sure?
-                        <div onClick={() => {this.props.quitGame(); this.onNewGame();}}>Yes</div>
-                    </Popup>
-                : null}
-                {this.state.joinGameWarningPopup ?
-                    <Popup onClose={() => this.setState({joinGameWarningPopup: false})}>
-                        This will quit your ongoing game. Are you sure?
-                        <div onClick={() => {this.props.quitGame(); this.onJoinGame();}}>Yes</div>
-                    </Popup>
-                : null}
+                <div className="home_center">
+                    <Title/>
+                    <div className="home_btn new_game" onClick={this.onNewGame}>New Game</div>
+                    <div className="home_btn join_game" onClick={this.onJoinGame}>Join Game</div>
+                    {this.state.joinGamePopup ? // TODO
+                        <Popup onClose={() => this.setState({joinGamePopup: false})}>
+                            Enter game code:
+                            <input type="text" />
+                            <div onClick={() => this.props.enterGame('XZXZ')}>Play!</div>
+                        </Popup>
+                    : null}
+                    {this.state.newGameWarningPopup ?
+                        <Popup onClose={() => this.setState({newGameWarningPopup: false})}>
+                            This will quit your ongoing game. Are you sure?
+                            <div onClick={() => {this.props.quitGame(); this.onNewGame();}}>Yes</div>
+                        </Popup>
+                    : null}
+                    {this.state.joinGameWarningPopup ?
+                        <Popup onClose={() => this.setState({joinGameWarningPopup: false})}>
+                            This will quit your ongoing game. Are you sure?
+                            <div onClick={() => {this.props.quitGame(); this.onJoinGame();}}>Yes</div>
+                        </Popup>
+                    : null}
+                </div>
             </div>
         );
     }

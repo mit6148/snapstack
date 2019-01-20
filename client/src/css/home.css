@@ -4,12 +4,23 @@ div {
   display: block;
 }
 
+.home_center {
+  display: block;
+  margin-top: 10%;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .title {
-  font-size: 110px;
+  font-size: 120px;
   text-align: center;
-  color: #F4F4F4;
-  text-shadow: 2px 5px 0px #7E7C82;
   font-weight: 600;
+  letter-spacing: 0.05em;
+  background: -webkit-linear-gradient(#F4F4F4, #8E7599);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 5px #7E7C82);
 }
 
 .home_btn {
