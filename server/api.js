@@ -16,11 +16,11 @@ router.get('/whoami', function(req, res) {
         UserDetail.findOne({_id: req.user.detail_id}).exec()
             .then(detail => res.send(
                 {name: detail.name,
-                 saved_pairs: detail.saved_pairs,
-                 avatar: detail.avatar,
-                 description: detail.description,
-                 email: detail.email,
-                 media: detail.media,
+                 //saved_pairs: detail.saved_pairs,
+                 //avatar: detail.avatar,
+                 //description: detail.description,
+                 //email: detail.email,
+                 //media: detail.media,
                  _id: req.user._id,
                  currentGameCode: getCurrentGameCode(user)}
                 ))
