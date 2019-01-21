@@ -1,3 +1,74 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
 
 @import "./_variables.scss";
+
+div {
+	font-family: 'Thasadith', sans-serif;
+	display: block;
+}
+
+.login_center {
+	display: block;
+	margin-top: 10%;
+	margin-bottom: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.title {
+	font-size: 160px;
+	text-align: center;
+	font-weight: 900;
+
+	letter-spacing: 0.05em;
+
+	background: -webkit-linear-gradient($blue-light, $green-light);
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+
+  	filter: drop-shadow(2px 5px $medium-gray);
+}
+
+/* Flash class and keyframe animation */
+.title:hover{
+  color:#f2f;
+	-webkit-animation: flash linear 1s;
+	animation: flash linear 1s;
+}
+@-webkit-keyframes flash {
+	0% { opacity: 1; } 
+	50% { opacity: .2; } 
+	100% { opacity: 1; }
+}
+@keyframes flash {
+	0% { opacity: 1; } 
+	50% { opacity: .2; } 
+	100% { opacity: 1; }
+}
+.home_btn {
+	color: $white;
+	font-size: 25px;
+	background-color: $blue-light;
+	box-shadow: 0px 5px 0px $blue-medium;
+	margin: 1em auto;
+	padding: 10px;
+	text-align: center;
+	max-width: 200px;
+
+	border-radius: 0.4em;
+}
+
+.home_btn:hover {
+	background: $blue-medium;
+	box-shadow: 0 5px $blue-dark;
+}
+
+.home_btn:active {
+  background-color: $blue-medium;
+  box-shadow: 0 2px $blue-dark;
+  transform: translateY(3px);
+}
+
+body {
+	background-color: $light-gray;
+}

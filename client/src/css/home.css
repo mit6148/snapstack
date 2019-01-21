@@ -4,18 +4,23 @@ div {
   display: block;
 }
 
-.home_center {
-  display: block;
+.home_center, .login_center {
   margin-top: 10%;
   margin-bottom: auto;
   margin-left: auto;
   margin-right: auto;
+  height: 500px;
+  text-align: center;
+}
+
+.login_center {
+  display: block;
 }
 
 .title {
   font-size: 160px;
   text-align: center;
-  font-weight: 900;
+  font-weight: 1000;
   letter-spacing: 0.05em;
   background: -webkit-linear-gradient(#0683E2, #12B780);
   -webkit-background-clip: text;
@@ -52,7 +57,7 @@ div {
     opacity: 1;
   }
 }
-.home_btn {
+.home_btn, .login_btn {
   color: #F4F4F4;
   font-size: 25px;
   background-color: #0683E2;
@@ -60,19 +65,24 @@ div {
   margin: 1em auto;
   padding: 10px;
   text-align: center;
-  max-width: 200px;
+  width: 150px;
   border-radius: 0.4em;
+  text-decoration: none;
 }
 
-.home_btn:hover {
+.home_btn:hover, .login_btn:hover {
   background: #0677CE;
   box-shadow: 0 5px #056BBA;
 }
 
-.home_btn:active {
+.home_btn:active, .login_btn:active {
   background-color: #0677CE;
   box-shadow: 0 2px #056BBA;
   transform: translateY(3px);
+}
+
+.login_btn {
+  display: inline-block;
 }
 
 body {

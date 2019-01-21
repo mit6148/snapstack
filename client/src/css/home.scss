@@ -8,17 +8,25 @@ div {
 }
 
 .home_center {
-	display: block;
 	margin-top: 10%;
 	margin-bottom: auto;
 	margin-left: auto;
 	margin-right: auto;
+
+	height: 500px;
+
+	text-align: center;
+}
+
+.login_center {
+	@extend .home_center;
+	display: block;
 }
 
 .title {
 	font-size: 160px;
 	text-align: center;
-	font-weight: 900;
+	font-weight: 1000;
 
 	letter-spacing: 0.05em;
 
@@ -46,6 +54,8 @@ div {
 	100% { opacity: 1; }
 }
 .home_btn {
+
+
 	color: $white;
 	font-size: 25px;
 	background-color: $blue-light;
@@ -53,9 +63,12 @@ div {
 	margin: 1em auto;
 	padding: 10px;
 	text-align: center;
-	max-width: 200px;
+	width: 150px;
+
 
 	border-radius: 0.4em;
+
+	text-decoration: none;
 }
 
 .home_btn:hover {
@@ -69,6 +82,11 @@ div {
   transform: translateY(3px);
 }
 
+.login_btn {
+	@extend .home_btn;
+	display: inline-block;
+
+}
 body {
 	background-color: $light-gray;
 }
