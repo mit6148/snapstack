@@ -174,10 +174,13 @@ export default class GameContainer extends React.Component {
                 winnerId: this.state.pCards[this.state.pCardIndex].creator_id
             });
         });
-        socket.on('disconnected', playerId => {
+        socket.on('disconnected', dcId => {
             this.setState({
-                players: update(this.state.players, {[playerId]: {connected: {$set: false}}}),
-                judgeDisconnected: this.state.judgeDisconnected || playerId === playerIds[0]
+                playerIds: this.state.gameState === gameStates.LOBBY
+                            ? this.state.playerIds.filter(playerId => playerId !== dcId)
+                            : this.state.playerIds,
+                players: update(this.state.players, {[dcId]: {connected: {$set: false}}}),
+                judgeDisconnected: this.state.judgeDisconnected || dcId === playerIds[0]
             });
         });
         socket.on('skipped', () => {
