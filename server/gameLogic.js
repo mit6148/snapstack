@@ -2,11 +2,10 @@ const User = require('./models/user');
 const UserDetail = require('./models/user_detail');
 const PCard = require('./models/pcard');
 const JCard = require('./models/jcard');
-const {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, GAME_CODE_LENGTH} = require("../config");
+const {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
+    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH} = require("../config");
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
-
-
 
 class Game {
     constructor(cardsToWin) {
@@ -20,7 +19,8 @@ class Game {
         this.gameCode = Game.generateUnusedGameCode();
         this.cardsToWin = cardsToWin;
         this.jCardsSeen = [];
-        this.isSkipping;
+        this.isSkipping = false;
+        this.tooFewPlayers = false;
         this._lock = null;
         this.round = 0;
     }
@@ -75,7 +75,7 @@ class Game {
     }
 
     startRound(user, jCardIndex) {
-        // TODO. doesn't need to handle starting timeout
+        // TODO. doesn't need to handle starting timeout, but does need to check for too few players.
     }
 
     getRound() {
@@ -106,6 +106,10 @@ class Game {
         return this.isSkipping;
     }
 
+    getTooFewPlayers() {
+        return this.tooFewPlayers;
+    }
+
     getGameCode() {
         return this.gameCode
     }
@@ -123,7 +127,7 @@ Game.create = async (cardsToWin, user) => {
         console.error('create game had an error: ' + err);
         throw "Sorry, we're having a problem on the back end :(";
     }
-}
+};
 
 Game.join = async (gameCode, user) => {
     gameCode = gameCode.toUpperCase();
@@ -146,7 +150,7 @@ Game.join = async (gameCode, user) => {
         }
         return game;
     }
-}
+};
 
 Game.generateUnusedGameCode = () => {
     while(true) {
@@ -158,15 +162,16 @@ Game.generateUnusedGameCode = () => {
             return code;
         }
     }
-}
+};
 
 
 
 async function emitGameState(socket, user, game) {
-    const [players, gameState, jCards, visiblePCards, pCardIndex, endTime, isSkipping, gameCode] = await  Promise.all(
+    const [players, gameState, jCards, visiblePCards, pCardIndex, endTime, isSkipping, tooFewPlayers, gameCode] = await Promise.all(
                 [game.getPlayers(), game.getGameState(), game.getJCards(), game.getVisiblePCards(user),
-                game.getPCardIndex(), game.getEndTime(), game.getIsSkipping(), game.getGameCode()]);
-    socket.emit('gameState', players, gameState, jCards, visiblePCards, pCardIndex, endTime, cardsToWin, isSkipping, gameCode);
+                game.getPCardIndex(), game.getEndTime(), game.getIsSkipping(), game.getTooFewPlayers(), game.getGameCode()]);
+    socket.emit('gameState', players, gameState, jCards, visiblePCards,
+                pCardIndex, endTime, cardsToWin, isSkipping, tooFewPlayers,  gameCode);
 }
 
 /**
@@ -175,7 +180,7 @@ Then, for everything but newGame and joinGame, it locks the game object while it
 will await it. Finally it runs the handler and then unlocks.
 */
 function createLockedListener(socket, event, gameGetter, func) {
-    socket.on(event, args => {
+    socket.on(event, async args => {
         const game = gameGetter();
 
         if(!game && !(event in ['newGame', 'joinGame'])) {
@@ -249,17 +254,20 @@ async function onConnection(socket) {
         const round = game.getRound();
         setTimeout(async () => {
             await game.lock();
-            if(game.canEndSubmitPhase(round)) {
-                // the timer is actually relevant
-                await game.endSubmitPhase();
-                io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+            try {
+                if(game.canEndSubmitPhase(round)) {
+                    // the timer is actually relevant
+                    await game.endSubmitPhase();
+                    io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+                }
+            } catch(err) {
+                console.error("end submit phase timeout in jCardChoice had an error, caught to preserve lock safety: " + err);
             }
             game.unlock();
         }, endTime - Date.now() + TIME_LIMIT_FORGIVE_MILLIS);
     });
 
-    createLockedListener(socket, 'submitCard', game, async (image, text {
-
+    createLockedListener(socket, 'submitCard', game, async (image, text) => {
     })
 }
 
