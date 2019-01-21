@@ -59,6 +59,13 @@ app.get('/logout', function(req, res) {
 app.use('/api', api );
 app.use('/', express.static(publicPath));
 
+function sendIndexHTML(req, res) {
+  res.sendFile(path.join(publicPath, 'index.html'));
+}
+
+app.get('/profile/:id', sendIndexHTML);
+app.get('/about', sendIndexHTML);
+
 // 404 route
 app.use(function(req, res, next) {
   const err = new Error('Not Found');
