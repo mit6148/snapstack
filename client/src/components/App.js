@@ -20,7 +20,7 @@ export default class App extends React.Component {
         this.getUser();
     }
 
-    render() {
+    render() { // TODO don't render until user is fetched
         return (
             <div>
                 <Switch>
