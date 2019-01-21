@@ -1,6 +1,5 @@
 // dependencies
 const express = require('express');
-const {getCurrentGameCode} = require('./gameLogic');
 const UserDetail = require('./models/user_detail');
 
 
@@ -13,9 +12,9 @@ router.get('/test', function (req, res) {
 
 router.get('/whoami', function(req, res) {
     if(req.isAuthenticated()) {
-        res.send({_id: req.user._id, currentGameCode: getCurrentGameCode(req.user)});
+        res.send({_id: req.user._id});
     } else {
-        res.send({});
+        res.send({_id: null});
     }
 });
 
