@@ -5,11 +5,34 @@
 div {
 	font-family: 'Thasadith', sans-serif;
 	display: block;
+	text-align: center;
+}
+
+.logo_container {
+	display: inline-block;
+	height: 160px;
+	width: 160px;
+	border-radius: 80px;
+	overflow: hidden;
+
+	box-shadow: 0px 5px 0px $medium-gray;
 }
 
 body {
 	background-color: $background-v1;
 }
+
+.logo:hover {
+	height: 100%;
+	width: 100%;
+
+    -webkit-animation:spin 2s linear ;
+    -moz-animation:spin 2s linear ;
+    animation:spin 2s linear ;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 .home_center {
 	display: block;
@@ -30,7 +53,7 @@ body {
 
 .title {
 	text-align: center;
-	font-size: 140px;
+	font-size: 120px;
 	text-align: center;
 	font-weight: 1000;
 
