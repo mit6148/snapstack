@@ -305,7 +305,7 @@ Then, for everything but newGame and joinGame, it locks the game object while it
 will await it. Finally it runs the handler and then unlocks.
 */
 function createLockedListener(socket, event, gameGetter, func) {
-    socket.on(event, async () => {
+    socket.on(event, async function() {
         const game = gameGetter ? gameGetter() : null;
 
         if(!game && !(['newGame', 'joinGame'].includes(event))) {
