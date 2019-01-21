@@ -1,3 +1,19 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+h1 {
+  text-align: center;
+  font-size: 60px;
+  text-align: center;
+  font-weight: 1000;
+  letter-spacing: 0.05em;
+  background: -webkit-linear-gradient(#0683E2, #12B780);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(1px 2px #7E7C82);
+}
+h1:hover {
+  color: #f2f;
+  -webkit-animation: flash linear 1s;
+  animation: flash linear 1s;
+}
 
 /*# sourceMappingURL=profile.css.map */
