@@ -36,7 +36,7 @@ class Player {
 }
 
 Player.from = async user => {
-    await details = UserDetail.findOne({_id: user.detail_id}).exec();
+    const details = await UserDetail.findOne({_id: user.detail_id}).exec();
     return new Player(user, details);
 }
 
@@ -58,7 +58,7 @@ class Game {
         this.isSkipping = false;
         this._lock = null;
         this.round = 0;
-        Game.codeToGameMap[this.gameCode] = game;
+        Game.codeToGameMap[this.gameCode] = this;
     }
 
     async withLock(asyncFunc) {
@@ -104,7 +104,7 @@ class Game {
         if(user._id in this.userToPlayerMap) {
             // rejoining
             const player = this.userToPlayerMap[user._id];
-            if(player in this.players) {
+            if(this.players.includes(player)) {
                 // still in game, hasn't ended round
                 if(player.connected) {
                     // trying to join the game again while other socket is still connected!
@@ -149,6 +149,10 @@ class Game {
 
     async startNewRound() {
         // TODO
+    }
+
+    async endSubmitPhase() {
+        // TODO. must add on placeholders for all those who didn't submit
     }
 
     checkRoomFull() {
@@ -221,10 +225,6 @@ class Game {
         return round === this.round && this.gamePhase === gamePhases.SUBMIT;
     }
 
-    endSubmitPhase() {
-        // TODO. must add on placeholders for all those who didn't submit
-    }
-
     startSubmitPhase(user, jCardIndex) {
         // TODO. check is judge. doesn't need to handle starting timeout, but does need to check for too few players.
     }
@@ -258,13 +258,17 @@ class Game {
     }
 
     getGameCode() {
-        return this.gameCode
+        return this.gameCode;
+    }
+
+    getCardsToWin() {
+        return this.cardsToWin;
     }
 }
 
 Game.codeToGameMap = {};
 
-Game.gameWithCode(gameCode) {
+Game.gameWithCode = gameCode => {
     const game = Game.codeToGameMap[gameCode];
     if(game === undefined) {
         throw "This is not the game code you are looking for";
@@ -277,7 +281,7 @@ Game.generateUnusedGameCode = () => {
     while(true) {
         let code = "";
         for(let i = 0; i < GAME_CODE_LENGTH; i++) {
-            text += String.fromCharCode(65 + Math.floor(Math.random() * 26));
+            code += String.fromCharCode(65 + Math.floor(Math.random() * 26));
         }
         if(!(code in Game.codeToGameMap)) {
             return code;
@@ -292,7 +296,7 @@ async function emitGameState(socket, user, game) {
                 [game.getPlayers(), game.getGamePhase(), game.getJCards(), game.getVisiblePCards(user),
                 game.getPCardIndex(), game.getEndTime(), game.getIsSkipping(), game.getGameCode()]);
     socket.emit('gameState', players, gamePhase, jCards, visiblePCards,
-                pCardIndex, endTime, cardsToWin, isSkipping,  gameCode);
+                pCardIndex, endTime, game.getCardsToWin(), isSkipping,  gameCode);
 }
 
 /**
@@ -301,10 +305,10 @@ Then, for everything but newGame and joinGame, it locks the game object while it
 will await it. Finally it runs the handler and then unlocks.
 */
 function createLockedListener(socket, event, gameGetter, func) {
-    socket.on(event, async args => {
-        const game = gameGetter();
+    socket.on(event, async () => {
+        const game = gameGetter ? gameGetter() : null;
 
-        if(!game && !(event in ['newGame', 'joinGame'])) {
+        if(!game && !(['newGame', 'joinGame'].includes(event))) {
             // WARNING: special values used here!
             console.error("attempted to do game action " + event + " without a game");
             return;
@@ -312,12 +316,12 @@ function createLockedListener(socket, event, gameGetter, func) {
 
         try {
             if(game) {
-                await game.withLock(async () => await func.apply(this, args));
+                await game.withLock(async () => await func.apply(this, arguments));
             } else {
-                await func.apply(this, args);
+                await func.apply(this, arguments);
             }
         } catch(err) {
-            console.error("socket triggered error: " + err);
+            console.error("socket triggered error: " + err + "\n" + err.stack);
 
             // WARNING: maybe we don't want this?
             socket.disconnect();
@@ -325,7 +329,7 @@ function createLockedListener(socket, event, gameGetter, func) {
     });
 }
 
-function tryStartNewRound(game) {
+async function tryStartNewRound(game) {
     await game.startNewRound();
     if(!game.getTooFewPlayers()) {
         // can start next round
@@ -343,6 +347,8 @@ async function onConnection(socket) {
         return;
     }
     console.log("user: " + user._id + " joined");
+
+    const gameGetter = () => game;
 
     createLockedListener(socket, 'newGame', null, async cardsToWin => {
         if(game) {
@@ -379,18 +385,18 @@ async function onConnection(socket) {
         }
     });
 
-    createLockedListener(socket, 'startGame', game, async () => {
+    createLockedListener(socket, 'startGame', gameGetter, async () => {
         await game.start();
         io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
     });
 
-    createLockedListener(socket, 'jCardChoice', game, async jCardIndex => {
+    createLockedListener(socket, 'jCardChoice', gameGetter, async jCardIndex => {
         const endTime = game.startSubmitPhase(user, jCardIndex);
         io.to(game.getGameCode()).emit('roundStart', jCardIndex, endTime);
         const round = game.getRound();
         setTimeout(async () => {
             try {
-                await game.withLock(() => {
+                await game.withLock(async () => {
                     if(game.canEndSubmitPhase(round)) {
                         // the timer is actually relevant
                         await game.endSubmitPhase();
@@ -403,39 +409,39 @@ async function onConnection(socket) {
         }, endTime - Date.now() + TIME_LIMIT_FORGIVE_MILLIS);
     });
 
-    createLockedListener(socket, 'submitCard', game, async (image, text) => {
+    createLockedListener(socket, 'submitCard', gameGetter, async (image, text) => {
         const pCardRef = await generatePCardRef(user, image, text);
         game.submitCard(pCardRef);
         socket.emit('turnedIn', user._id, pCard._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
     });
 
-    createLockedListener(socket, 'flip', game, async index => {
+    createLockedListener(socket, 'flip', gameGetter, async index => {
         game.flipCard(user, index);
         socket.to(game.getGameCode()).emit('flip', index);
     });
 
-    createLockedListener(socket, 'flipAll', game, async () => {
+    createLockedListener(socket, 'flipAll', gameGetter, async () => {
         game.flipAll(user);
         socket.to(game.getGameCode()).emit('flipAll');
     });
 
-    createLockedListener(socket, 'look', game, async index => {
+    createLockedListener(socket, 'look', gameGetter, async index => {
         game.look(user, index);
         socket.to(game.getGameCode()).emit('look', index);
     });
 
-    createLockedListener(socket, 'select', game, async index => {
+    createLockedListener(socket, 'select', gameGetter, async index => {
         game.select(user, index);
         io.to(game.getGameCode()).emit('select', game.getCreators());
         setTimeout(async () => {
             try {
-                await game.withLock(() => {
+                await game.withLock( async () => {
                     if(game.hasSomeoneWon()) {
-                        game.endGame();
+                        await game.endGame();
                         io.to(game.getGameCode()).emit('gameOver');
                     } else {
-                        tryStartNewRound(game);
+                        await tryStartNewRound(game);
                     }
                 });
             } catch(err) {
@@ -444,13 +450,13 @@ async function onConnection(socket) {
         }, WAIT_TIME);
     });
 
-    createLockedListener(socket, 'disconnect', game, async () => {
+    createLockedListener(socket, 'disconnect', gameGetter, async () => {
         game.disconnect(user);
         io.to(game.getGameCode()).emit('disconnected', user._id);
         await game.tryDestroyAssets();
     });
 
-    createLockedListener(socket, 'skip', game, async () => {
+    createLockedListener(socket, 'skip', gameGetter, async () => {
         game.skipRound();
         io.to(game.getGameCode()).emit('skipped');
     });
