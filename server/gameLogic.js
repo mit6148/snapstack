@@ -117,10 +117,6 @@ class Game {
 
 // PUBLIC METHODS
 
-    addPlayer(player) {
-        this.players.push(player);
-    }
-
     isFull() {
         return this.players.length >= MAX_PLAYERS;
     }
@@ -136,6 +132,13 @@ class Game {
     }
 
 // EMIT AND BROADCAST METHODS
+
+    addPlayer(player) {
+        this.players.push(player);
+        socket.join(game.gameCode); // add to room listeners
+        game.emitRefreshGame(socket, player);
+        socket.to(gameCode).emit('nuj', player.redacted()); // emit to all but newcomer
+    }
 
     emitRefreshGame(socket, player) {
         this.formatAllPCardsPromise(player)
@@ -186,7 +189,7 @@ class GameManager {
         return this.userToGameMap[userOrPlayer._id];
     }
 
-    removePlayer(player, game) {
+    removePlayer(socket, player, game) {
         console.log("@nikhil finish remove player");
         //TODO(niks)
     }
@@ -194,12 +197,10 @@ class GameManager {
     addPlayerToGame(socket, player, game) {
         const previous = getCurrentGame(player);
         if(previous) {
-            this.removePlayer(player, previous);
+            this.removePlayer(socket, player, previous);
         }
-        game.addPlayer(player);
         this.userToGameMap[player._id] = game;
-        socket.join(game.gameCode); // add to room listeners
-        game.emitRefreshGame(socket, player);
+        game.addPlayer(player);
     }
 
 
@@ -222,7 +223,6 @@ class GameManager {
             socket.emit('rejectConnection', "Room full :'(");
         } else {
             this.addPlayerToGame(socket, player, game);
-            socket.to(gameCode).emit('nuj', player.redacted()); // emit to all but newcomer
         }
     }
 
