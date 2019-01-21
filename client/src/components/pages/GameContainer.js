@@ -19,16 +19,17 @@ export default class GameContainer extends React.Component {
             pCardsFacedown: 0, // if JUDGE
             endTime: null, // if SUBMIT
             cardsToWin: null,
-            roundSkipped: false, // if JCHOOSE, SUBMIT, or JUDGE
-            tooFewPlayers: false // prevent game start if LOBBY, prevent round start if JCHOOSE
+            roundSkipped: false // if JCHOOSE, SUBMIT, or JUDGE
         };
 
         this.actions = {
+            startGame: this.startGame,
             selectJCard: this.selectJCard,
             submitPCard: this.submitPCard,
-            flipPCard: this.flipPCard,
+            viewPCard: this.viewPCard,
             flipAllPCards: this.flipAllPCards,
             selectPCard: this.selectPCard,
+            skipRound: this.skipRound,
             savePCard: this.savePCard,
             quitGame: this.props.quitGame
         }
@@ -60,6 +61,11 @@ export default class GameContainer extends React.Component {
         }
     }
 
+    startGame = () => {
+        this.socket.emit('startGame');
+    }
+
+    // judge action
     selectJCard = jCardIndex => {
         this.setState({
             jCardIndex: jCardIndex
@@ -67,19 +73,29 @@ export default class GameContainer extends React.Component {
         this.socket.emit('jCardChoice', jCardIndex);
     }
 
+    // player action
     submitPCard = () => {
-
+        // TODO
     }
 
-    flipPCard = pCardIndex => {
-        this.setState({
-            pCards: update(this.state.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
-            pCardIndex: pCardIndex,
-            pCardsFacedown: this.state.pCardsFacedown - 1
-        });
-        this.socket.emit('flip', pCardIndex);
+    // judge action
+    viewPCard = pCardIndex => {
+        if (!this.state.pCards[pCardIndex].faceup) {
+            this.setState({
+                pCards: update(this.state.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
+                pCardIndex: pCardIndex,
+                pCardsFacedown: this.state.pCardsFacedown - 1
+            });
+            this.socket.emit('flip', pCardIndex);
+        } else {
+            this.setState({
+                pCardIndex: pCardIndex
+            });
+            this.socket.emit('look', pCardIndex);
+        }
     }
 
+    // judge action
     flipAllPCards = () => {
         this.setState({
             pCards: this.state.pCards.map(pCard => update(pCard, {faceup: {$set: true}})),
@@ -88,11 +104,19 @@ export default class GameContainer extends React.Component {
         this.socket.emit('flipAll');
     }
 
+    // judge action
     selectPCard = () => {
         this.setState({
             gamePhase: ROUND_OVER
         });
         this.socket.emit('select', this.state.pCardIndex);
+    }
+
+    skipRound = () => {
+        this.setState({
+            roundSkipped: true
+        });
+        this.socket.emit('skip');
     }
 
     savePCard = pCardIndex => {
@@ -144,8 +168,7 @@ export default class GameContainer extends React.Component {
                 pCardIndex: pCardIndex,
                 endTime: endTime,
                 cardsToWin: cardsToWin,
-                roundSkipped: roundSkipped,
-                tooFewPlayers: players.length < MIN_PLAYERS
+                roundSkipped: roundSkipped
             });
         });
         socket.on('nuj', player => {
@@ -154,8 +177,7 @@ export default class GameContainer extends React.Component {
                             : update(this.stateplayerIds, {$push: [player._id]});
             this.setState({
                 playerIds: playerIds,
-                players: update(this.state.players, {[player._id]: {$set: player}}),
-                tooFewPlayers: playerIds.length < MIN_PLAYERS
+                players: update(this.state.players, {[player._id]: {$set: player}})
             });
         });
         socket.on('judgeAssign', (playerIds, jCards) => {
@@ -164,8 +186,7 @@ export default class GameContainer extends React.Component {
                 playerIds: playerIds,
                 jCards: jCards,
                 pCards: [],
-                roundSkipped: false,
-                tooFewPlayers: playerIds.length < MIN_PLAYERS
+                roundSkipped: false
             });
         });
         socket.on('roundStart', (jCardIndex, endTime) => {
