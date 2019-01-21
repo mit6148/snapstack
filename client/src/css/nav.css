@@ -16,6 +16,16 @@
   font-size: 15px;
   margin: 5px;
 }
+.nav_btn:active, #logout_nav_btn:active, #profile_nav_btn:active, #about_nav_btn:active, #home_nav_btn:active {
+  background-color: #9C81A8;
+  box-shadow: 0px 1px #8E7599;
+  transform: translateY(1.5px);
+}
+.nav_btn:hover, #logout_nav_btn:hover, #profile_nav_btn:hover, #about_nav_btn:hover, #home_nav_btn:hover {
+  background: #9C81A8;
+  box-shadow: 0px 3px #8E7599;
+  cursor: pointer;
+}
 
 #home_nav_btn {
   left: 10px;
@@ -35,17 +45,6 @@
 #logout_nav_btn {
   right: 10px;
   bottom: 10px;
-}
-
-.nav_btn:active, #home_nav_btn:active, #about_nav_btn:active, #profile_nav_btn:active, #logout_nav_btn:active {
-  background-color: #9C81A8;
-  box-shadow: 0px 1px #8E7599;
-  transform: translateY(1.5px);
-}
-
-.nav_btn:hover, #home_nav_btn:hover, #about_nav_btn:hover, #profile_nav_btn:hover, #logout_nav_btn:hover {
-  background: #9C81A8;
-  box-shadow: 0px 3px #8E7599;
 }
 
 /*# sourceMappingURL=nav.css.map */
