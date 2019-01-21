@@ -7,6 +7,12 @@ const gameStates = {
     GAME_OVER: 5,
 };
 
+const saveStates = {
+    UNSAVED: 0,
+    SAVING: 1,
+    SAVED: 2,
+};
+
 const MIN_PLAYERS = 3;
 
 const MAX_PLAYERS = 7;
@@ -21,4 +27,4 @@ const CARDS_TO_WIN = 3;
 
 const GAME_CODE_LENGTH = 3;
 
-module.exports = {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH};
+module.exports = {gameStates, saveStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH};

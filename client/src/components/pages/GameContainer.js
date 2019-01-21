@@ -2,28 +2,21 @@ import React from "react";
 import io from "socket.io-client";
 import update from 'immutability-helper';
 import NavButtons from "../nav/NavButtons";
-import { gameStates, CARDS_TO_WIN, MIN_PLAYERS } from "../../../../config.js";
-
-import "../../css/game.css";
-
-const saveStates = {
-    UNSAVED: 0,
-    SAVED: 1,
-    SAVING: 2
-};
+import { {LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER}, {UNSAVED, SAVING, SAVED}, CARDS_TO_WIN, MIN_PLAYERS } from "../../../../config.js";
 
 export default class GameContainer extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            gameState: gameStates.LOBBY, // LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER
+            gamePhase: LOBBY, // LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER
             playerIds: [], // judge is playerIds[0]
             players: new Map(), // {_id: {_id, name, avatar, media{fb, insta}, score, hasPlayed, connected}}
             jCards: null, // [string]; [NUM_JCARDS] if JCHOOSE, [NUM_JCARDS or 1] otherwise
             jCardIndex: null, // selected if SUBMIT, JUDGE, ROUND_OVER, or GAME_OVER
             pCards: null, // [{_id, image, text, faceup, creator_id, saved}]; [0] if JCHOOSE, [0] or [1] if SUBMIT, [n] otherwise
-            pCardIndex: null, // selected if JUDGE, winner if ROUND_OVER or GAME_OVER
+            pCardIndex: null, // selected if JUDGE, winner if ROUND_OVER or GAME_OVER; accurate for non-judge players only
+            pCardsFacedown: 0, // if JUDGE; accurate for judge only
             endTime: null, // if SUBMIT
             cardsToWin: null,
             winnerId: null, // if ROUND_OVER or GAME_OVER
@@ -33,6 +26,16 @@ export default class GameContainer extends React.Component {
         };
 
         this.socket = this.createSocket();
+
+        this.quickActions = {
+            selectJCard: this.selectJCard,
+            submitPCard: this.submitPCard,
+            flipPCard: this.flipPCard,
+            flipAllPCards: this.flipAllPCards,
+            selectPCard: this.selectPCard,
+            savePCard: this.savePCard,
+            quitGame: this.props.quitGame
+        }
     }
 
     componentDidMount() {
@@ -40,12 +43,59 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
-        return (
-            <div className="game_page">
-            	<NavButtons appState={this.props.appState} page='GameContainer' quitGame={this.props.quitGame} />
-                Game
-            </div>
-        );
+        if (this.state.gamePhase === LOBBY) {
+            return (
+                <div>
+                    <Lobby  appState={this.props.appState}
+                            gameState={this.state}
+                            socket={this.socket}
+                            quickActions={this.quickActions} />
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <Game   appState={this.props.appState}
+                            gameState={this.state}
+                            socket={this.socket}
+                            quickActions={this.quickActions} />
+                </div>
+            );
+        }
+    }
+
+    selectJCard = jCardIndex => {
+        this.setState({
+            jCardIndex: jCardIndex
+        });
+    }
+
+    submitPCard = () => {
+
+    }
+
+    flipPCard = pCardIndex => {
+        this.setState({
+            pCards: update(this.state.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
+            pCardsFacedown: this.state.pCardsFacedown - 1
+        });
+        this.socket.emit('flip', pCardIndex);
+    }
+
+    flipAllPCards = () => {
+        this.setState({
+            pCards: this.state.pCards.map(pCard => update(pCard, {faceup: {$set: true}})),
+            pCardsFacedown: 0
+        });
+        this.socket.emit('flipAll');
+    }
+
+    selectPCard = pCardIndex => {
+
+    }
+
+    savePCard = pCardIndex => {
+
     }
 
     onConnect = () => {
@@ -65,19 +115,19 @@ export default class GameContainer extends React.Component {
             socket.disconnect();
             this.props.quitGame();
         });
-        socket.on('gameState', (players, gameState, jCards, pCards, pCardIndex, endTime, cardsToWin, roundSkipped, gameCode) => {
+        socket.on('gameState', (players, gamePhase, jCards, pCards, pCardIndex, endTime, cardsToWin, roundSkipped, gameCode) => {
             this.props.enterGame(gameCode);
             this.setState({
-                gameState: gameState,
+                gamePhase: gamePhase,
                 playerIds: players.map(player => player._id),
                 players: new Map(players.map(player => [player._id, player])),
                 jCards: jCards,
                 jCardIndex: 0,
-                pCards: pCards.map(pCard => update(pCard, {saved: {$set: saveStates.UNSAVED}})),
+                pCards: pCards.map(pCard => update(pCard, {saved: {$set: UNSAVED}})),
                 pCardIndex: pCardIndex,
                 endTime: endTime,
                 cardsToWin: cardsToWin,
-                winnerId: [gameState.ROUND_OVER, gameState.GAME_OVER].includes(gameState) ? pCards[pCardIndex].creator_id : null,
+                winnerId: [ROUND_OVER, GAME_OVER].includes(gamePhase) ? pCards[pCardIndex].creator_id : null,
                 judgeDisconnected: !players[0].connected,
                 roundSkipped: roundSkipped,
                 tooFewPlayers: players.length < MIN_PLAYERS
@@ -96,7 +146,7 @@ export default class GameContainer extends React.Component {
         });
         socket.on('judgeAssign', (playerIds, jCards) => {
             this.setState({
-                gameState: gameStates.JCHOOSE,
+                gamePhase: JCHOOSE,
                 playerIds: playerIds,
                 jCards: jCards,
                 pCards: [],
@@ -107,7 +157,7 @@ export default class GameContainer extends React.Component {
         });
         socket.on('roundStart', (jCardIndex, endTime) => {
             this.setState({
-                gameState: gameStates.SUBMIT,
+                gamePhase: SUBMIT,
                 players: new Map(Array.from(this.state.players, ([playerId, player]) => [playerId, update(player, {hasPlayed: {$set: false}})])),
                 jCardIndex: jCardIndex,
                 endTime: endTime
@@ -118,7 +168,7 @@ export default class GameContainer extends React.Component {
                 players: update(this.state.players, {[creator_id]: {hasPlayed: {$set: true}}}),
                 pCards: this.state.pCards.map(pCard =>
                             (pCard.creator_id === creator_id ||
-                            pCard._id === pCard_id && this.state.gameState !== gameState.SUBMIT)
+                            pCard._id === pCard_id && this.state.gamePhase !== SUBMIT)
                             ? update(pCard, {
                                 _id: {$set: pCard_id},
                                 creator_id: {$set: creator_id}
@@ -129,7 +179,7 @@ export default class GameContainer extends React.Component {
         });
         socket.on('pCards', pCards => {
             this.setState({
-                gameState: gameStates.JUDGE,
+                gamePhase: JUDGE,
                 pCards: this.state.pCards.length === 1 // TODO flip own card facedown first in animation
                         ? pCards.map(pCard =>
                             pCard._id === this.state.pCards[0]._id
@@ -139,12 +189,13 @@ export default class GameContainer extends React.Component {
                             })
                             : pCard
                         )
-                        : pCards
+                        : pCards,
+                pCardsFacedown: pCards.length
             });
         });
         socket.on('flip', pCardIndex => {
             this.setState({
-                pCards: update(this.state.pCards, {[pCardIndex]: {$toggle: ['faceup']}}),
+                pCards: update(this.state.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
                 pCardIndex: pCardIndex
             });
         });
@@ -161,7 +212,7 @@ export default class GameContainer extends React.Component {
         socket.on('select', (pCardIndex, creator_ids) => {
             let winnerId = creator_ids[pCardIndex];
             this.setState({
-                gameState: gameStates.ROUND_OVER,
+                gamePhase: ROUND_OVER,
                 players: update(this.state.players, {[winnerId]: {score: (score => score + 1)}}),
                 pCards: this.state.pCards.map((pCard, index) => update(pCard, {creator_id: {$set: creator_ids[index]}})),
                 pCardIndex: pCardIndex,
@@ -170,13 +221,13 @@ export default class GameContainer extends React.Component {
         });
         socket.on('gameOver', () => {
             this.setState({
-                gameState: gameStates.GAME_OVER,
+                gamePhase: GAME_OVER,
                 winnerId: this.state.pCards[this.state.pCardIndex].creator_id
             });
         });
         socket.on('disconnected', dcId => {
             this.setState({
-                playerIds: this.state.gameState === gameStates.LOBBY
+                playerIds: this.state.gamePhase === LOBBY
                             ? this.state.playerIds.filter(playerId => playerId !== dcId)
                             : this.state.playerIds,
                 players: update(this.state.players, {[dcId]: {connected: {$set: false}}}),
@@ -192,7 +243,7 @@ export default class GameContainer extends React.Component {
             this.setState({
                 pCards: this.state.pCards.map(pCard =>
                             pCard._id === pCard_id
-                            ? update(pCard, {saved: {$set: saveStates.SAVED}})
+                            ? update(pCard, {saved: {$set: SAVED}})
                             : pCard
                         )
             });
@@ -201,7 +252,7 @@ export default class GameContainer extends React.Component {
             this.setState({
                 pCards: this.state.pCards.map(pCard =>
                             pCard._id === pCard_id
-                            ? update(pCard, {saved: {$set: saveStates.UNSAVED}})
+                            ? update(pCard, {saved: {$set: UNSAVED}})
                             : pCard
                         )
             });
