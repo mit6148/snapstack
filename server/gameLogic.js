@@ -7,12 +7,6 @@ const {gamePhases, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
-const judgeConnection = {
-    CONNECTED = 0;
-    DISCONNECTED = 1;
-    SKIPPING = 2;
-}
-
 class Game {
     constructor(cardsToWin) {
         this.gamePhase = gamePhases.LOBBY;
@@ -27,7 +21,7 @@ class Game {
         this.cardsToWin = cardsToWin;
         this.jCardsSeen = [];
         this.pausedForTooFewPlayers = false;
-        this.judgeConnection = judgeConnection.CONNECTED;
+        this.isSkipping = false;
         this._lock = null;
         this.round = 0;
     }
@@ -158,7 +152,11 @@ class Game {
     }
 
     getIsSkipping() {
-        return this.judgeConnection === judgeConnection.SKIPPING;
+        return this.isSkipping;
+    }
+
+    getIsJudgeConnected() {
+        // TODO
     }
 
     getTooFewPlayers() {
@@ -392,6 +390,8 @@ async function onConnection(socket) {
         game.disconnect(user);
         io.to(game.getGameCode()).emit('disconnected', user._id);
     });
+
+    // TODO: skip and saveCard. Note: if judge disconnects, don't do anything different except that players now have the option to skip.
 }
 
 
