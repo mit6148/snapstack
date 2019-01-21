@@ -5,14 +5,16 @@ div {
 }
 
 body {
-  background-color: #D6CDD8;
+  background-color: #C6C3DB;
 }
 
 .home_center, .login_center {
-  margin-top: 10%;
-  margin-bottom: auto;
-  margin-left: auto;
-  margin-right: auto;
+  display: block;
+  font-size: 2em;
+  margin-block-start: 2em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
   height: 500px;
   text-align: center;
 }
@@ -22,7 +24,8 @@ body {
 }
 
 .title {
-  font-size: 160px;
+  text-align: center;
+  font-size: 140px;
   text-align: center;
   font-weight: 1000;
   letter-spacing: 0.05em;
@@ -75,6 +78,7 @@ body {
 .home_btn:hover, .login_btn:hover {
   background: #0677CE;
   box-shadow: 0 5px #056BBA;
+  cursor: pointer;
 }
 .home_btn:active, .login_btn:active {
   background-color: #0677CE;
