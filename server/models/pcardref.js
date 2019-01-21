@@ -12,4 +12,4 @@ const PCardRefSchema = new mongoose.Schema ({
 });
 
 // compile model from schema
-module.exports = mongoose.model('PCardRef', PCardSchema);
+module.exports = mongoose.model('PCardRef', PCardRefSchema);
