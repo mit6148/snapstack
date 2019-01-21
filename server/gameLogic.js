@@ -7,8 +7,11 @@ const {gamePhases, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
-// TODO: make adding a player be able to cause a judgeAssign event if there were previously too few players
-
+const judgeConnection = {
+    CONNECTED = 0;
+    DISCONNECTED = 1;
+    SKIPPING = 2;
+}
 
 class Game {
     constructor(cardsToWin) {
@@ -17,14 +20,14 @@ class Game {
         this.formerPlayerMap = {};
         this.userToPlayerMap = {};
         this.jCards = null;
-        this.pCardArray = null;
+        this.pCardPairArray = null;
         this.pCardIndex = null;
         this.endTime = null;
         this.gameCode = Game.generateUnusedGameCode();
         this.cardsToWin = cardsToWin;
         this.jCardsSeen = [];
-        this.isSkipping = false;
         this.pausedForTooFewPlayers = false;
+        this.judgeConnection = judgeConnection.CONNECTED;
         this._lock = null;
         this.round = 0;
     }
@@ -51,7 +54,7 @@ class Game {
     }
 
     async addPlayer(user) {
-        // TODO. must also handle RE-ADDING players
+        // TODO. must also handle RE-ADDING players, including the judge
     }
 
     async getPlayer(user) {
@@ -67,6 +70,10 @@ class Game {
     }
 
     async start() {
+        // TODO
+    }
+
+    disconnect(user) {
         // TODO
     }
 
@@ -110,7 +117,7 @@ class Game {
         // TODO. must check is judge and index in bounds and not flipped
     }
 
-    submitCard(user, pCard) {
+    submitCard(user, pCard, image) {
         // TODO
     }
 
@@ -151,7 +158,7 @@ class Game {
     }
 
     getIsSkipping() {
-        return this.isSkipping;
+        return this.judgeConnection === judgeConnection.SKIPPING;
     }
 
     getTooFewPlayers() {
@@ -341,7 +348,7 @@ async function onConnection(socket) {
     createLockedListener(socket, 'submitCard', game, async (image, text) => {
         const pCard = new PCard({text: text, creator_id: user._id, ref_count: 0});
         await pCard.save();
-        game.submitCard(user, pCard);
+        game.submitCard(user, pCard, image);
         socket.emit('turnedIn', user._id, pCard._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
     });
@@ -379,6 +386,11 @@ async function onConnection(socket) {
             }
             game.unlock();
         }, WAIT_TIME);
+    });
+
+    createLockedListener(socket, 'disconnect', game, async () => {
+        game.disconnect(user);
+        io.to(game.getGameCode()).emit('disconnected', user._id);
     });
 }
 
