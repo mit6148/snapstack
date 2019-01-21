@@ -21,16 +21,17 @@ export default class Home extends React.Component {
                     <Title/>
                     <div className="home_btn new_game" onClick={this.onNewGame}>New Game</div>
                     <div className="home_btn join_game" onClick={this.onJoinGame}>Join Game</div>
-                    {this.state.joinGameModal ? // TODO
-                        <Modal onClose={() => this.setState({joinGameModal: false})}>
-                            Enter game code:
-                            <input type="text" />
-                            <div onClick={() => this.props.enterGame('XZXZ')}>Play!</div>
-                        </Modal>
-                    : null}
                 </div>
+                {this.state.joinGameModal ? // TODO
+                    <Modal onClose={() => this.setState({joinGameModal: false})}>
+                        Enter game code:
+                        <input type="text" />
+                        <div onClick={() => this.props.enterGame('XZXZ')}>Play!</div>
+                    </Modal>
+                : null}
                 <NavButtons appState={this.props.appState} page='Home' />
             </div>
+
         );
     }
 

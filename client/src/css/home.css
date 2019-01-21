@@ -27,14 +27,13 @@ div {
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(2px 5px #7E7C82);
 }
-
-/* Flash class and keyframe animation */
 .title:hover {
   color: #f2f;
   -webkit-animation: flash linear 1s;
   animation: flash linear 1s;
 }
 
+/* Flash class and keyframe animation */
 @-webkit-keyframes flash {
   0% {
     opacity: 1;
@@ -69,12 +68,10 @@ div {
   border-radius: 0.4em;
   text-decoration: none;
 }
-
 .home_btn:hover, .login_btn:hover {
   background: #0677CE;
   box-shadow: 0 5px #056BBA;
 }
-
 .home_btn:active, .login_btn:active {
   background-color: #0677CE;
   box-shadow: 0 2px #056BBA;
