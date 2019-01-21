@@ -38,18 +38,26 @@ class PCardRef {
             .then(image => ({_id: this._id, image: image, text: cardInfo.text,
                             creator_id: redactCreator ? undefined : card.creator_id}));
     }
+
+    removeFromPlay() {
+        PCard.updateOne({_id: this._id}, {$set: {in_play: false}}).exec().catch(err => console.error);
+    }
 }
 
 class Player { // do not use constructor, use fromUserPromise
     constructor(user, detail) {
         this._id = user._id,
         this.media = detail.media,
-        this.score = 0;
-        this.hasPlayed = false;
-        this.pCardRef = null;
-        this.connected = true;
         this.name = detail.name;
         this.avatar = detail.avatar;
+        this.reset();
+    }
+
+    reset() {
+        this.score = 0;
+        this.hasPlayed = false;
+        this.pCardRef = null; // weak reference, game holds the strong reference
+        this.connected = true;
     }
 
     getPCardRef() {
@@ -89,6 +97,18 @@ class Game {
         this.jCardsSeen = [];
     }
 
+    reset() {
+        this.pCardIndex = null;
+        this.endTime = null;
+        if(this.pCardRefArray) {
+            // must first dereference all these pCards
+            for(let pCardRef of this.pCardRefArray) {
+                pCardRef.removeFromPlay();
+            }
+            this.pCardRefArray = null;
+        }
+    }
+
     formatAllPCardsPromise(player) {
         switch(this.gameState) {
             case gameStates.SUBMIT:
@@ -97,7 +117,7 @@ class Game {
             case gameStates.JUDGE: case gameStates.ROUND_OVER:
                 return Promise.all(this.pCardRefArray.map(
                     pCardRef => pCardRef.outputRepPromise(
-                        this.gameState == gameStates.ROUND_OVER)));
+                        this.gameState !== gameStates.ROUND_OVER)));
             default:
                 return Promise.resolve(null);
         }
@@ -114,6 +134,19 @@ class Game {
             });
     }
 
+    checkEndOfSubmitStage() {
+        let notPlayed = 0;
+        for(let player of this.players) {
+            if(!player.hasPlayed) {
+                notPlayed++;
+            }
+        }
+        if(notPlayed <= 1) {
+            // only judge hasn't played a card
+            this.endSubmitStage()
+        }
+    }
+
 
 // PUBLIC METHODS
 
@@ -124,7 +157,7 @@ class Game {
     start() {
         // must randomize player order
         shuffle(this.players);
-        this.judgeAssign();
+        this.judgeAssign(true);
     }
 
     isJudge(player) {
@@ -133,11 +166,47 @@ class Game {
 
 // EMIT AND BROADCAST METHODS
 
-    addPlayer(player) {
+    addPlayer(socket, player) {
+        player.reset();
         this.players.push(player);
         socket.join(game.gameCode); // add to room listeners
         game.emitRefreshGame(socket, player);
         socket.to(gameCode).emit('nuj', player.redacted()); // emit to all but newcomer
+    }
+
+    removePlayer(socket, player) { // returns true iff this game should be deleted, false otherwise
+        socket.leave(this.gameCode);
+        socket.to(this.gameCode).emit('quit', player._id);
+        const index = this.player.indexOf(player);
+        this.players.splice(index, 1);
+
+        if(this.gameState in [gameStates.LOBBY, gameStates.GAME_OVER]) {
+            return this.players.length === 0; // only kill in lobby or game over if no one is left
+        } else if(this.players.length <= 2) { // below minimum number of players
+            io.to(this.gameCode).emit("tooFewPlayers");
+            return true;
+        }
+
+        if(index === 0) { // is judge
+            if(this.gameState !== gameStates.ROUND_OVER) { // round over --> judge does nothing more so it's fine
+                this.pCardRefArray = null;
+                this.pCardIndex = null;
+                this.endTime = null;
+            }
+        } else {
+            if(this.gameState === gameStates.SUBMIT) {
+                this.checkEndOfSubmitStage();
+            }
+        }
+        return false;
+    }
+
+    endSubmitStage() {
+        this.gameState = gameStates.JUDGE;
+        this.pCardIndex = null;
+        this.endTime = null;
+        this.formatAllPCardsPromise(null).then(pCards => io.to(this.gameCode).emit('pCards', pCards));
+        //TODO(niks): handle the fact that this is async
     }
 
     emitRefreshGame(socket, player) {
@@ -148,7 +217,11 @@ class Game {
             .catch(err => console.log("emitRefreshGame had error!!!"));
     }
 
-    judgeAssign() {
+    judgeAssign(isStart) {
+        if(!isStart) {
+            // must rotate players!
+            this.players.push(this.players.shift());
+        }
         this.generateJCardsPromise().then(() => {
             this.gameState = gameStates.JCHOOSE;
             io.in(this.gameCode)
@@ -190,8 +263,17 @@ class GameManager {
     }
 
     removePlayer(socket, player, game) {
-        console.log("@nikhil finish remove player");
-        //TODO(niks)
+        delete this.userToGameMap[player._id];
+
+        if(game.removePlayer(socket, player)) {
+            // delete game
+            delete this.codeToGameMap[game.gameCode];
+            for(let p of game.players) {
+                delete this.userToGameMap[p._id];
+            }
+            game.deletePCardRefs();
+            delete game;
+        }
     }
 
     addPlayerToGame(socket, player, game) {
@@ -200,7 +282,7 @@ class GameManager {
             this.removePlayer(socket, player, previous);
         }
         this.userToGameMap[player._id] = game;
-        game.addPlayer(player);
+        game.addPlayer(socket, player);
     }
 
 
