@@ -262,6 +262,15 @@ function createLockedListener(socket, event, gameGetter, func) {
     });
 }
 
+function tryStartNewRound(game) {
+    game.startNewRound();
+    if(!game.getTooFewPlayers()) {
+        // can start next round
+        io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
+    }
+    // otherwise, just wait until a new player comes along
+}
+
 async function onConnection(socket) {
     const user = socket.request.user;
     let game;
@@ -362,12 +371,7 @@ async function onConnection(socket) {
                     game.endGame();
                     io.to(game.getGameCode()).emit('gameOver');
                 } else {
-                    game.startNewRound();
-                    if(!game.getTooFewPlayers()) {
-                        // can start next round
-                        io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
-                    }
-                    // otherwise, just wait until a new player comes along
+                    tryStartNewRound(game);
                 }
 
             } catch(err) {
