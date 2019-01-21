@@ -7,6 +7,10 @@ div {
 	display: block;
 }
 
+body {
+	background-color: $background-v1;
+}
+
 .home_center {
 	margin-top: 10%;
 	margin-bottom: auto;
@@ -55,7 +59,7 @@ div {
 	100% { opacity: 1; }
 }
 .home_btn {
-	
+
 	color: $white;
 	font-size: 25px;
 	background-color: $blue-light;
@@ -86,7 +90,4 @@ div {
 	@extend .home_btn;
 	display: inline-block;
 
-}
-body {
-	background-color: $light-gray;
 }
