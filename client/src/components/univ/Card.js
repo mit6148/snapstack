@@ -9,6 +9,7 @@ export default class Card extends Component {
     constructor(props) { // type {J, P}, faceup (Boolean), cardId; enlarged, [flipStatus]
         super(props)
         if (this.props.faceup === undefined) this.props.faceup = true;
+
     }
 
     render() {
