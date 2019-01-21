@@ -43,6 +43,7 @@ module.exports = {
       '/profile': 'http://localhost:3000',
       '/logout': 'http://localhost:3000',
       '/auth': 'http://localhost:3000',
+      '/socket.io': 'http://localhost:3000',
     }
   }
 };

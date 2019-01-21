@@ -44,7 +44,7 @@ export default class App extends React.Component {
             } else {
                 this.setState({userId: null, gameCode: null});
             }
-        });
+        }).catch(console.error);
     }
 
     logout = () => {

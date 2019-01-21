@@ -207,6 +207,7 @@ class GameManager {
 
 
     handleNewGame(socket, player, cardsToWin) {
+        console.log("new game");
         const code = this.generateUnusedRoomCode();
         const game = new Game(code, cardsToWin);
         codeToGameMap[code] = game;
@@ -255,9 +256,11 @@ function onConnection(socket) {
         socket.disconnect(true); // close socket fully
         return;
     }
+    console.log("user: " + user._id + " joined");
 
     Player.fromUserPromise(user)
         .then(player => {
+            console.log("made player");
             socket.on('newGame', cardsToWin => manager.handleNewGame(socket, player, cardsToWin));
             socket.on('joinGame', gameCode => manager.handleJoinGame(socket, player, gameCode));
             socket.on('startGame', () => manager.handleStartGame(player));
