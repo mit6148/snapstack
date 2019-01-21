@@ -1,0 +1,127 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+.modal_window {
+  position: fixed;
+  top: 0%;
+  bottom: 0%;
+  background-color: rgba(0, 0, 0, 0.4);
+  height: 100%;
+  width: 100%;
+  z-index: 500;
+  text-align: center;
+}
+
+.modal_container, .modal_container_card, .modal_container_join {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0);
+  height: 60%;
+  width: 60%;
+  text-align: center;
+  font-size: 20px;
+  z-index: 600;
+}
+
+.modal_container_join {
+  height: 250px;
+  width: 350px;
+}
+
+.modal_contents, .modal_contents_card, .modal_contents_join {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0);
+  height: 90%;
+  width: 90%;
+  z-index: 700;
+  opacity: 0%;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+  border-radius: 15px;
+  box-shadow: 0px 5px 0px 0px #636266;
+  text-align: center;
+  pointer-events: none;
+}
+
+.modal_contents_join {
+  background-color: #C6C3DB;
+  height: 200px;
+  width: 300px;
+}
+
+.modal_close_btn {
+  position: fixed;
+  color: #F4F4F4;
+  font-size: 100%;
+  right: 5px;
+  text-align: center;
+  top: 5px;
+  text-decoration: none;
+  pointer-events: auto;
+}
+.modal_close_btn:hover {
+  color: #CCCCCC;
+  cursor: pointer;
+}
+
+h3 {
+  color: #3B3B3D;
+}
+
+.modal_text_input {
+  border-radius: 5px;
+  padding: 8px;
+  background-color: #F4F4F4;
+  pointer-events: auto;
+}
+
+.modal_btn {
+  color: #F4F4F4;
+  background-color: #0683E2;
+  padding: 5px;
+  margin: 1em auto;
+  max-width: 50%;
+  border-radius: 5px;
+  box-shadow: 0px 5px 0px #0677CE;
+  pointer-events: auto;
+}
+.modal_btn:active {
+  background-color: #0677CE;
+  box-shadow: 0px 2px 0px #056BBA;
+  transform: translateY(1px);
+}
+.modal_btn:hover {
+  background: #0677CE;
+  box-shadow: 0px 5px 0px #056BBA;
+  cursor: pointer;
+}
+
+.modal_container_card {
+  height: 600px;
+  width: 400px;
+}
+
+.modal_contents_card {
+  background-color: #C6C3DB;
+  height: 540px;
+  width: 360px;
+}
+
+.container {
+  height: 500px;
+  width: 333px;
+  overflow: hidden;
+}
+
+img {
+  width: 100%;
+}
+
+/*# sourceMappingURL=card.css.map */

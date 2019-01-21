@@ -1,4 +1,4 @@
-const gameStates = {
+const gamePhases = {
     LOBBY: 0,
     JCHOOSE: 1,
     SUBMIT: 2,
@@ -27,4 +27,7 @@ const CARDS_TO_WIN = 3;
 
 const GAME_CODE_LENGTH = 3;
 
-module.exports = {gameStates, saveStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH};
+const WAIT_TIME = 2000; // between events that would otherwise be emitted concurrently
+
+module.exports = {gamePhases, saveStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
+    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME};
