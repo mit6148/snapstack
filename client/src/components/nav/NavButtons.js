@@ -32,10 +32,6 @@ export default class NavButtons extends React.Component {
                         <ProfileNavBtn appState={this.props.appState} />
                     </React.Fragment>
                 );
-            case 'GameContainer':
-                return (
-                    null
-                );
             case 'Profile':
                 return (
                     <React.Fragment>
@@ -49,6 +45,14 @@ export default class NavButtons extends React.Component {
                     <React.Fragment>
                         <HomeNavBtn appState={this.props.appState} />
                     </React.Fragment>
+                );
+            case 'Lobby':
+                return (
+                    null
+                );
+            case 'Game':
+                return (
+                    null
                 );
         }
     }
