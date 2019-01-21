@@ -27,6 +27,10 @@ export default class GameContainer extends React.Component {
         this.socket = this.connect();
     }
 
+    componentDidMount() {
+        window.addEventListener('beforeunload', () => this.socket.disconnect());
+    }
+
     render() {
         return (
             <div className="game_page">
@@ -121,5 +125,7 @@ export default class GameContainer extends React.Component {
         });
         socket.on('quit', playerId => {
         });
+
+        return socket;
     }
 }
