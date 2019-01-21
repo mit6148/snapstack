@@ -2,282 +2,266 @@ const User = require('./models/user');
 const UserDetail = require('./models/user_detail');
 const PCard = require('./models/pcard');
 const JCard = require('./models/jcard');
-const {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, NUM_JCARDS} = require("../config");
+const {gameStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, GAME_CODE_LENGTH} = require("../config");
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
-function generateRoomCode(length) {
-    let code = "";
-    for(let i = 0; i < length; i++) {
-        text += String.fromCharCode(65 + Math.floor(Math.random() * 26));
-    }
-}
-
-function shuffle(array) { // shuffle in place
-    let currentIndex = array.length;
-    while(currentIndex !== 0) {
-        const randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        const temp = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temp;
-    }
-    return array;
-}
-
-
-class PCardRef {
-    constructor(_id, faceup) {
-        this._id = _id;
-        this.faceup = faceup;
-    }
-
-    outputRepPromise(redactCreator) {
-        return PCard.findOne({_id: this._id}).exec()
-            .then(cardInfo => downloadImagePromise(cardInfo.image_ref))
-            .then(image => ({_id: this._id, image: image, text: cardInfo.text,
-                            creator_id: redactCreator ? undefined : card.creator_id}));
-    }
-}
-
-class Player { // do not use constructor, use fromUserPromise
-    constructor(user, detail) {
-        this._id = user._id,
-        this.media = detail.media,
-        this.score = 0;
-        this.hasPlayed = false;
-        this.pCardRef = null;
-        this.connected = true;
-        this.name = detail.name;
-        this.avatar = detail.avatar;
-    }
-
-    getPCardRef() {
-        return this.pCardRef;
-    }
-
-    redacted() {
-        return {_id: this._id, media: this.media, score: this.score, hasPlayed: this.hasPlayed,
-                connected: this.connected, name: this.name, avatar: this.avatar};
-    }
-
-    is(player) {
-        return this._id === player._id;
-    }
-}
-Player._idToPlayerMap = {}; // keep right after class Player definition
-Player.fromUserPromise = (user) => {
-    const found = Player._idToPlayerMap[user._id];
-    if(found) {
-        return Promise.resolve(found);
-    } else {
-        return UserDetail.findOne({_id: user.detail_id}).exec().then(detail => new Player(user, detail));
-    }
-};
 
 
 class Game {
-    constructor(code, cardsToWin) {
-        this.players = []; // first player is judge when relevant
-        this.gameState = gameStates.LOBBY;
-        this.jCards = null; // format: [{text, _id}]
+    constructor(cardsToWin) {
+        this.players = []; // first player is judge
+        this.formerPlayerMap = {};
+        this.userToPlayerMap = {};
+        this.jCards = null;
         this.pCardRefArray = null;
         this.pCardIndex = null;
         this.endTime = null;
-        this.gameCode = code;
+        this.gameCode = Game.generateUnusedGameCode();
         this.cardsToWin = cardsToWin;
         this.jCardsSeen = [];
+        this.isSkipping;
+        this._lock = null;
+        this.round = 0;
     }
 
-    formatAllPCardsPromise(player) {
-        switch(this.gameState) {
-            case gameStates.SUBMIT:
-                const pCardRef = player.getPCardRef();
-                return pCardRef ? Promise.resolve([]) : pCardRef.outputRepPromise(false).then(card => [card]);
-            case gameStates.JUDGE: case gameStates.ROUND_OVER:
-                return Promise.all(this.pCardRefArray.map(
-                    pCardRef => pCardRef.outputRepPromise(
-                        this.gameState == gameStates.ROUND_OVER)));
-            default:
-                return Promise.resolve(null);
+    lock() {
+        if(this._lock === null) {
+            this._lock = [];
+            return null;
+        } else {
+            return new Promise(function(resolve, reject) {
+                this._lock.push(resolve);
+            });
         }
     }
 
-    generateJCardsPromise() {
-        return JCard.aggregate([
-            {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
-            {$sample: {$size: NUM_JCARDS}} // warning: try to prevent concurrent modification error & memory excess (100MB)
-            ])
-            .then(jCards => {
-                this.jCards = jCards;
-                this.jCardsSeen += jCards.map(card => card._id);
-            });
+    unlock() {
+        if(this._lock.length === 0) {
+            this._lock = null;
+        } else {
+            const next = this._lock[0];
+            delete this._lock[0]; // WARNING: O(n) when could be O(1) with linked list. can fix later
+            next(null);
+        }
     }
 
-
-// PUBLIC METHODS
-
-    addPlayer(player) {
-        this.players.push(player);
+    async addPlayer(user) {
+        // TODO. must also handle RE-ADDING players
     }
 
-    isFull() {
-        return this.players.length >= MAX_PLAYERS;
+    async getPlayer(user) {
+        // TODO
     }
 
-    start() {
-        // must randomize player order
-        shuffle(this.players);
-        this.judgeAssign();
+    async getPlayers() {
+        // TODO
     }
 
-    isJudge(player) {
-        return this.players.length > 0 && this.players[0].is(player);
+    async getVisiblePCards() {
+        // TODO
     }
 
-// EMIT AND BROADCAST METHODS
-
-    emitRefreshGame(socket, player) {
-        this.formatAllPCardsPromise(player)
-            .then(pCards => socket.emit('refreshGame',
-                this.players.map(player => player.redacted()), this.gameState, this.jCards.map(jCard => jCard.text),
-                pCards, this.pCardIndex, this.endTime, this.cardsToWin, this.gameCode))
-            .catch(err => console.log("emitRefreshGame had error!!!"));
+    async start() {
+        // TODO
     }
 
-    judgeAssign() {
-        this.generateJCardsPromise().then(() => {
-            this.gameState = gameStates.JCHOOSE;
-            io.in(this.gameCode)
-                .emit('judgeAssign', this.players.map(player => player._id), this.jCards.map(jCard => jCard.text));
-        });
+    canEndSubmitPhase(round) {
+        return round === this.round && this.gameState === gameStates.SUBMIT;
     }
 
-    startRoundAndCheckIndex(jCardIndex) {
-        if(this.jCardIndex >= this.jCards.length || this.jCardIndex < 0) {
-            console.log("judge submitted invalid index");
+    endSubmitPhase() {
+        // TODO. must add on placeholders for all those who didn't submit
+    }
+
+    startRound(user, jCardIndex) {
+        // TODO. doesn't need to handle starting timeout
+    }
+
+    getRound() {
+        return this.round;
+    }
+
+    getPlayer_ids() {
+        return this.players.map(player => player._id);
+    }
+
+    getGameState() {
+        return this.gameState;
+    }
+
+    getJCards() {
+        return this.jCards;
+    }
+
+    getPCardIndex() {
+        return this.pCardIndex;
+    }
+
+    getEndTime() {
+        return this.endTime;
+    }
+
+    getIsSkipping() {
+        return this.isSkipping;
+    }
+
+    getGameCode() {
+        return this.gameCode
+    }
+}
+
+Game.codeToGameMap = {};
+
+Game.create = async (cardsToWin, user) => {
+    try {
+        const game = new Game(cardsToWin);
+        await game.addPlayer(user);
+        Game.codeToGameMap[this.gameCode] = game;
+        return game;
+    } catch (err) {
+        console.error('create game had an error: ' + err);
+        throw "Sorry, we're having a problem on the back end :(";
+    }
+}
+
+Game.join = async (gameCode, user) => {
+    gameCode = gameCode.toUpperCase();
+    if(!gameCode.match(/^[A-Z]{3}$/)) {
+        throw "Game codes must be " + GAME_CODE_LENGTH + " letters long";
+    }
+    let game;
+    try {
+        game = Game.codeToGameMap[gameCode];
+    } catch(err) {
+        console.error('join game had an error: ' + err);
+        throw "Sorry, we're having a problem on the back end :(";
+    }
+    if(game === undefined) {
+        throw "This is not the game code you are looking for";
+    } else {
+        const success = await game.addPlayer(user);
+        if(!success) {
+            throw "Sorry, room full";
+        }
+        return game;
+    }
+}
+
+Game.generateUnusedGameCode = () => {
+    while(true) {
+        let code = "";
+        for(let i = 0; i < GAME_CODE_LENGTH; i++) {
+            text += String.fromCharCode(65 + Math.floor(Math.random() * 26));
+        }
+        if(!(code in Game.codeToGameMap)) {
+            return code;
+        }
+    }
+}
+
+
+
+async function emitGameState(socket, user, game) {
+    const [players, gameState, jCards, visiblePCards, pCardIndex, endTime, isSkipping, gameCode] = await  Promise.all(
+                [game.getPlayers(), game.getGameState(), game.getJCards(), game.getVisiblePCards(user),
+                game.getPCardIndex(), game.getEndTime(), game.getIsSkipping(), game.getGameCode()]);
+    socket.emit('gameState', players, gameState, jCards, visiblePCards, pCardIndex, endTime, cardsToWin, isSkipping, gameCode);
+}
+
+/**
+creates a socket listener for event, checks that only newGame and joinGame are allowed to not come with a game already made.
+Then, for everything but newGame and joinGame, it locks the game object while it runs so that all others on the same game
+will await it. Finally it runs the handler and then unlocks.
+*/
+function createLockedListener(socket, event, gameGetter, func) {
+    socket.on(event, args => {
+        const game = gameGetter();
+
+        if(!game && !(event in ['newGame', 'joinGame'])) {
+            // WARNING: special values used here!
+            console.error("attempted to do game action " + event + " without a game");
             return;
         }
-        this.jCards = [this.jCards[jCardIndex]];
-        this.endTime = Date.now() + TIME_LIMIT_MILLIS;
-        io.in(this.gameCode).emit('roundStart', jCardIndex, this.endTime);
-    }
 
+        if(game) {
+            await game.lock();
+        }
+        try {
+            await func.apply(this, args);
+        } catch(err) {
+            console.error("socket triggered error: " + err);
+
+            // WARNING: maybe we don't want this?
+            socket.disconnect();
+        }
+        if(game) {
+            game.unlock();
+        }
+    });
 }
 
-class GameManager {
-    constructor() {
-        this.codeToGameMap = {};
-        this.userToGameMap = {};
-    }
-
-    generateUnusedRoomCode() {
-        const size = Object.keys(this.codeToGameMap).length;
-        const minLetters = Math.ceil(Math.pow(size + 1, 1.0 / 26)) + 2;
-        while(true) {
-            const code = generateRoomCode(minLetters);
-            if(code in this.codeToGameMap) {
-                return code;
-            }
-        }
-    }
-
-    getCurrentGame(userOrPlayer) {
-        return this.userToGameMap[userOrPlayer._id];
-    }
-
-    removePlayer(player, game) {
-        console.log("@nikhil finish remove player");
-        //TODO(niks)
-    }
-
-    addPlayerToGame(socket, player, game) {
-        const previous = getCurrentGame(player);
-        if(previous) {
-            this.removePlayer(player, previous);
-        }
-        game.addPlayer(player);
-        this.userToGameMap[player._id] = game;
-        socket.join(game.gameCode); // add to room listeners
-        game.emitRefreshGame(socket, player);
-    }
-
-
-// SOCKET EVENT HANDLERS
-
-
-    handleNewGame(socket, player, cardsToWin) {
-        console.log("new game");
-        const code = this.generateUnusedRoomCode();
-        const game = new Game(code, cardsToWin);
-        codeToGameMap[code] = game;
-        this.addPlayerToGame(socket, player, game);
-    }
-
-    handleJoinGame(socket, player, gameCode) {
-        const game = this.getCurrentGame(player);
-        if(!game) {
-            socket.emit('rejectConnection', 'Invalid room code');
-        } else if(game.isFull()) {
-            socket.emit('rejectConnection', "Room full :'(");
-        } else {
-            this.addPlayerToGame(socket, player, game);
-            socket.to(gameCode).emit('nuj', player.redacted()); // emit to all but newcomer
-        }
-    }
-
-    handleStartGame(player) {
-        const game = this.getCurrentGame(player);
-        if(!game || game.gameState != gameStates.LOBBY) {
-            return console.log("player " + player._id + " tried to start game in wrong state");
-        }
-        game.start();
-    }
-
-    handleJCardChoice(player, jCardIndex) {
-        const game = this.getCurrentGame(player);
-        if(!game || !game.isJudge(player)) {
-            return console.log("player " + player._id + " tried to choose j card in wrong state");
-        }
-        game.startRoundAndCheckIndex(jCardIndex); // this should be the only mutator
-    }
-
-    handleSubmitCard(socket, player, image, text) {
-        //TODO(niks)
-    }
-}
-
-const manager = new GameManager();
-
-function onConnection(socket) {
+async function onConnection(socket) {
     const user = socket.request.user;
+    let game;
     if(!user.logged_in) {
         console.log('not logged in!');
-        socket.disconnect(true); // close socket fully
+        socket.disconnect(); // close socket fully
         return;
     }
     console.log("user: " + user._id + " joined");
 
-    Player.fromUserPromise(user)
-        .then(player => {
-            console.log("made player");
-            socket.on('newGame', cardsToWin => manager.handleNewGame(socket, player, cardsToWin));
-            socket.on('joinGame', gameCode => manager.handleJoinGame(socket, player, gameCode));
-            socket.on('startGame', () => manager.handleStartGame(player));
-            socket.on('jCardChoice', jCardIndex => manager.handleJCardChoice(player, jCardIndex));
-            socket.on('submitCard', (image, text) => manager.handleSubmitCard(socket, player, image, text));
-        })
-        .catch(err => {
-            console.log("failed to get user --> player: " + err);
-            socket.disconnect(true);
-        });
+    createLockedListener(socket, 'newGame', null, async cardsToWin => {
+        if(game) {
+            throw "tried to create a game on the same socket as an existing one!";
+        }
+        try {
+            game = await Game.create(cardsToWin, user);
+        } catch(reason) {
+            return socket.emit('rejectConnection', reason);
+        }
+        socket.join(game.getGameCode());
+        emitGameState(socket, user, game);
+    });
+
+    createLockedListener(socket, 'joinGame', null, async gameCode => {
+        if(game) {
+            throw "tried to join game on the same socket as an existing one!";
+        }
+        try {
+            game = await Game.join(gameCode, user);
+        } catch(reason) {
+            return socket.emit('rejectConnection', reason);
+        }
+        socket.join(gameCode);
+        emitGameState(socket, user, game);
+        socket.to(gameCode).emit('nuj', await game.getPlayer(user));
+    });
+
+    createLockedListener(socket, 'startGame', game, async () => {
+        await game.start();
+        io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
+    });
+
+    createLockedListener(socket, 'jCardChoice', game, async jCardIndex => {
+        const endTime = game.startRound(user, jCardIndex);
+        io.to(game.getGameCode()).emit('roundStart', jCardIndex, endTime);
+        const round = game.getRound();
+        setTimeout(async () => {
+            await game.lock();
+            if(game.canEndSubmitPhase(round)) {
+                // the timer is actually relevant
+                await game.endSubmitPhase();
+                io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+            }
+            game.unlock();
+        }, endTime - Date.now() + TIME_LIMIT_FORGIVE_MILLIS);
+    });
+
+    createLockedListener(socket, 'submitCard', game, async (image, text {
+
+    })
 }
 
-function getCurrentGameCode(user) {
-    const game = manager.getCurrentGame(user);
-    return game ? game.gameCode : null;
-}
 
-
-
-module.exports = {onConnection, getCurrentGameCode};
+module.exports = {onConnection};

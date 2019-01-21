@@ -17,6 +17,7 @@ function generateObjectName() {
 
 
 function uploadImagePromise(image) {
+    // WARNING: should validate image here
     return new Promise(function(resolve, reject) {
         const name = generateObjectName();
         const file = bucket.file(name, {generation: 0}); // generation:0 means there can't exist a previous file
