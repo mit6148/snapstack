@@ -16,11 +16,25 @@ export default class Game extends React.Component {
         );
     }
 
-    getWinner = () => {
-        return [ROUND_OVER, GAME_OVER].includes(this.gameState.gamePhase) && this.gameState.pCards[this.gameState.pCardIndex].creator_id || null
+    canFlipAllPCards = () => {
+        return this.gameState.pCardsFacedown > 0;
     }
 
+    canSelectPCard = () => {
+        return this.gameState.pCardsFacedown === 0 && this.gameState.pCardIndex !== null;
+    }
+
+    getWinner = () => {
+        return [ROUND_OVER, GAME_OVER].includes(this.gameState.gamePhase) && this.gameState.pCards[this.gameState.pCardIndex].creator_id || null;
+    }
+
+    // enable skip round
     isJudgeDisconnected = () => {
-        return [JCHOOSE, SUBMIT, JUDGE].includes(this.gameState.gamePhase) && !this.gameState.players[this.gameState.playerIds[0]].connected
+        return [JCHOOSE, SUBMIT, JUDGE].includes(this.gameState.gamePhase) && !this.gameState.players[this.gameState.playerIds[0]].connected;
+    }
+
+    // stall at JCHOOSE
+    tooFewPlayers = () => {
+        return this.gameState.playerIds.length < MIN_PLAYERS;
     }
 }
