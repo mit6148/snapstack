@@ -10,7 +10,7 @@ export default class Lobby extends React.Component {
 
         return (
             <div className="game_page">
-                <NavButtons appState={this.props.appState} page='Lobby' quitGame={this.props.quickActions.quitGame}/>
+                <NavButtons appState={this.props.appState} page='Lobby' quitGame={this.actions.quitGame} />
                 Lobby
             </div>
         );

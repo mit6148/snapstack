@@ -10,7 +10,7 @@ export default class Game extends React.Component {
 
         return (
             <div className="game_page">
-                <NavButtons appState={this.props.appState} page='Game' quitGame={this.actions.quitGame}/>
+                <NavButtons appState={this.props.appState} page='Game' quitGame={this.actions.quitGame} />
                 Game
             </div>
         );
