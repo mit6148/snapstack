@@ -19,7 +19,7 @@ export default class Image extends Component {
     render() {
         return (
             <div>
-                <img src='../../../../examples/assets/image1.jpg' />
+                <img src='/pancakes.jpg' />
             </div>
         );
     }
