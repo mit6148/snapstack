@@ -14,7 +14,9 @@ class Player {
         this.avatar = details.avatar;
         this.media = details.media;
         this.score = 0;
-        this.resetRoundState();
+        this.hasPlayed = false;
+        this.connected = true;
+        this.pCardRef = null;
     }
 
     connect() {
@@ -24,7 +26,12 @@ class Player {
     resetRoundState() { // after having been removed from a round, so round state is reset
         this.hasPlayed = false;
         this.connected = true;
-        this.pCardRef = null
+        this.pCardRef = null;
+    }
+
+    format() {
+        return {_id: this._id, name: this.name, avatar: this.avatar, media: this.media,
+                score: this.score, hasPlayed: this.hasPlayed, connected: this.connected};
     }
 }
 
@@ -40,7 +47,7 @@ class Game {
         this.players = []; // first player is judge
         this.userToPlayerMap = {}; // still keeps removed players
         this.jCards = [];
-        this.pCardRefArray = [];
+        this.pCardRefPairArray = []; // array of pairs [pCardRef, flipped]
         this.pCardIndex = null;
         this.endTime = null;
         this.gameCode = Game.generateUnusedGameCode();
@@ -107,12 +114,13 @@ class Game {
                 }
             } else {
                 // add player to end of player list
-                checkRoomFull();
+                this.checkRoomFull();
                 player.resetRoundState();
                 this.players.push(player);
             }
         } else {
-            checkRoomFull();
+            // new!
+            this.checkRoomFull();
             try {
                 this.players.push(await Player.from(user));
             } catch(err) {
@@ -120,20 +128,6 @@ class Game {
                 throw "Sorry, we're having some trouble. Try again later";
             }
         }
-    }
-
-    checkRoomFull() {
-        if(this.players.length >= MAX_PLAYERS) {
-            throw "Sorry, room full";
-        }
-    }
-
-    async getPlayer(user) {
-        // TODO
-    }
-
-    async getPlayers() {
-        // TODO
     }
 
     async getVisiblePCards(userOrUndefined) {
@@ -151,6 +145,28 @@ class Game {
 
     async tryDestroyAssets() {
         // TODO. must remove from codetogamemap
+    }
+
+    async startNewRound() {
+        // TODO
+    }
+
+    checkRoomFull() {
+        if(this.players.length >= MAX_PLAYERS) {
+            throw "Sorry, room full";
+        }
+    }
+
+    getPlayer(user) {
+        const player = this.userToPlayerMap[user._id];
+        if(!player) {
+            throw "tried to get player who isn't in game!";
+        }
+        return player.format();
+    }
+
+    getPlayers() {
+        return this.players.map(player => player.format());
     }
 
     skipRound() {
@@ -174,10 +190,6 @@ class Game {
     }
 
     endGame() {
-        // TODO
-    }
-
-    startNewRound() {
         // TODO
     }
 
@@ -314,7 +326,7 @@ function createLockedListener(socket, event, gameGetter, func) {
 }
 
 function tryStartNewRound(game) {
-    game.startNewRound();
+    await game.startNewRound();
     if(!game.getTooFewPlayers()) {
         // can start next round
         io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
