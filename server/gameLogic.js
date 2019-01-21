@@ -1,6 +1,6 @@
 const User = require('./models/user');
 const UserDetail = require('./models/user_detail');
-const PCard = require('./models/pcard');
+const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
     NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME} = require("../config");
@@ -14,12 +14,13 @@ class Game {
         this.formerPlayerMap = {};
         this.userToPlayerMap = {};
         this.jCards = null;
-        this.pCardPairArray = null;
+        this.pCardRefArray = null;
         this.pCardIndex = null;
         this.endTime = null;
         this.gameCode = Game.generateUnusedGameCode();
         this.cardsToWin = cardsToWin;
         this.jCardsSeen = [];
+        this.pCardsMade = [];
         this.pausedForTooFewPlayers = false;
         this.isSkipping = false;
         this._lock = null;
@@ -111,7 +112,7 @@ class Game {
         // TODO. must check is judge and index in bounds and not flipped
     }
 
-    submitCard(user, pCard, image) {
+    submitCard(pCardRef) {
         // TODO
     }
 
@@ -344,9 +345,8 @@ async function onConnection(socket) {
     });
 
     createLockedListener(socket, 'submitCard', game, async (image, text) => {
-        const pCard = new PCard({text: text, creator_id: user._id, ref_count: 0});
-        await pCard.save();
-        game.submitCard(user, pCard, image);
+        const pCardRef = await generatePCardRef(user, image, text);
+        game.submitCard(pCardRef);
         socket.emit('turnedIn', user._id, pCard._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
     });
