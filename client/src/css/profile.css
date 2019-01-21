@@ -1,7 +1,11 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+@import url("https://fonts.googleapis.com/css?family=Raleway|Thasadith");
+.profile_text {
+  font-family: Thasadith, sans-serif;
+}
+
 h1 {
   text-align: center;
-  font-size: 60px;
+  font-size: 80px;
   text-align: center;
   font-weight: 1000;
   letter-spacing: 0.05em;
@@ -14,6 +18,25 @@ h1:hover {
   color: #f2f;
   -webkit-animation: flash linear 1s;
   animation: flash linear 1s;
+}
+
+h2 {
+  text-align: center;
+  font-size: 30px;
+  text-align: center;
+}
+
+.picture_container {
+  height: 200px;
+  width: 200px;
+  border-radius: 100px;
+  overflow: hidden;
+  box-shadow: 2px 4px 0px #7E7C82;
+}
+
+.profile_picture {
+  height: 100%;
+  width: 100%;
 }
 
 /*# sourceMappingURL=profile.css.map */

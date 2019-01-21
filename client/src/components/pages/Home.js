@@ -15,7 +15,6 @@ export default class Home extends React.Component {
 
         this.state = {
             joinGameModal: false,
-            viewCard: false
         };
     }   
 
@@ -24,9 +23,11 @@ export default class Home extends React.Component {
             <div>
                 <div className="home_center">
                     <Title/>
+                    <div className="logo_container">
+                        <img className="logo" src="/pancakes.jpg"/>
+                    </div>
                     <div className="home_btn new_game" onClick={this.onNewGame}>New Game</div>
                     <div className="home_btn join_game" onClick={this.onJoinGame}>Join Game</div>
-                    <div className="home_btn zoom_card" onClick={this.onViewCard}>View Card</div>
                 </div>
                 {this.state.joinGameModal ? // TODO
                     <Modal modalType="join_game" onClose={() => this.setState({joinGameModal: false})}>
@@ -34,11 +35,6 @@ export default class Home extends React.Component {
                         <input className="modal_text_input" type="text" />
                         <div className="modal_btn" onClick={() => this.props.enterGame('XZXZ')}>Play!</div>
                     </Modal>
-                : null}
-
-                {this.state.viewCard ? // TODO
-                    <Card zoomed={true} faceup={true} onClose={() => this.setState({viewCard: false})}>
-                    </Card>
                 : null}
 
                 <NavButtons appState={this.props.appState} page='Home' />
@@ -57,10 +53,5 @@ export default class Home extends React.Component {
         });
     }
 
-    onViewCard = () => {
-        this.setState({
-            viewCard: true
-        });
-    }
 
 }
