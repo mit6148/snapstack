@@ -23,10 +23,10 @@ export default class Home extends React.Component {
                     <div className="home_btn join_game" onClick={this.onJoinGame}>Join Game</div>
                 </div>
                 {this.state.joinGameModal ? // TODO
-                    <Modal onClose={() => this.setState({joinGameModal: false})}>
-                        Enter game code:
-                        <input type="text" />
-                        <div onClick={() => this.props.enterGame('XZXZ')}>Play!</div>
+                    <Modal modalType="join_game" onClose={() => this.setState({joinGameModal: false})}>
+                        <h3> Enter game code: </h3>
+                        <input className="modal_text_input" type="text" />
+                        <div className="modal_btn" onClick={() => this.props.enterGame('XZXZ')}>Play!</div>
                     </Modal>
                 : null}
                 <NavButtons appState={this.props.appState} page='Home' />

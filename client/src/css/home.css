@@ -4,6 +4,10 @@ div {
   display: block;
 }
 
+body {
+  background-color: #D6CDD8;
+}
+
 .home_center, .login_center {
   margin-top: 10%;
   margin-bottom: auto;
@@ -80,10 +84,6 @@ div {
 
 .login_btn {
   display: inline-block;
-}
-
-body {
-  background-color: #CCCCCC;
 }
 
 /*# sourceMappingURL=home.css.map */
