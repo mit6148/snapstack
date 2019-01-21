@@ -1,9 +1,9 @@
 const User = require('./models/user');
 const UserDetail = require('./models/user_detail');
-const PCard = require('./models/pcard');
+const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
-    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME} = require("../config");
+    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates} = require("../config");
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
@@ -14,12 +14,13 @@ class Game {
         this.formerPlayerMap = {};
         this.userToPlayerMap = {};
         this.jCards = null;
-        this.pCardPairArray = null;
+        this.pCardRefArray = null;
         this.pCardIndex = null;
         this.endTime = null;
         this.gameCode = Game.generateUnusedGameCode();
         this.cardsToWin = cardsToWin;
         this.jCardsSeen = [];
+        this.pCardsMade = [];
         this.pausedForTooFewPlayers = false;
         this.isSkipping = false;
         this._lock = null;
@@ -48,7 +49,7 @@ class Game {
     }
 
     async addPlayer(user) {
-        // TODO. must also handle RE-ADDING players, including the judge
+        // TODO. must also handle RE-ADDING players, including the judge. Must return problem: null if no issues, otherwise an informative message
     }
 
     async getPlayer(user) {
@@ -59,11 +60,24 @@ class Game {
         // TODO
     }
 
-    async getVisiblePCards() {
-        // TODO
+    async getVisiblePCards(userOrUndefined) {
+        // TODO:
+        /*
+        In jchoose: return []
+        In submit: user is provided, give back array with only zero/one elem: the user's submitted pcard, including it's saveState
+        In judge: no user provided, 
+        */
     }
 
     async start() {
+        // TODO
+    }
+
+    async tryDestroyAssets() {
+        // TODO
+    }
+
+    skipRound() {
         // TODO
     }
 
@@ -111,7 +125,7 @@ class Game {
         // TODO. must check is judge and index in bounds and not flipped
     }
 
-    submitCard(user, pCard, image) {
+    submitCard(pCardRef) {
         // TODO
     }
 
@@ -198,16 +212,16 @@ Game.join = async (gameCode, user) => {
         throw "This is not the game code you are looking for";
     } else {
         await game.lock();
-        let success;
+        let problem;
         try {
-            success = await game.addPlayer(user);
+            problem = await game.addPlayer(user);
         } catch(err) {
             game.unlock(); // WATCH OUT: NEEDED BEFORE ANY EXIT
             throw "Sorry, we're having a problem on the back end :/";
         }
         game.unlock(); // WATCH OUT: NEEDED BEFORE ANY EXIT
-        if(!success) {
-            throw "Sorry, room full";
+        if(problem) {
+            throw problem;
         }
         return game;
     }
@@ -344,9 +358,8 @@ async function onConnection(socket) {
     });
 
     createLockedListener(socket, 'submitCard', game, async (image, text) => {
-        const pCard = new PCard({text: text, creator_id: user._id, ref_count: 0});
-        await pCard.save();
-        game.submitCard(user, pCard, image);
+        const pCardRef = await generatePCardRef(user, image, text);
+        game.submitCard(pCardRef);
         socket.emit('turnedIn', user._id, pCard._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
     });
@@ -389,9 +402,13 @@ async function onConnection(socket) {
     createLockedListener(socket, 'disconnect', game, async () => {
         game.disconnect(user);
         io.to(game.getGameCode()).emit('disconnected', user._id);
+        await game.tryDestroyAssets();
     });
 
-    // TODO: skip and saveCard. Note: if judge disconnects, don't do anything different except that players now have the option to skip.
+    createLockedListener(socket, 'skip', game, async () => {
+        game.skipRound();
+        io.to(game.getGameCode()).emit('skipped');
+    });
 }
 
 
