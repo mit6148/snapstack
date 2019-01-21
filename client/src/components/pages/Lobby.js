@@ -19,6 +19,7 @@ export default class Lobby extends React.Component {
                     Play to {this.gameState.cardsToWin} cards
                 </div>
                 <PlayerList players={this.gameState.playerIds.map(playerId => this.gameState.players[playerId])} />
+                <div onClick={this.actions.gameStart}>Start Game</div>
             </div>
         );
     }
