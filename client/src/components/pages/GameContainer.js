@@ -28,7 +28,7 @@ export default class GameContainer extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener('beforeunload', () => this.socket.disconnect());
+        window.addEventListener('beforeunload', () => this.socket.disconnect()); // TODO debug
     }
 
     render() {
