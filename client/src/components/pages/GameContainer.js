@@ -1,7 +1,8 @@
 import React from "react";
 import io from "socket.io-client";
-import update from 'immutability-helper';
-import NavButtons from "../nav/NavButtons";
+import update from "immutability-helper";
+import Lobby from "./Lobby";
+import Game from "./Game";
 import { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER, UNSAVED, SAVING, SAVED, CARDS_TO_WIN, MIN_PLAYERS } from "../../../../config.js";
 
 export default class GameContainer extends React.Component {
