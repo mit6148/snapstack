@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Image from "./Image";
+import Caption from "./Caption";
 
 export default class Card extends Component {
     constructor(props) { // type {J, P}, faceup (Boolean), cardId; enlarged, [flipStatus]
@@ -9,13 +11,21 @@ export default class Card extends Component {
     render() {
         if (this.props.faceup) {
             return (
-                {null}
+                <div>
+                    <Image />
+                    <Caption text=':chrissexy:'/>
+                </div>
             );
         }
         else {
             return (
-                {this.props.type == 'J' ? null : null}
+                null
             );
+            // return (
+            //     <div>
+            //         <Cardback type={this.props.type} />
+            //     </div>
+            // );
         }
     }
 }

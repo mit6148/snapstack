@@ -36,14 +36,9 @@ export default class App extends React.Component {
 
     getUser = () => {
         fetch("/api/whoami").then(res => res.json()).then(userObj => {
-            if(userObj._id !== undefined) {
-                this.setState({
-                        userId: userObj._id,
-                        gameCode: userObj.currentGameCode || null
-                    });
-            } else {
-                this.setState({userId: null, gameCode: null});
-            }
+            this.setState({
+                userId: userObj._id
+            });
         }).catch(console.error);
     }
 
