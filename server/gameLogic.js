@@ -228,7 +228,8 @@ class Game {
 
     async startNewRound() {
         this.gamePhase = gamePhases.JCHOOSE;
-        this.players = this.players.filter(player => player.connected);
+        this.players.push(this.players.shift()); // rotate the player order
+        this.players = this.players.filter(player => player.connected); // do this after rotating so that if judge disconnected, still good
         for(let player of this.players) {
             player.resetRoundState();
         }
