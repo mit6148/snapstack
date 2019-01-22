@@ -165,7 +165,7 @@ export default class GameContainer extends React.Component {
                 players: Object.assign({}, ...players.map(player => ({[player._id]: player}))),
                 jCards: jCards,
                 jCardIndex: 0,
-                pCards: pCards.map(pCard => update(pCard, {saveState: {$set: UNSAVED}})),
+                pCards: pCards,
                 pCardIndex: pCardIndex,
                 endTime: endTime,
                 cardsToWin: cardsToWin,
@@ -173,7 +173,7 @@ export default class GameContainer extends React.Component {
             });
         });
         socket.on('nuj', player => {
-            let playerIds = this.state.players.has(player._id)
+            let playerIds = player._id in this.state.players
                             ? this.state.playerIds
                             : update(this.stateplayerIds, {$push: [player._id]});
             this.setState({
@@ -185,6 +185,8 @@ export default class GameContainer extends React.Component {
             this.setState({
                 gamePhase: JCHOOSE,
                 playerIds: playerIds,
+                players: update(this.state.players, Object.assign({}, ...this.state.playerIds.map(playerId =>
+                            ({[playerId]: {hasPlayed: {$set: false}}})))),
                 jCards: jCards,
                 pCards: [],
                 roundSkipped: false
@@ -193,8 +195,6 @@ export default class GameContainer extends React.Component {
         socket.on('roundStart', (jCardIndex, endTime) => {
             this.setState({
                 gamePhase: SUBMIT,
-                players: update(this.state.players, Object.assign({}, ...this.state.playerIds.map(playerId =>
-                            ({[playerId]: {hasPlayed: {$set: false}}})))),
                 jCardIndex: jCardIndex,
                 endTime: endTime
             });

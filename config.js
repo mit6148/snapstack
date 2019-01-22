@@ -13,6 +13,12 @@ const saveStates = {
     SAVED: 2,
 };
 
+const specialCards = {
+    NO_CARD: 0,
+    CARDBACK: 1,
+    FACEDOWN_CARD: 2,
+};
+
 const MIN_PLAYERS = 3;
 
 const MAX_PLAYERS = 7;
@@ -29,5 +35,5 @@ const GAME_CODE_LENGTH = 3;
 
 const WAIT_TIME = 2000; // between events that would otherwise be emitted concurrently
 
-module.exports = {gamePhases, saveStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
+module.exports = {gamePhases, saveStates, specialCards, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
     NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME};
