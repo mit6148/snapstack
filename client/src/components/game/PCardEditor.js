@@ -12,7 +12,6 @@ export default class PCardEditor extends React.Component {
     }
 
     submit = (image, text) => {
-        console.log('hi');
         this.props.submit(image, text);
         this.props.onClose();
     }
