@@ -50,7 +50,7 @@
   filter: drop-shadow(1px 2px #7E7C82);
 }
 
-.disabled_start_btn, .enabled_start_btn {
+.start_game_btn, .enabled_start_btn, .disabled_start_btn {
   color: #F4F4F4;
   font-size: 25px;
   background-color: #7E7C82;
@@ -63,11 +63,17 @@
   text-decoration: none;
 }
 
+.disabled_start_btn {
+  background-color: #7E7C82;
+  box-shadow: 0px 5px 0px #636266;
+}
+
 .enabled_start_btn {
-  color: #0683E2;
+  background-color: #0683E2;
+  box-shadow: 0px 5px 0px #0677CE;
 }
 .enabled_start_btn:hover {
-  background: #0677CE;
+  background-color: #0677CE;
   box-shadow: 0 5px #056BBA;
   cursor: pointer;
 }

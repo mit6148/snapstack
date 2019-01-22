@@ -60,7 +60,8 @@
   	filter: drop-shadow(1px 2px $medium-gray);
 }
 
-.disabled_start_btn {
+
+.start_game_btn {
 	color: $white;
 	font-size: 25px;
 	background-color: $medium-gray;
@@ -69,22 +70,24 @@
 	padding: 10px;
 	text-align: center;
 	width: 150px;
-
-
 	border-radius: 0.4em;
-
 	text-decoration: none;
+}
 
+.disabled_start_btn {
+	@extend .start_game_btn;
+	background-color: $medium-gray;
+	box-shadow: 0px 5px 0px $dark-gray;
 }
 
 .enabled_start_btn {
-	@extend .disabled_start_btn;
-	color: $blue-light;
+	@extend .start_game_btn;
 
 	background-color: $blue-light;
+	box-shadow: 0px 5px 0px $blue-medium;
 
 	&:hover {
-	background: $blue-medium;
+	background-color: $blue-medium;
 	box-shadow: 0 5px $blue-dark;
 	cursor: pointer;
 	}
