@@ -10,4 +10,8 @@
   justify-content: center;
 }
 
+.upload_div {
+  flex: 1;
+}
+
 /*# sourceMappingURL=game.css.map */
