@@ -1,10 +1,5 @@
 require('dotenv').config(); // keep this as first line
 
-const fs = require('fs');
-
-console.log(fs.readFileSync(process.env.TEST_ENVIRONMENT_VARIABLE));
-
-
 const {http, express, app, server, io} = require('./requirements');
 const bodyParser = require('body-parser');
 const session = require('express-session');

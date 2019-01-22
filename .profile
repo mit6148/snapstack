@@ -1,1 +1,0 @@
-export TEST_ENVIRONMENT_VARIABLE="$HOME/test.txt"
