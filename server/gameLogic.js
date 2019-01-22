@@ -174,7 +174,7 @@ class Game {
         */
         let pCardRefPairs;
         let show_creator = false;
-        const player = userOrUndefined ? this.getPlayer(userOrUndefined) : undefined;
+        const player = userOrUndefined ? this.userToPlayerMap[userOrUndefined._id] : undefined;
         switch(this.gamePhase) {
             case gamePhases.LOBBY: case gamePhases.JCHOOSE:
                 return [];
@@ -280,7 +280,7 @@ class Game {
     }
 
     disconnect(user) {
-        this.getPlayer(user).disconnect();
+        this.userToPlayerMap[user._id].disconnect();
     }
 
     pausedAndShouldResume() {
