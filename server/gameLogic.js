@@ -517,6 +517,7 @@ will await it. Finally it runs the handler and then unlocks.
 */
 function createLockedListener(socket, event, gameGetter, func) {
     socket.on(event, async function() {
+        console.log("backend handling: " + event)
         const game = gameGetter ? gameGetter() : null;
 
         if(!game && !(['newGame', 'joinGame'].includes(event))) {
