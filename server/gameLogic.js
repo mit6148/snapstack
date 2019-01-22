@@ -237,7 +237,7 @@ class Game {
             {$sample: {size: NUM_JCARDS}}, // WARNING: try to prevent concurrent modification error & memory excess (100MB)
             ]).exec();
         this.jCards = jCards.map(jCard => jCard.text);
-        this.jCardsSeen += jCards.map(jCard => jCard._id);
+        this.jCardsSeen = this.jCardsSeen.concat(jCards.map(jCard => jCard._id));
         this.pCardRefPairs = [];
         this.pCardIndex = null;
         this.endTime = null;
