@@ -13,7 +13,7 @@ export default class Image extends Component {
     }
 
     render() {
-        let src = this.props.src === null ? '/pancakes.jpg' : this.props.src.substring(this.props.src.indexOf(',') + 1);
+        let src = this.props.src === null ? '/pancakes.jpg' : this.props.src;
         return (
             <div>
                 <img src={src} />

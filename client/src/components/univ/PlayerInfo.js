@@ -6,7 +6,7 @@ export default class PlayerInfo extends React.Component {
         return (
             <div>
                 <div>
-                    <Image src={this.props.avatar} />
+                    <img src={this.props.avatar}></img>
                 </div>
                 <div>
                     {this.props.name}
