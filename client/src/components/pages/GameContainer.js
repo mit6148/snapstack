@@ -3,8 +3,9 @@ import io from "socket.io-client";
 import update from "immutability-helper";
 import Lobby from "./Lobby";
 import Game from "./Game";
-import {gamePhases, UNSAVED, SAVING, SAVED, CARDS_TO_WIN, MIN_PLAYERS} from "../../../../config.js";
+import {gamePhases, saveStates, CARDS_TO_WIN, MIN_PLAYERS} from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
+const { UNSAVED, SAVING, SAVED } = saveStates;
 
 import "../../css/game.css";
 
