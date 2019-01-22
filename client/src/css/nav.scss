@@ -7,6 +7,7 @@
 .nav_btn {
 	text-decoration: none;
 	display: inline-block;
+	
 	border-radius: 60px;
 	box-shadow: 0px 3px 0px $purple-medium;
 	padding: 0.5em 0.6em;
@@ -16,7 +17,7 @@
 	padding: 15px;
 	color: $white;
 
-	position: absolute;
+	position:fixed;
 
 	width: 15px;
 	height: 15px;
@@ -58,12 +59,19 @@
 }
 #logout_nav_btn {
 	@extend .nav_btn;
-	// background: $white;
-	// color: $black;
-	// box-shadow: 0px 3px $light-gray;
-
 	right: $nav_btn_margin;
 	bottom: $nav_btn_margin;
 }
 
+#quit_nav_btn {
+	@extend .nav_btn;
+	left: $nav_btn_margin;
+	bottom: $nav_btn_margin;
+
+	-moz-transform: scale(-1, 1);
+	-webkit-transform: scale(-1, 1);
+	-o-transform: scale(-1, 1);
+	-ms-transform: scale(-1, 1);
+	transform: scale(-1, 1);
+}
 

@@ -27,6 +27,7 @@ h2 {
 }
 
 .picture_container {
+  display: inline-block;
   height: 200px;
   width: 200px;
   border-radius: 100px;
@@ -37,6 +38,43 @@ h2 {
 .profile_picture {
   height: 100%;
   width: 100%;
+}
+
+.profile_page {
+  display: fixed;
+}
+
+.profile_section, .saved_cards, .social_media, .about_me {
+  padding: 15px;
+  display: inline-block;
+  background-color: #3B3B3D;
+  max-width: 900px;
+  min-width: 60%;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.edit_btn {
+  color: #F4F4F4;
+  font-size: 15px;
+  background-color: #12B780;
+  box-shadow: 0px 5px 0px #10A070;
+  margin: 1em auto;
+  padding: 5px;
+  text-align: center;
+  width: 50px;
+  border-radius: 0.4em;
+  text-decoration: none;
+}
+.edit_btn:hover {
+  background: #10A070;
+  box-shadow: 0 5px #0E8C62;
+  cursor: pointer;
+}
+.edit_btn:active {
+  background-color: #10A070;
+  box-shadow: 0 2px #0E8C62;
+  transform: translateY(3px);
 }
 
 /*# sourceMappingURL=profile.css.map */
