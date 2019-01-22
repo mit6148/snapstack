@@ -5,15 +5,15 @@ const { UNSAVED, SAVING, SAVED } = saveStates;
 export default class SaveButton extends Component {
     render() {
         switch (this.props.saveState) {
-            UNSAVED:
+            case UNSAVED:
                 return (
                     <div onClick={this.props.save}>Save</div>
                 );
-            SAVING:
+            case SAVING:
                 return (
                     <div>Saving</div>
                 );
-            SAVED:
+            case SAVED:
                 return (
                     <div>Saved!</div>
                 );
