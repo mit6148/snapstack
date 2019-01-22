@@ -175,7 +175,7 @@ export default class GameContainer extends React.Component {
         socket.on('nuj', player => {
             let playerIds = player._id in this.state.players
                             ? this.state.playerIds
-                            : update(this.stateplayerIds, {$push: [player._id]});
+                            : update(this.state.playerIds, {$push: [player._id]});
             this.setState({
                 playerIds: playerIds,
                 players: update(this.state.players, {[player._id]: {$set: player}})
