@@ -37,7 +37,7 @@ function uploadImagePromise(image) {
 }
 
 function downloadImagePromise(name) {
-    return bucket.file(name).download().then(data => data[0]); // data[0] is the file data
+    return bucket.file(name).download().then(data => data[0].toString('base64')); // data[0] is the file data
 }
 
 function deleteImagePromise(name) { // returns true if succeeded
