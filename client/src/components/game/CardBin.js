@@ -5,20 +5,22 @@ import PlayerInfo from "../univ/PlayerInfo";
 import { specialCards } from "../../../../config.js";
 const { NO_CARD, CARDBACK, FACEDOWN_CARD } = specialCards;
 
+import "../../css/card.css";
+
 export default class CardBin extends React.Component {
     render() {
         if (this.props.jCards !== undefined) {
             return (
-                <div>
+                <div className="jcard_bin">
                     {this.props.jCards.map((jCard, index) => (
-                        <div key={index}>
-                            <div>
+                        <div key={index} className="jcard_slot">
+                            <div className="jcard_object">
                                 <JCard  src={jCard}
                                         text={jCard}
                                         onClick={this.props.onClick ? (() => this.props.onClick(index, jCard)) : null}
                                         enlarged={this.props.enlarged} />
                             </div>
-                            <div>
+                            <div className="jcard_info">
                                 {!this.props.owners || !this.props.owners[index] ? null : (
                                     <PlayerInfo name={this.props.owners[index].name}
                                                 avatar={this.props.owners[index].avatar}
@@ -33,9 +35,9 @@ export default class CardBin extends React.Component {
             );
         } else { // TODO handle judgeFocusIndex, winnerIndex
             return (
-                <div>
+                <div className="pcard_bin">
                     {this.props.pCards.map((pCard, index) => (
-                        <div key={index}>
+                        <div key={index} className='pcard_slot'>
                             <div>
                                 <PCard  src={pCard}
                                         image={pCard.image}

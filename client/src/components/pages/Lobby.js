@@ -26,16 +26,17 @@ export default class Lobby extends React.Component {
                     <div className="game_info">
                         <h2>
                             Game Code: 
-                            <div className="game_code"> {this.props.appState.gameCode}
-                            </div>
                         </h2>
+                        <div className="game_code"> {this.props.appState.gameCode}
+                        </div>
                         
                         <h2>
                             # Cards to Win: 
-                            <div className="game_settings">
-                                {this.gameState.cardsToWin}
-                            </div>
+
                         </h2>
+                        <div className="game_settings">
+                            {this.gameState.cardsToWin}
+                        </div>
                     </div>
 
                     <div className="whos_joined">

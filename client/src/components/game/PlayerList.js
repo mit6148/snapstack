@@ -11,6 +11,7 @@ export default class PlayerList extends React.Component {
                     <PlayerListCell player={player} key={player._id} />
                 ))}
                 
+                
             </div>
         );
     }

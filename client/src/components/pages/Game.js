@@ -3,6 +3,7 @@ import NavButtons from "../nav/NavButtons";
 import CardBin from "../game/CardBin";
 import Timer from "../game/Timer";
 import Uploader from "../game/Uploader";
+import PCard from "../univ/PCard";
 import PCardEditor from "../game/PCardEditor";
 import Modal from "../univ/Modal";
 import { gamePhases, saveStates, specialCards, MIN_PLAYERS } from "../../../../config.js";

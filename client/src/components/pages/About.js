@@ -9,9 +9,9 @@ export default class About extends React.Component {
         return (
             <div className="about_page">
             	<NavButtons appState={this.props.appState} page='About' />
-                <h1> ABOUT </h1>
+                <h1> About </h1>
 
-                <h2> Get to know the SnapStack team! &lt;3</h2>
+                <h2> Get to know the SnapStack team!</h2>
 
                 <div className="snapstack_team">
                 	<div className="member">
