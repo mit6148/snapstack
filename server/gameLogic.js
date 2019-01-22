@@ -10,8 +10,8 @@ const {io} = require('./requirements');
 class Player {
     constructor(user, detail) {
         this._id = user._id;
-        this.name = (detail.firstName && detail.lastName) ? detail.firstName + " " + detail.lastName[0] + "."
-                                                            : (detail.firstName || detail.lastName);
+        this.name = (detail.firstName && detail.lastName) ? detail.firstName + " " + detail.lastName[0]
+                                                            : (detail.firstName || detail.lastName || "No Name");
         this.avatar = detail.avatar;
         this.media = detail.media;
         this.detail_id = detail._id
