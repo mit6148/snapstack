@@ -231,11 +231,12 @@ class Game {
         for(let player of this.players) {
             player.resetRoundState();
         }
-        this.jCards = await JCard.aggregate([
+        const jCards = await JCard.aggregate([
             {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
             {$sample: {size: NUM_JCARDS}}, // WARNING: try to prevent concurrent modification error & memory excess (100MB)
             ]).exec();
-        this.jCardsSeen += this.jCards.map(jCard => jCard._id);
+        this.jCards = jCards.map(jCard => jCard.text);
+        this.jCardsSeen += jCards.map(jCard => jCard._id);
         this.pCardRefPairs = [];
         this.pCardIndex = null;
         this.endTime = null;
