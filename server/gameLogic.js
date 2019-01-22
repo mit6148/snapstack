@@ -138,18 +138,22 @@ class Game {
                 // still in game, hasn't ended round
                 if(player.connected) {
                     // trying to join the game again while other socket is still connected!
+                    console.log("new user already connected");
                     throw "Sorry, you're already in this game. Check your other windows!";
                 } else {
+                    console.log("new user rejoined within the same round");
                     player.connect(); // just reconnect, nothing really changes
                 }
             } else {
                 // add player to end of player list
+                console.log("new user rejoined in different round");
                 this.checkRoomFull();
                 player.resetRoundState();
                 this.players.push(player);
             }
         } else {
             // new!
+            console.log("new user has never been in game");
             this.checkRoomFull();
             try {
                 const player = await Player.from(user);
