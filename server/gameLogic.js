@@ -228,7 +228,8 @@ class Game {
 
     async startNewRound() {
         this.gamePhase = gamePhases.JCHOOSE;
-        this.players = this.players.filter(player => player.connected);
+        this.players.push(this.players.shift()); // rotate the player order
+        this.players = this.players.filter(player => player.connected); // do this after rotating so that if judge disconnected, still good
         for(let player of this.players) {
             player.resetRoundState();
         }
@@ -237,7 +238,7 @@ class Game {
             {$sample: {size: NUM_JCARDS}}, // WARNING: try to prevent concurrent modification error & memory excess (100MB)
             ]).exec();
         this.jCards = jCards.map(jCard => jCard.text);
-        this.jCardsSeen += jCards.map(jCard => jCard._id);
+        this.jCardsSeen = this.jCardsSeen.concat(jCards.map(jCard => jCard._id));
         this.pCardRefPairs = [];
         this.pCardIndex = null;
         this.endTime = null;
@@ -273,7 +274,7 @@ class Game {
     }
 
     skipRound(userTriggered) {
-        if(!userTriggered || (userTriggered && !this.pausedForTooFewPlayers &&
+        if(DEVELOPER_MODE ||  !userTriggered || (userTriggered && !this.pausedForTooFewPlayers &&
             ![gamePhases.LOBBY, gamePhases.GAME_OVER, gamePhases.ROUND_OVER].includes(this.gamePhase) && !this.players[0].connected)) {
             this.isSkipping = true;
         } else {
@@ -373,6 +374,7 @@ class Game {
         if(player.pCardRef) {
             throw new Error("user " + player._id + "tried to submit a card twice!");
         } else {
+            this.pCardRefPairs.push([pCardRef, false]);
             player.play(pCardRef);
         }
     }
@@ -403,6 +405,10 @@ class Game {
             this.jCards = [this.jCards[jCardIndex]];
             this.endTime = Date.now() + TIME_LIMIT_MILLIS;
         }
+    }
+
+    allCardsSubmitted() {
+        return this.players.length - 1 === this.pCardRefPairs.length; // everyone but judge submitted
     }
 
     getRound() {
@@ -471,6 +477,9 @@ Game.generateUnusedGameCode = () => {
 
 
 async function generatePCardRef(user, image, text) {
+    if(typeof(image) !== 'string' || typeof(text) !== 'string') {
+        throw new Error("cannot handle image of type " + typeof(image) + "/text of type " + typeof(text));
+    }
     const image_ref = await uploadImagePromise(image);
     const pCardRef = new PCardRef({
         text: text,
@@ -535,10 +544,13 @@ function createLockedListener(socket, event, gameGetter, func) {
 
 async function handleSkipRound(userTriggered) {
     game.skipRound(userTriggered);
+    console.log('about to wait to skip round');
     io.to(game.getGameCode()).emit('skipped');
     setTimeout(async () => {
         try {
+            console.log('about to actually skip round');
             await game.withLock(async () => tryStartNewRound(game));
+            console.log('success');
         } catch(err) {
             console.error("post-skip-phase timeout in skip had an error: " + err);
         }
@@ -553,9 +565,15 @@ async function tryStartNewRound(game) {
 async function endSubmitPhaseDelayedSendout() {
     await game.endSubmitPhase();
     setTimeout(async () => {
-        game.withLock(async () => {
-            io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
-        });
+        try {
+            await game.withLock(async () => {
+                const pCards = await game.getVisiblePCards();
+                io.to(game.getGameCode()).emit('pCards', pCards);
+                console.log("sent pCards");
+            });
+        } catch(err) {
+            throw new Error("error in end submit phase delayed sendout: " + err + "\n" + err.stack);
+        }
     }, WAIT_TIME);
 }
 
@@ -615,18 +633,22 @@ async function onConnection(socket) {
         const round = game.getRound();
         setTimeout(async () => {
             try {
+                console.log("about to handle timeout event");
                 await game.withLock(async () => {
                     switch(game.getEndSubmitPhaseStatus(round)) {
                         case endSubmitPhaseStatus.CAN_END:
                             // submit phase ended in a timeout
+                            console.log("ending submit phase");
                             await endSubmitPhaseDelayedSendout();
                             break;
                         case endSubmitPhaseStatus.SKIP_INSTEAD:
                             // no one submitted, so trigger skip event not caused by any particular user
+                            console.log('skipping due to no submission');
                             await handleSkipRound(false);
                             break;
                         case endSubmitPhaseStatus.ALREADY_ENDED:
                             // timer is irrelevant since submit phase already ended, so do nothing
+                            console.log("old timer did nothing");
                     }
                 });
             } catch(err) {
@@ -638,10 +660,10 @@ async function onConnection(socket) {
     createLockedListener(socket, 'submitCard', gameGetter, async (image, text) => {
         const pCardRef = await generatePCardRef(user, image, text);
         game.submitCard(pCardRef);
-        socket.emit('turnedIn', user._id, pCard._id);
+        socket.emit('turnedIn', user._id, pCardRef._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
 
-        if(game.getEndSubmitPhaseStatus(game.getRound()) === endSubmitPhaseStatus.CAN_END) {
+        if(game.allCardsSubmitted()) {
             await endSubmitPhaseDelayedSendout();
         }
     });
@@ -667,14 +689,18 @@ async function onConnection(socket) {
         io.to(game.getGameCode()).emit('select', index, game.getCreators());
         setTimeout(async () => {
             try {
+                console.log("about to move from round over to new round");
                 await game.withLock( async () => {
                     if(game.hasSomeoneWon()) {
+                        console.log("game over!");
                         await game.endGame();
                         io.to(game.getGameCode()).emit('gameOver');
                     } else {
+                        console.log("trying to start a new round");
                         await tryStartNewRound(game);
                     }
                 });
+                console.log("finished starting new round/game over-ifying");
             } catch(err) {
                 console.error("post-select-phase timeout in select had an error: " + err);
             }

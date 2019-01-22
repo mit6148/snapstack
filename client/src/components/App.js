@@ -39,6 +39,7 @@ export default class App extends React.Component {
             this.setState({
                 userId: userObj._id
             });
+            console.log(userObj);
         }).catch(console.error);
     }
 

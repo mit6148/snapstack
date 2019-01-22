@@ -3,7 +3,9 @@ import NavButtons from "../nav/NavButtons";
 import CardBin from "../game/CardBin";
 import Timer from "../game/Timer";
 import Uploader from "../game/Uploader";
+import PCard from "../univ/PCard";
 import PCardEditor from "../game/PCardEditor";
+import Modal from "../univ/Modal";
 import { gamePhases, saveStates, specialCards, MIN_PLAYERS } from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 const { UNSAVED, SAVING, SAVED } = saveStates;
@@ -60,7 +62,7 @@ export default class Game extends React.Component {
                                 winnerIndex={this.gameState.pCardIndex} />
                 )}
                 {this.gameState.gamePhase === SUBMIT ? <Timer end={this.gameState.endTime} /> : null}
-                {this.canUploadImage() ? <Uploader upload={this.uploadImage} /> : null}
+                {this.canUploadImage() ? <Uploader upload={this.uploadImage} fakeImage={this.gameState.players[this.gameState.playerIds[0]].avatar} /> : null}
                 {this.canFlipAllPCards() ? <div onClick={this.actions.flipAllPCards}>Flip All</div> : null}
                 {this.canSelectPCard() ? <div onClick={this.actions.selectPCard}>Select</div> : null}
                 {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
@@ -85,7 +87,7 @@ export default class Game extends React.Component {
         this.setState({
             pCardEditModal: (
                 <Modal onClose={this.setState({pCardEditModal: null})} persistOnWindowClick={true}>
-                    <PCardEditor image={image} submit={this.actions.submitPCard} onClose={this.setState({pCardEditModal: null})} />
+                    <PCardEditor image={image} submit={this.actions.submitPCard} onClose={() => this.setState({pCardEditModal: null})} />
                 </Modal>
             )
         });
@@ -97,7 +99,7 @@ export default class Game extends React.Component {
         if (pCard.faceup !== false) {
             this.setState({
                 cardModal: (
-                    <Modal onClose={this.setState({cardModal: null})}>
+                    <Modal modalType='zoom_card' onClose={this.setState({cardModal: null})}>
                         <PCard  image={pCard.image}
                                 text={pCard.text}
                                 saveState={pCard.saveState}
@@ -133,8 +135,8 @@ export default class Game extends React.Component {
     }
 
     // enable skip round
-    isJudgeDisconnected = () => {
-        return [JCHOOSE, SUBMIT, JUDGE].includes(this.gameState.gamePhase) && !this.gameState.players[this.gameState.playerIds[0]].connected;
+    isJudgeDisconnected = () => { // TODO remove temp change
+        return true || [JCHOOSE, SUBMIT, JUDGE].includes(this.gameState.gamePhase) && !this.gameState.players[this.gameState.playerIds[0]].connected;
     }
 
     // stall at JCHOOSE
