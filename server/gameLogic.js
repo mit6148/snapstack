@@ -62,6 +62,7 @@ class Player {
 }
 
 Player.from = async user => {
+    console.log(user.detail_id);
     const detail = await UserDetail.findOne({_id: user.detail_id}).exec();
     return new Player(user, detail);
 }
@@ -156,7 +157,7 @@ class Game {
                 this.players.push(player);
                 this.userToPlayerMap[user._id] = player;
             } catch(err) {
-                console.error("addPlayer had unknown error: " + err);
+                console.error("addPlayer had unknown error: " + err + "\n" + err.stack);
                 throw "Sorry, we're having some trouble. Try again later";
             }
         }
