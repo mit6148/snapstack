@@ -2,11 +2,7 @@ import React, { Component } from "react";
 
 export default class Image extends Component {
     constructor(props) {
-        super(props)
-
-        this.state = {
-            image: null
-        };
+        super(props);
 
         // fetch('/api/image', {'_id': this.props.imageId})
         // .then(image => {
@@ -17,9 +13,10 @@ export default class Image extends Component {
     }
 
     render() {
+        let src = this.props.src === null ? '/pancakes.jpg' : this.props.src;
         return (
             <div>
-                <img src='/pancakes.jpg' />
+                <img src={src} />
             </div>
         );
     }
