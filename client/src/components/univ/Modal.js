@@ -37,8 +37,8 @@ export default class Modal extends React.Component {
                     <div>
                         <div className="modal_window">
                         </div>
-                        <div className="modal_container_card">
-                            <div className="modal_contents_card">
+                        <div className="modal_container_jcard_selector">
+                            <div className="modal_contents_jcard_selector">
                                 {this.props.children}
                             </div>
                         </div>

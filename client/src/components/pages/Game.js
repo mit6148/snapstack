@@ -35,6 +35,7 @@ export default class Game extends React.Component {
                         <CardBin    jCards={[NO_CARD]}
                                     owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
                         <Modal modalType="jcard_selector">
+                            <h2 className='modal_command'> Select your judge card </h2>
                             <CardBin    jCards={this.gameState.jCards}
                                         onClick={this.isJudge() ? this.actions.selectJCard : null}
                                         enlarged={true} />
@@ -70,7 +71,8 @@ export default class Game extends React.Component {
                 {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
                     <div>
                         The judge has disconnected. Skip round?
-                        <div onClick={this.actions.skipRound}>Sure</div>
+                        <div className="home_btn" onClick={this.actions.skipRound}> 
+                        Sure </div>
                     </div>
                 ) : null}
                 {this.gameState.roundSkipped ? (

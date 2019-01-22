@@ -37,6 +37,25 @@ export default class Lobby extends React.Component {
                         <div className="game_settings">
                             {this.gameState.cardsToWin}
                         </div>
+                        <h2>
+                            Time limit per round:
+                        </h2>
+                        <div className="game_settings">
+                            3 min
+                        </div>
+                        <h2>
+                            Min # players:
+                        </h2>
+                        <div className="game_settings">
+                            3
+                        </div>
+                        <h2>
+                            Max # players:
+                        </h2>
+                        <div className="game_settings">
+                            7
+                        </div>
+
                     </div>
 
                     <div className="whos_joined">

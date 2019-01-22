@@ -12,25 +12,28 @@ export default class JCard extends Component {
         switch (this.props.src) {
             case NO_CARD:
                 return (
-                    <div onClick={this.props.onClick}>
+                    <div className="jcard_empty" onClick={this.props.onClick}>
                     </div>
                 );
             case CARDBACK:
             case FACEDOWN_CARD:
                 return (
-                    <div onClick={this.props.onClick}>
+                    <div className="jcard_back" onClick={this.props.onClick}>
                     </div>
                 );
             default:
                 if (this.props.faceup === false) {
                     return (
-                        <div onClick={this.props.onClick}>
+                        <div className="jcard_back" onClick={this.props.onClick}>
+                            <img type="image/png" href="/pancakes.png" />
                         </div>
                     );
                 } else {
                     return (
                         <div className={this.props.enlarged ? 'jcard_enlarged' : 'jcard'} onClick={this.props.onClick}>
-                            {this.props.text}
+                            <div className="jcard_prompt">
+                                {this.props.text}
+                            </div>
                         </div>
                     );
                 }

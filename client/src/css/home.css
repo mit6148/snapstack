@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Questrial|Thasadith");
-
 div {
   font-family: "Raleway", sans-serif;
   display: block;
@@ -18,11 +17,6 @@ div {
 body {
   background-color: #C6C3DB;
 }
-
-img {
-  width: 100%;
-}
-
 
 .logo:hover {
   height: 100%;

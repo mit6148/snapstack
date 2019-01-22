@@ -1,34 +1,85 @@
 @import "./_variables.scss";
-@import "./modal.scss";
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
 
-.modal_container_card {
-	@extend .modal_container;
-	height: 600px;
-  	width: 400px;
+
+.jcard_bin {
+	display:flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
 }
 
-.modal_contents_card {
-  @extend .modal_contents;
-  background-color: $background-v1;
-  height: 540px;
-  width: 360px;
+.jcard_slot {
+	align-items: flex-start;
+	justify-content: center;
+
 }
 
-.container {
-	height: 500px;
-	width: 333px;
-	overflow: hidden;
+.jcard_object {
+	text-align: center;
+	justify-content: center;
+	height: 300px;
+	width: 200px;
+	display: flex;
+	align-items: center;
+
 }
 
-img {
+.jcard_info {
+
+}
+
+.jcard_enlarged {
+	@extend .jcard_front;
+	height: 100%;
 	width: 100%;
 }
 
+.jcard {
+	@extend .jcard_front;
+}
 
+.jcard_front {	
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background-color: $white;
+	justify-content: center;
+	align-items: center;
+	border-style: solid;
+	border-radius: 10px;
+	border-color: $green-light;
+	border-width: 10px;
+	box-shadow: 1px 3px 0px $green-dark;
+}
 
+.jcard_empty {
+	height: 60%;
+	width: 60%;
+	display: flex;
+	background-color: $background-v1;
+	justify-content: center;
+	align-items: center;
+	border-style: dashed;
+	border-radius: 10px;
+	border-color: $green-light;
+	border-width: 3px;
 
+}
+
+.jcard_back {
+	height: 90%;
+	width: 90%;
+}
+
+.jcard_prompt {
+	word-wrap: break-word;
+	color: $black;
+	padding: 10px;
+}
 
 
 
