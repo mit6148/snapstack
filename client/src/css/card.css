@@ -26,8 +26,8 @@
 }
 
 .jcard_front, .jcard_enlarged, .jcard {
-  height: 100%;
-  width: 100%;
+  height: 90%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   background-color: #F4F4F4;
@@ -38,6 +38,7 @@
   border-color: #12B780;
   border-width: 10px;
   box-shadow: 1px 3px 0px #0E8C62;
+  margin: 15px;
 }
 
 .jcard_empty {

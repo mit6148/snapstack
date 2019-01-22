@@ -42,8 +42,8 @@
 }
 
 .jcard_front {	
-	height: 100%;
-	width: 100%;
+	height: 90%;
+	width: 90%;
 	display: flex;
 	flex-direction: column;
 	background-color: $white;
@@ -54,6 +54,8 @@
 	border-color: $green-light;
 	border-width: 10px;
 	box-shadow: 1px 3px 0px $green-dark;
+
+	margin: 15px;
 }
 
 .jcard_empty {

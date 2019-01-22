@@ -35,7 +35,7 @@ export default class Game extends React.Component {
                         <CardBin    jCards={[NO_CARD]}
                                     owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
                         <Modal modalType="jcard_selector">
-                            <h2 className='modal_command'> Select your judge card </h2>
+                            <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
                             <CardBin    jCards={this.gameState.jCards}
                                         onClick={this.isJudge() ? this.actions.selectJCard : null}
                                         enlarged={true} />
