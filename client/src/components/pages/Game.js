@@ -4,7 +4,7 @@ import CardBin from "../game/CardBin";
 import Timer from "../game/Timer";
 import Uploader from "../game/Uploader";
 import PCardEditor from "../game/PCardEditor";
-import {gamePhases, saveStates, specialCards, MIN_PLAYERS} from "../../../../config.js";
+import { gamePhases, saveStates, specialCards, MIN_PLAYERS } from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 const { UNSAVED, SAVING, SAVED } = saveStates;
 const { NO_CARD, CARDBACK, FACEDOWN_CARD } = specialCards;
@@ -29,12 +29,14 @@ export default class Game extends React.Component {
             <div className="game_page">
                 <NavButtons appState={this.props.appState} page='Game' quitGame={this.actions.quitGame} />
                 {this.gameState.gamePhase === JCHOOSE ? (
-                    <CardBin    jCards={[NO_CARD]}
-                                owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
-                    <CardBin    jCards={this.gameState.jCards}
-                                owners={[this.gameState.players[this.gameState.playerIds[0]]]}
-                                onClick={this.isJudge() ? this.actions.selectJCard : null}
-                                fullScreen={true} />
+                    <React.Fragment>
+                        <CardBin    jCards={[NO_CARD]}
+                                    owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
+                        <CardBin    jCards={this.gameState.jCards}
+                                    owners={[this.gameState.players[this.gameState.playerIds[0]]]}
+                                    onClick={this.isJudge() ? this.actions.selectJCard : null}
+                                    enlarged={true} />
+                    </React.Fragment>
                 ) : (
                     <CardBin    jCards={[this.gameState.jCards[this.gameState.jCardIndex]]}
                                 owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
@@ -90,14 +92,18 @@ export default class Game extends React.Component {
         });
     }
 
-    viewPCard = (pCard, pCardIndex) => {
+    viewPCard = (pCardIndex, pCard) => {
         if ([NO_CARD, CARDBACK].includes(pCard)) return;
 
-        if (pCard !== FACEDOWN_CARD) {
+        if (pCard.faceup !== false) {
             this.setState({
                 cardModal: (
                     <Modal onClose={this.setState({cardModal: null})}>
-                        {pCard}
+                        <PCard  image={pCard.image}
+                                text={pCard.text}
+                                saveState={pCard.saveState}
+                                save={this.props.save}
+                                enlarged={true} />
                     </Modal>
                 )
             });
