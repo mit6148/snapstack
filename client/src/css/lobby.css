@@ -1,14 +1,28 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
 .lobby_page {
   display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.non_start_btn {
+  display: flex;
+  flex-direction: row;
+  flex: 9;
+}
+
+.start_btn_div {
+  flex: 1;
 }
 
 .game_info {
   flex: 1 1 0;
+  justify-content: center;
 }
 
 .whos_joined {
-  flex: 1 1 0;
+  flex: 3 1 0;
 }
 
 .game_code {

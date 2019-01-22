@@ -4,19 +4,35 @@
 
 .lobby_page{
 	display: flex;
-
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
 }
 
+.non_start_btn {
+	display: flex;
+	flex-direction: row;
+
+	flex: 9;
+}
+
+.start_btn_div {
+	flex: 1;
+}
 .game_info {
 	flex: 1 1 0;
+	justify-content: center;
 
 }
 
 .whos_joined {
-	flex: 1 1 0;
+	flex: 3 1 0;
+
+
 }
 
 .game_code {
+
 	text-align: center;
 	font-size: 100px;
 	text-align: center;
