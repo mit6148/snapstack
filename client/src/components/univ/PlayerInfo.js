@@ -32,7 +32,7 @@ export default class PlayerInfo extends React.Component {
                                 <img src="/card_icon.png"/>
                             </div>
                             <div className="player_score">
-                                {this.state.player_score}
+                                x {this.state.player_score}
                             </div>
 
                         </div>
