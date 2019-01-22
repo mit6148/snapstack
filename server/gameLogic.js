@@ -124,8 +124,7 @@ class Game {
         if(this._lock.length === 0) {
             this._lock = null;
         } else {
-            const next = this._lock[0];
-            delete this._lock[0]; // WARNING: O(n) when could be O(1) with linked list. can fix later
+            const next = this._lock.shift(); // WARNING: O(n) when could be O(1) with linked list. can fix later
             next(null);
         }
     }
@@ -225,13 +224,16 @@ class Game {
     }
 
     async startNewRound() {
-        // TODO. must handle pausing for too few players, and resetting all states
         this.gamePhase = gamePhases.JCHOOSE;
         this.players = this.players.filter(player => player.connected);
         for(let player of this.players) {
             player.resetRoundState();
         }
-        this.jCards = [];
+        this.jCards = await JCard.aggregate([
+            {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
+            {$sample: {size: NUM_JCARDS}}, // WARNING: try to prevent concurrent modification error & memory excess (100MB)
+            ]).exec();
+        this.jCardsSeen += this.jCards.map(jCard => jCard._id);
         this.pCardRefPairs = [];
         this.pCardIndex = null;
         this.endTime = null;
@@ -240,8 +242,12 @@ class Game {
         this.round++;
     }
 
-    async tryDestroyAssets() {
-        // TODO. must remove from codetogamemap. only run if there are no players
+    async tryDestroyAssets() { // only destroy if there are no players CONNECTED, not just in play. otherwise, return silently
+        if(this.players.filter(player => player.connected).length == 0) {
+            delete Game.codeToGameMap[this.gameCode];
+
+            await Promise.all(this.pCardsMade.map(pCardId => dereferencePCard(pCardId)));
+        }
     }
 
     checkRoomFull() {
@@ -468,6 +474,10 @@ Game.generateUnusedGameCode = () => {
 
 
 async function generatePCardRef(user, image, text) {
+    // TODO
+}
+
+async function dereferencePCard(pCardId) {
     // TODO
 }
 
