@@ -231,9 +231,8 @@ export default class GameContainer extends React.Component {
         socket.on('pCards', pCards => {
             this.setState({
                 gamePhase: JUDGE,
-                pCards: this.state.pCards.length === 1 // TODO flip own card facedown first in animation
-                        ? pCards.map(pCard =>
-                            pCard._id === this.state.pCards[0]._id
+                pCards: pCards.map(pCard => // TODO flip own card facedown first in animation
+                            this.state.pCards.length === 1 && pCard._id === this.state.pCards[0]._id
                             ? update(pCard, {
                                 creator_id: {$set: this.state.pCards[0].creator_id},
                                 saveState: {$set: this.state.pCards[0].saveState}
@@ -242,8 +241,7 @@ export default class GameContainer extends React.Component {
                                 creator_id: {$set: null},
                                 saveState: {$set: UNSAVED}
                             })
-                        )
-                        : pCards,
+                        ),
                 pCardIndex: null,
                 pCardsFacedown: pCards.length
             });
