@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
-.nav_btn, #quit_nav_btn, #logout_nav_btn, #profile_nav_btn, #about_nav_btn, #home_nav_btn {
+.nav_btn, #leave_nav_btn, #logout_nav_btn, #profile_nav_btn, #about_nav_btn, #home_nav_btn {
   text-decoration: none;
   display: inline-block;
   border-radius: 60px;
@@ -16,12 +16,12 @@
   font-size: 15px;
   margin: 5px;
 }
-.nav_btn:active, #quit_nav_btn:active, #logout_nav_btn:active, #profile_nav_btn:active, #about_nav_btn:active, #home_nav_btn:active {
+.nav_btn:active, #leave_nav_btn:active, #logout_nav_btn:active, #profile_nav_btn:active, #about_nav_btn:active, #home_nav_btn:active {
   background-color: #9C81A8;
   box-shadow: 0px 1px #8E7599;
   transform: translateY(1.5px);
 }
-.nav_btn:hover, #quit_nav_btn:hover, #logout_nav_btn:hover, #profile_nav_btn:hover, #about_nav_btn:hover, #home_nav_btn:hover {
+.nav_btn:hover, #leave_nav_btn:hover, #logout_nav_btn:hover, #profile_nav_btn:hover, #about_nav_btn:hover, #home_nav_btn:hover {
   background: #9C81A8;
   box-shadow: 0px 3px #8E7599;
   cursor: pointer;
@@ -47,9 +47,9 @@
   bottom: 10px;
 }
 
-#quit_nav_btn {
+#leave_nav_btn {
   left: 10px;
-  bottom: 10px;
+  top: 10px;
   -moz-transform: scale(-1, 1);
   -webkit-transform: scale(-1, 1);
   -o-transform: scale(-1, 1);
