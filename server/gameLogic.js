@@ -8,11 +8,12 @@ const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
 class Player {
-    constructor(user, details) {
+    constructor(user, detail) {
         this._id = user._id;
-        this.name = details.name;
-        this.avatar = details.avatar;
-        this.media = details.media;
+        this.name = detail.name;
+        this.avatar = detail.avatar;
+        this.media = detail.media;
+        this.detail_id = detail._id
         this.score = 0;
         this.hasPlayed = false;
         this.connected = true;
@@ -33,21 +34,34 @@ class Player {
         return {_id: this._id, name: this.name, avatar: this.avatar, media: this.media,
                 score: this.score, hasPlayed: this.hasPlayed, connected: this.connected};
     }
+
+    async checkSaved(pCardIds) {
+        const savedIdMap = await UserDetail.findOne({_id: this.detail_id}).select("saved_pairs.pcard").exec()
+            .then(detail => detail.saved_pairs.map(pair => {
+                const out = {};
+                out[pair.pcard] = true;
+                return out;
+            }));
+        return pCardIds.map(pCard => pCard in savedIdMap);
+    }
 }
 
 Player.from = async user => {
-    const details = await UserDetail.findOne({_id: user.detail_id}).exec();
-    return new Player(user, details);
+    const detail = await UserDetail.findOne({_id: user.detail_id}).exec();
+    return new Player(user, detail);
 }
 
 
 class Game {
     constructor(cardsToWin) {
+        if(typeof(cardsToWin) !== 'number') {
+            throw "You have to input a NUMBER of cards to win";
+        }
         this.gamePhase = gamePhases.LOBBY;
         this.players = []; // first player is judge
         this.userToPlayerMap = {}; // still keeps removed players
         this.jCards = [];
-        this.pCardRefPairArray = []; // array of pairs [pCardRef, flipped]
+        this.pCardRefPairs = []; // array of pairs [pCardRef, flipped]
         this.pCardIndex = null;
         this.endTime = null;
         this.gameCode = Game.generateUnusedGameCode();
@@ -133,25 +147,74 @@ class Game {
     }
 
     async getVisiblePCards(userOrUndefined) {
-        // TODO:
         /*
+        in lobby: return []
         In jchoose: return []
         In submit: user is provided, give back array with only zero/one elem: the user's submitted pcard, including it's saveState
-        In judge: no user provided, 
+        In judge: no user provided, give all cards without creator OR user is provided, so also give them saveStates
+        in round over: no user provided, give all cards, with creator OR user is provided, so also give them saveStates
+        in game over: no user provided, give all cards, with creator OR user is provided, so also give them saveStates
         */
-        return [];
+        let pCardRefPairs;
+        let show_creator = false;
+        const player = userOrUndefined ? this.getPlayer(userOrUndefined) : undefined;
+        switch(this.gamePhase) {
+            case gamePhases.LOBBY: case gamePhases.JCHOOSE:
+                return [];
+            case gamePhases.SUBMIT:
+                const pCardRef = player.pCardRef;
+                if(!pCardRef) {
+                    return [];
+                } else {
+                    pCardRefPairs = [[pCardRef, true]];
+                    break;
+                }
+            case gamePhases.JUDGE: case gamePhases.ROUND_OVER: case gamePhases.GAME_OVER:
+                show_creator = this.gamePhase != gamePhases.JUDGE;
+                pCardRefPairs = this.pCardRefPairs;
+        }
+
+        const imagesPromise = Promise.all(pCardRefPairs.map(pair => downloadImagePromise(pair[0].image_ref)));
+        const pCardSaved = await (player ? player.checkSaved(pCardRefPairs.map(pair => pair[0]._id)) : {});
+        const images = await imagesPromise;
+
+        const output = [];
+
+        for(let i = 0; i < pCardRefPairs.length; i++) {
+            output.push({
+                _id: pCardRefPairs[i][0]._id,
+                image: images[i],
+                text: pCardRefPairs[i][0].text,
+                faceup: pCardRefPairs[i][1],
+                creator_id: show_creator ? pCardRefPairs[i][0].creator_id : undefined,
+                saveState: pCardSaved[i] || false, // make sure undefined turns into false
+            });
+        }
+        return output;
     }
 
     async start() {
-        // TODO
+        if(this.gamePhase !== gamePhases.LOBBY || this.players.length < MIN_PLAYERS) {
+            throw "Cannot start game in this state!";
+        }
+        // randomize player order, then start round
+        for(let i = this.players.length; i >= 2;) {
+            const r = Math.floor(Math.random() * i);
+            i--;
+            const t = this.players[i];
+            this.players[i] = this.players[r];
+            this.players[r] = t;
+        }
+        await this.startNewRound();
+    }
+
+    async startNewRound() {
+        // TODO. must handle pausing for too few players, and resetting all states
+
     }
 
     async tryDestroyAssets() {
         // TODO. must remove from codetogamemap
-    }
-
-    async startNewRound() {
-        // TODO
     }
 
     async endSubmitPhase() {
@@ -167,7 +230,7 @@ class Game {
     getPlayer(user) {
         const player = this.userToPlayerMap[user._id];
         if(!player) {
-            throw "tried to get player who isn't in game!: " + user._id;
+            throw "tried to get player who isn't in game! should never happen: " + user._id;
         }
         return player.format();
     }
@@ -229,7 +292,7 @@ class Game {
     }
 
     startSubmitPhase(user, jCardIndex) {
-        // TODO. check is judge. doesn't need to handle starting timeout, but does need to check for too few players.
+        // TODO. check is judge. doesn't need to handle starting timeout, but does need to check for too few players. check in bounds
     }
 
     getRound() {
@@ -272,6 +335,10 @@ class Game {
 Game.codeToGameMap = {};
 
 Game.gameWithCode = gameCode => {
+    gameCode = gameCode.toUpperCase();
+    if(!gameCode.match("^[A-Z]{3}$")) {
+        throw "Game code must consist only of letters";
+    }
     const game = Game.codeToGameMap[gameCode];
     if(game === undefined) {
         throw "This is not the game code you are looking for";
@@ -463,6 +530,13 @@ async function onConnection(socket) {
     createLockedListener(socket, 'skip', gameGetter, async () => {
         game.skipRound();
         io.to(game.getGameCode()).emit('skipped');
+        setTimeout(async () => {
+            try {
+                await game.withLock(tryStartNewRound);
+            } catch(err) {
+                console.error("post-skip-phase timeout in skip had an error: " + err);
+            }
+        }, WAIT_TIME);
     });
 }
 
