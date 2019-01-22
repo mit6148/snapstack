@@ -273,7 +273,7 @@ class Game {
     }
 
     skipRound(userTriggered) {
-        if(!userTriggered || (userTriggered && !this.pausedForTooFewPlayers &&
+        if(DEVELOPER_MODE ||  !userTriggered || (userTriggered && !this.pausedForTooFewPlayers &&
             ![gamePhases.LOBBY, gamePhases.GAME_OVER, gamePhases.ROUND_OVER].includes(this.gamePhase) && !this.players[0].connected)) {
             this.isSkipping = true;
         } else {
