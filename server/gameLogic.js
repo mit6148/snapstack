@@ -328,7 +328,7 @@ class Game {
     }
 
     getCreators() {
-        return this.pCardRefPairs.map(pair => pair[0]._id);
+        return this.pCardRefPairs.map(pair => pair[0].creator_id);
     }
 
     isJudge(user) {
