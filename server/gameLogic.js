@@ -212,7 +212,18 @@ class Game {
 
     async startNewRound() {
         // TODO. must handle pausing for too few players, and resetting all states
-
+        this.gamePhase = gamePhases.JCHOOSE;
+        this.players = this.players.filter(player => player.connected);
+        for(let player of this.players) {
+            player.resetRoundState();
+        }
+        this.jCards = [];
+        this.pCardRefPairs = [];
+        this.pCardIndex = null;
+        this.endTime = null;
+        this.pausedForTooFewPlayers = this.players.length < MIN_PLAYERS;
+        this.isSkipping = false;
+        this.round++;
     }
 
     async tryDestroyAssets() {
