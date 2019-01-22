@@ -194,15 +194,27 @@ class Game {
     }
 
     async start() {
-        // TODO
+        if(this.gamePhase !== gamePhases.LOBBY || this.players.length < MIN_PLAYERS) {
+            throw "Cannot start game in this state!";
+        }
+        // randomize player order, then start round
+        for(let i = this.players.length; i >= 2;) {
+            const r = Math.floor(Math.random() * i);
+            i--;
+            const t = this.players[i];
+            this.players[i] = this.players[r];
+            this.players[r] = t;
+        }
+        await this.startNewRound();
+    }
+
+    async startNewRound() {
+        // TODO. must handle pausing for too few players, and resetting all states
+
     }
 
     async tryDestroyAssets() {
         // TODO. must remove from codetogamemap
-    }
-
-    async startNewRound() {
-        // TODO
     }
 
     async endSubmitPhase() {
@@ -518,6 +530,13 @@ async function onConnection(socket) {
     createLockedListener(socket, 'skip', gameGetter, async () => {
         game.skipRound();
         io.to(game.getGameCode()).emit('skipped');
+        setTimeout(async () => {
+            try {
+                await game.withLock(tryStartNewRound);
+            } catch(err) {
+                console.error("post-skip-phase timeout in skip had an error: " + err);
+            }
+        }, WAIT_TIME);
     });
 }
 

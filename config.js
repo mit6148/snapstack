@@ -30,4 +30,4 @@ const GAME_CODE_LENGTH = 3;
 const WAIT_TIME = 2000; // between events that would otherwise be emitted concurrently
 
 module.exports = {gamePhases, saveStates, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
-    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME};
+    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, MIN_PLAYERS};
