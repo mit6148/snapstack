@@ -20,6 +20,10 @@ app.use(bodyParser.json());
 
 
 
+// TODO: storage cleanup operations: delete unreferenced pcards and their images
+
+
+
 // set up sessions
 const sessionStore = new MongoStore({'mongooseConnection': db});
 app.use(session({

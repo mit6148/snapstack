@@ -16,7 +16,7 @@ export default class Lobby extends React.Component {
                 <NavButtons appState={this.props.appState} page='Lobby' quitGame={this.actions.quitGame} />
                 <div className="start_btn_div">
                     {this.canStartGame() ? (
-                        <div className="enabled_start_btn" onClick={this.actions.gameStart}>Start Game</div>
+                        <div className="enabled_start_btn" onClick={this.actions.startGame}>Start Game</div>
                     ) : (
                         <div className="disabled_start_btn">Start Game</div>
                     )}

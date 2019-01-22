@@ -20,7 +20,7 @@ export default class App extends React.Component {
         this.getUser();
     }
 
-    render() { // TODO don't render until user is fetched
+    render() { // TODO don't render until user is fetched; TODO /profile doesn't redirect when not logged in
         return (
             <div>
                 <Switch>

@@ -81,6 +81,8 @@
 	@extend .disabled_start_btn;
 	color: $blue-light;
 
+	background-color: $blue-light;
+
 	&:hover {
 	background: $blue-medium;
 	box-shadow: 0 5px $blue-dark;

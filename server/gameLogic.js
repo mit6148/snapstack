@@ -2,37 +2,52 @@ const User = require('./models/user');
 const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
-const {gamePhases, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
-    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE} = require("../config");
-const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
+const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
+    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS} = require("../config");
+const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
 class Player {
     constructor(user, detail) {
         this._id = user._id;
-        this.name = detail.name;
+        this.name = (detail.firstName && detail.lastName) ? detail.firstName + " " + detail.lastName[0] + "."
+                                                            : (detail.firstName || detail.lastName);
         this.avatar = detail.avatar;
         this.media = detail.media;
         this.detail_id = detail._id
         this.score = 0;
-        this.hasPlayed = false;
         this.connected = true;
         this.pCardRef = null;
     }
+
+// MUTATORS
 
     connect() {
         this.connected = true;
     }
 
+    disconnect() {
+        this.connected = false;
+    }
+
     resetRoundState() { // after having been removed from a round, so round state is reset
-        this.hasPlayed = false;
         this.connected = true;
         this.pCardRef = null;
     }
 
+    incrementScore() {
+        this.score++;
+    }
+
+    play(pCardRef) {
+        this.pCardRef = pCardRef;
+    }
+
+// OBSERVERS (note that fields are expected to be accessed directly)
+
     format() {
         return {_id: this._id, name: this.name, avatar: this.avatar, media: this.media,
-                score: this.score, hasPlayed: this.hasPlayed, connected: this.connected};
+                score: this.score, hasPlayed: this.pCardRef !== null, connected: this.connected};
     }
 
     async checkSaved(pCardIds) {
@@ -63,7 +78,7 @@ class Game {
         this.players = []; // first player is judge
         this.userToPlayerMap = {}; // still keeps removed players
         this.jCards = [];
-        this.pCardRefPairs = []; // array of pairs [pCardRef, flipped]
+        this.pCardRefPairs = []; // array of pairs [pCardRef, faceup]
         this.pCardIndex = null;
         this.endTime = null;
         this.gameCode = _devCode || Game.generateUnusedGameCode();
@@ -110,8 +125,7 @@ class Game {
         if(this._lock.length === 0) {
             this._lock = null;
         } else {
-            const next = this._lock[0];
-            delete this._lock[0]; // WARNING: O(n) when could be O(1) with linked list. can fix later
+            const next = this._lock.shift(); // WARNING: O(n) when could be O(1) with linked list. can fix later
             next(null);
         }
     }
@@ -142,7 +156,7 @@ class Game {
                 this.players.push(player);
                 this.userToPlayerMap[user._id] = player;
             } catch(err) {
-                console.error("addPlayer had unknown error: " + err);
+                console.error("addPlayer had unknown error: " + err + "\n" + err.stack);
                 throw "Sorry, we're having some trouble. Try again later";
             }
         }
@@ -159,7 +173,7 @@ class Game {
         */
         let pCardRefPairs;
         let show_creator = false;
-        const player = userOrUndefined ? this.getPlayer(userOrUndefined) : undefined;
+        const player = userOrUndefined ? this.userToPlayerMap[userOrUndefined._id] : undefined;
         switch(this.gamePhase) {
             case gamePhases.LOBBY: case gamePhases.JCHOOSE:
                 return [];
@@ -211,16 +225,31 @@ class Game {
     }
 
     async startNewRound() {
-        // TODO. must handle pausing for too few players, and resetting all states
-
+        this.gamePhase = gamePhases.JCHOOSE;
+        this.players = this.players.filter(player => player.connected);
+        for(let player of this.players) {
+            player.resetRoundState();
+        }
+        const jCards = await JCard.aggregate([
+            {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
+            {$sample: {size: NUM_JCARDS}}, // WARNING: try to prevent concurrent modification error & memory excess (100MB)
+            ]).exec();
+        this.jCards = jCards.map(jCard => jCard.text);
+        this.jCardsSeen += jCards.map(jCard => jCard._id);
+        this.pCardRefPairs = [];
+        this.pCardIndex = null;
+        this.endTime = null;
+        this.pausedForTooFewPlayers = this.players.length < MIN_PLAYERS;
+        this.isSkipping = false;
+        this.round++;
     }
 
-    async tryDestroyAssets() {
-        // TODO. must remove from codetogamemap
-    }
+    async tryDestroyAssets() { // only destroy if there are no players CONNECTED, not just in play. otherwise, return silently
+        if(this.players.filter(player => player.connected).length == 0) {
+            delete Game.codeToGameMap[this.gameCode];
 
-    async endSubmitPhase() {
-        // TODO. must add on placeholders for all those who didn't submit
+            await dereferencePCards(this.pCardsMade);
+        }
     }
 
     checkRoomFull() {
@@ -241,60 +270,144 @@ class Game {
         return this.players.map(player => player.format());
     }
 
-    skipRound() {
-        // TODO
+    skipRound(userTriggered) {
+        if(!userTriggered || (userTriggered && !this.pausedForTooFewPlayers &&
+            ![gamePhases.LOBBY, gamePhases.GAME_OVER, gamePhases.ROUND_OVER].includes(this.gamePhase) && !this.players[0].connected)) {
+            this.isSkipping = true;
+        } else {
+            throw new Error("illegal skip triggered! userTriggered: " + userTriggered);
+        }
     }
 
     disconnect(user) {
-        // TODO
+        this.userToPlayerMap[user._id].disconnect();
     }
 
     pausedAndShouldResume() {
-        // TODO
+        return this.pausedForTooFewPlayers && !this.getTooFewPlayers();
     }
 
     resume() {
-        // TODO
+        if(this.pausedAndShouldResume()) {
+            this.pausedForTooFewPlayers = false;
+        }
     }
 
     hasSomeoneWon() {
-        // TODO
+        for(let player of this.players) {
+            if(player.score >= this.cardsToWin) {
+                return true;
+            }
+        }
+        return false;
     }
 
     endGame() {
-        // TODO
+        if(this.hasSomeoneWon()) {
+            this.game
+        } else {
+            throw new Error("end game without winning!");
+        }
     }
 
     getCreators() {
-        // TODO
+        return this.pCardRefPairs.map(pair => pair[0]._id);
+    }
+
+    isJudge(user) {
+        return this.players.length > 0 && user._id === this.players[0]._id;
+    }
+
+    isValidPCardIndex(index) {
+        return 0 <= index && index < this.pCardRefPairs.length;
     }
 
     select(user, index) {
-        // TODO
+        if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
+                            || this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("illegal selection attempt by " + user._id + " for index " + index);
+        }
+        // also need to check that all cards are flipped
+        if(!this.pCardRefPairs.every(pair => pair[1])) {
+            throw new Error("user " + user._id + " attempted to select card without having flipped all others");
+        }
+
+        this.pCardIndex = index;
+        this.userToPlayerMap[this.pCardRefPairs[index][0].creator_id].incrementScore();
+        this.gamePhase = gamePhases.ROUND_OVER;
     }
 
     look(user, index) {
-        // TODO
+        if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
+                            || this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("illegal look attempt by " + user._id + " for index " + index);
+        }
+
+        this.pCardIndex = index;
+        this.pCardRefPairs[index][1] = true;
     }
 
     flipAll(user) {
-        // TODO
+        if(!isJudge(user) || this.gamePhase !== gamePhases.JUDGE
+                            || this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("illegal flipAll attempt by " + user._id + " for index " + index);
+        }
+
+        for(let pair of this.pCardRefPairs) {
+            pair[1] = true;
+        }
     }
 
     flipCard(user, index) {
-        // TODO. must check is judge and index in bounds and not flipped
+        if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
+                            || this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("illegal flip attempt by " + user._id + " for index " + index);
+        }
+
+        if(this.pCardRefPairs[index][1]) {
+            throw new Error("card already flipped!");
+        }
+        this.pCardIndex = index;
+        this.pCardRefPairs[index][1] = true;
     }
 
     submitCard(pCardRef) {
-        // TODO
+        const player = this.userToPlayerMap[pCardRef.creator_id];
+        this.pCardsMade.push(pCardRef._id); // must add to list so it can be dereferenced later
+
+        if(player.pCardRef) {
+            throw new Error("user " + player._id + "tried to submit a card twice!");
+        } else {
+            player.play(pCardRef);
+        }
     }
 
-    canEndSubmitPhase(round) {
-        return round === this.round && this.gamePhase === gamePhases.SUBMIT;
+    getEndSubmitPhaseStatus(round) {
+        if(round === this.round && this.gamePhase === gamePhases.SUBMIT) {
+            if(this.pCardRefPairs.length === 0) {
+                return endSubmitPhaseStatus.SKIP_INSTEAD;
+            } else {
+                return endSubmitPhaseStatus.CAN_END;
+            }
+        } else {
+            return endSubmitPhaseStatus.ALREADY_ENDED;
+        }
+    }
+
+    endSubmitPhase() {
+        this.gamePhase = gamePhases.JUDGE;
+        this.endTime = null;
     }
 
     startSubmitPhase(user, jCardIndex) {
-        // TODO. check is judge. doesn't need to handle starting timeout, but does need to check for too few players. check in bounds
+        if(!isJudge(user) || jCardIndex < 0 || jCardIndex >= this.jCards.length || this.gamePhase !== gamePhases.JCHOOSE ||
+                                this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("can't start submit phase (jcard choice) with user: " + user._id + " index: " + jCardIndex);
+        } else {
+            this.gamePhase = gamePhases.SUBMIT;
+            this.jCards = [this.jCards[jCardIndex]];
+            this.endTime = Date.now() + TIME_LIMIT_MILLIS;
+        }
     }
 
     getRound() {
@@ -362,6 +475,32 @@ Game.generateUnusedGameCode = () => {
 };
 
 
+async function generatePCardRef(user, image, text) {
+    const image_ref = await uploadImagePromise(image);
+    const pCardRef = new PCardRef({
+        text: text,
+        image_ref: image_ref,
+        creator_id: user._id,
+        ref_count: 0,
+        in_play: true,
+    });
+    await pCardRef.save();
+    return pCardRef;
+}
+
+async function dereferencePCards(pCardIds) {
+    const pCardRefs = await PCardRef.find({_id: {$in: pCardIds}, ref_count: 0}).exec();
+    const successes = await Promise.all(pCardRefs.map(pCardRef => deleteImagePromise(pCardRef.image_ref)));
+    const deletedIds = [];
+    for(let i = 0; i < pCardIds.length; i++) {
+        if(successes[i]) {
+            deletedIds.push(pCardIds[i]);
+        }
+    }
+    await PCardRef.deleteMany({_id: {$in: deletedIds}}).exec(); // WARNING: could make more efficient
+    await PCardRef.updateMany({_id: {$in: pCardIds}}, {$set: {in_play: false}}).exec();
+}
+
 
 async function emitGameState(socket, user, game) {
     const [players, gamePhase, jCards, visiblePCards, pCardIndex, endTime, isSkipping, gameCode] = await Promise.all(
@@ -378,6 +517,7 @@ will await it. Finally it runs the handler and then unlocks.
 */
 function createLockedListener(socket, event, gameGetter, func) {
     socket.on(event, async function() {
+        console.log("backend handling: " + event)
         const game = gameGetter ? gameGetter() : null;
 
         if(!game && !(['newGame', 'joinGame'].includes(event))) {
@@ -394,11 +534,20 @@ function createLockedListener(socket, event, gameGetter, func) {
             }
         } catch(err) {
             console.error("socket triggered error while handling " + event + ": " + err + (err.stack ? ("\n" + err.stack) : ""));
-
-            // WARNING: maybe we don't want this?
-            socket.disconnect();
         }
     });
+}
+
+async function handleSkipRound(userTriggered) {
+    game.skipRound(userTriggered);
+    io.to(game.getGameCode()).emit('skipped');
+    setTimeout(async () => {
+        try {
+            await game.withLock(tryStartNewRound);
+        } catch(err) {
+            console.error("post-skip-phase timeout in skip had an error: " + err);
+        }
+    }, WAIT_TIME);
 }
 
 async function tryStartNewRound(game) {
@@ -408,6 +557,15 @@ async function tryStartNewRound(game) {
         io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
     }
     // otherwise, just wait until a new player comes along
+}
+
+async function endSubmitPhaseDelayedSendout() {
+    await game.endSubmitPhase();
+    setTimeout(async () => {
+        game.withLock(async () => {
+            io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+        });
+    }, WAIT_TIME);
 }
 
 async function onConnection(socket) {
@@ -464,16 +622,24 @@ async function onConnection(socket) {
     });
 
     createLockedListener(socket, 'jCardChoice', gameGetter, async jCardIndex => {
-        const endTime = game.startSubmitPhase(user, jCardIndex);
+        game.startSubmitPhase(user, jCardIndex);
+        const endTime = game.getEndTime();
         io.to(game.getGameCode()).emit('roundStart', jCardIndex, endTime);
         const round = game.getRound();
         setTimeout(async () => {
             try {
                 await game.withLock(async () => {
-                    if(game.canEndSubmitPhase(round)) {
-                        // the timer is actually relevant
-                        await game.endSubmitPhase();
-                        io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+                    switch(game.getEndSubmitPhaseStatus(round)) {
+                        case endSubmitPhaseStatus.CAN_END:
+                            // submit phase ended in a timeout
+                            await endSubmitPhaseDelayedSendout();
+                            break;
+                        case endSubmitPhaseStatus.SKIP_INSTEAD:
+                            // no one submitted, so trigger skip event not caused by any particular user
+                            await handleSkipRound(false);
+                            break;
+                        case endSubmitPhaseStatus.ALREADY_ENDED:
+                            // timer is irrelevant since submit phase already ended, so do nothing
                     }
                 });
             } catch(err) {
@@ -487,11 +653,16 @@ async function onConnection(socket) {
         game.submitCard(pCardRef);
         socket.emit('turnedIn', user._id, pCard._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
+
+        if(game.getEndSubmitPhaseStatus(game.getRound()) === endSubmitPhaseStatus.CAN_END) {
+            await endSubmitPhaseDelayedSendout();
+        }
     });
 
     createLockedListener(socket, 'flip', gameGetter, async index => {
         game.flipCard(user, index);
         socket.to(game.getGameCode()).emit('flip', index);
+        socket.to(game.getGameCode()).emit('look', index);
     });
 
     createLockedListener(socket, 'flipAll', gameGetter, async () => {
@@ -506,7 +677,7 @@ async function onConnection(socket) {
 
     createLockedListener(socket, 'select', gameGetter, async index => {
         game.select(user, index);
-        io.to(game.getGameCode()).emit('select', game.getCreators());
+        io.to(game.getGameCode()).emit('select', index, game.getCreators());
         setTimeout(async () => {
             try {
                 await game.withLock( async () => {
@@ -529,23 +700,13 @@ async function onConnection(socket) {
         await game.tryDestroyAssets();
     });
 
-    createLockedListener(socket, 'skip', gameGetter, async () => {
-        game.skipRound();
-        io.to(game.getGameCode()).emit('skipped');
-        setTimeout(async () => {
-            try {
-                await game.withLock(tryStartNewRound);
-            } catch(err) {
-                console.error("post-skip-phase timeout in skip had an error: " + err);
-            }
-        }, WAIT_TIME);
-    });
+    createLockedListener(socket, 'skip', gameGetter, async () => await handleSkipRound(true));
 }
 
 
 
 if(DEVELOPER_MODE) {
-    User.findOne({_id: "5c46acb51c9d440000ea85a3"}).exec().then(async user => {
+    User.findOne({_id: "5c46ec131c9d440000ea85a4"}).exec().then(async user => {
         game = new Game(3, "XYZ");
         await game.addPlayer(user);
     });
