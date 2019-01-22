@@ -12,6 +12,7 @@ const { UNSAVED, SAVING, SAVED } = saveStates;
 const { NO_CARD, CARDBACK, FACEDOWN_CARD } = specialCards;
 
 import "../../css/game.css";
+import "../../css/card.css";
 
 export default class Game extends React.Component {
     constructor (props) {

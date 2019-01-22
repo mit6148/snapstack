@@ -5,13 +5,6 @@ import "../../css/player.css";
 
 export default class PlayerInfo extends React.Component {
    
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            player_score: 0,
-        };
-    }   
 
     render() {
         return (
@@ -32,7 +25,7 @@ export default class PlayerInfo extends React.Component {
                                 <img src="/card_icon.png"/>
                             </div>
                             <div className="player_score">
-                                x {this.state.player_score}
+                                x {this.props.score}
                             </div>
 
                         </div>

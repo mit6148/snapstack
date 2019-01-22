@@ -13,7 +13,7 @@ export default class Uploader extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="upload_div">
                 <div onClick={() => this.props.upload(this.props.fakeImage)}>Upload</div>
             </div>
         );

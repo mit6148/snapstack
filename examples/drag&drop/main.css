@@ -14,7 +14,7 @@ a
 }
 
 
-.box
+.drag_input
 {
     width: 50%;
     max-width: 680px;
@@ -24,16 +24,14 @@ a
     background-color: #c8dadf;
     position: relative;
     padding: 100px 20px;
-}
-.box.has-advanced-upload
-{
     outline: 2px dashed #92b0b3;
     outline-offset: -10px;
 
     -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
     transition: outline-offset .15s ease-in-out, background-color .15s linear;
 }
-.box.is-dragover
+
+.drag_input.is-dragover
 {
     outline-offset: -20px;
     outline-color: #c8dadf;
@@ -44,11 +42,11 @@ a
 {
     display: none;
 }
-.box.has-advanced-upload .box__dragndrop
+.drag_input .box__dragndrop
 {
     display: inline;
 }
-.box.has-advanced-upload .box__icon
+.drag_input .box__icon
 {
     width: 100%;
     height: 80px;
@@ -57,41 +55,7 @@ a
     margin-bottom: 40px;
 }
 
-.box.is-uploading .box__input,
-.box.is-success .box__input,
-.box.is-error .box__input
-{
-    visibility: hidden;
-}
 
-.box__uploading,
-.box__success,
-.box__error
-{
-    display: none;
-}
-.box.is-uploading .box__uploading,
-.box.is-success .box__success,
-.box.is-error .box__error
-{
-    display: block;
-    position: absolute;
-    top: 50%;
-    right: 0;
-    left: 0;
-
-    -webkit-transform: translateY( -50% );
-    transform: translateY( -50% );
-}
-.box__uploading
-{
-    font-style: italic;
-}
-.box__success
-{
-    -webkit-animation: appear-from-inside .25s ease-in-out;
-    animation: appear-from-inside .25s ease-in-out;
-}
 @-webkit-keyframes appear-from-inside
 {
     from    { -webkit-transform: translateY( -50% ) scale( 0 ); }
@@ -105,15 +69,6 @@ a
     to      { transform: translateY( -50% ) scale( 1 ); }
 }
 
-.box__restart
-{
-    font-weight: 700;
-}
-.box__restart:focus,
-.box__restart:hover
-{
-    color: #39bfd3;
-}
 
 .box__file
 {
