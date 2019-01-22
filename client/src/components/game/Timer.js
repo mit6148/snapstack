@@ -16,14 +16,14 @@ export default class Timer extends React.Component {
         if (ms === 0) {
             clearInterval(this.interval);
         }
-        let minutes = ms / 60000;
+        let minutes = Math.floor(ms / 60000);
         ms %= 60000;
-        let seconds = ('0' + ms / 1000).slice(-2);
+        let seconds = ('0' + Math.floor(ms / 1000)).slice(-2);
         ms = ('00' + ms).slice(-3);
 
         return (
             <div>
-                {minutes + ':' + seconds + '.' + ms}
+                {minutes+':'+seconds+(minutes === 0 && seconds < 10 ? ('.'+ms) : '')}
             </div>
         );
     }
