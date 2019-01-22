@@ -4,7 +4,7 @@ const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
     NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE} = require("../config");
-const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
+const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
 class Player {
@@ -246,7 +246,7 @@ class Game {
         if(this.players.filter(player => player.connected).length == 0) {
             delete Game.codeToGameMap[this.gameCode];
 
-            await Promise.all(this.pCardsMade.map(pCardId => dereferencePCard(pCardId)));
+            await dereferencePCards(this.pCardsMade);
         }
     }
 
@@ -474,11 +474,29 @@ Game.generateUnusedGameCode = () => {
 
 
 async function generatePCardRef(user, image, text) {
-    // TODO
+    const image_ref = await uploadImagePromise(image);
+    const pCardRef = new PCardRef({
+        text: text,
+        image_ref: image_ref,
+        creator_id: user._id,
+        ref_count: 0,
+        in_play: true,
+    });
+    await pCardRef.save();
+    return pCardRef;
 }
 
-async function dereferencePCard(pCardId) {
-    // TODO
+async function dereferencePCards(pCardIds) {
+    const pCardRefs = await PCardRef.find({_id: {$in: pCardIds}, ref_count: 0}).exec();
+    const successes = await Promise.all(pCardRefs.map(pCardRef => deleteImagePromise(pCardRef.image_ref)));
+    const deletedIds = [];
+    for(let i = 0; i < pCardIds.length; i++) {
+        if(successes[i]) {
+            deletedIds.push(pCardIds[i]);
+        }
+    }
+    await PCardRef.deleteMany({_id: {$in: deletedIds}}).exec(); // WARNING: could make more efficient
+    await PCardRef.updateMany({_id: {$in: pCardIds}}, {$set: {in_play: false}}).exec();
 }
 
 
