@@ -69,15 +69,6 @@ a
     to      { transform: translateY( -50% ) scale( 1 ); }
 }
 
-.box__restart
-{
-    font-weight: 700;
-}
-.box__restart:focus,
-.box__restart:hover
-{
-    color: #39bfd3;
-}
 
 .box__file
 {
