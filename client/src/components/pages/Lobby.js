@@ -1,6 +1,7 @@
 import React from "react";
 import NavButtons from "../nav/NavButtons";
 import PlayerList from "../game/PlayerList";
+import { MIN_PLAYERS } from "../../../../config.js";
 
 import "../../css/game.css";
 
@@ -19,7 +20,11 @@ export default class Lobby extends React.Component {
                     Play to {this.gameState.cardsToWin} cards
                 </div>
                 <PlayerList players={this.gameState.playerIds.map(playerId => this.gameState.players[playerId])} />
-                <div onClick={this.actions.gameStart}>Start Game</div>
+                {this.canStartGame() ? (
+                    <div onClick={this.actions.gameStart}>Start Game</div>
+                ) : (
+                    <div>Start Game</div>
+                )}
             </div>
         );
     }
