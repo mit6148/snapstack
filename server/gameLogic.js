@@ -230,10 +230,6 @@ class Game {
         // TODO. must remove from codetogamemap
     }
 
-    async endSubmitPhase() {
-        // TODO
-    }
-
     checkRoomFull() {
         if(this.players.length >= MAX_PLAYERS) {
             throw "Sorry, room full";
@@ -254,6 +250,12 @@ class Game {
 
     skipRound(userTriggered) {
         // TODO. looser legality limits on non-user-triggered skips
+        if(!userTriggered || (userTriggered &&
+            ([gamePhases.LOBBY, gamePhases.GAME_OVER, gamePhases.ROUND_OVER].includes(this.gamePhase) || this.players[0].connected))) {
+            this.isSkipping = true;
+        } else {
+            throw new Error("illegal skip triggered! userTriggered: " + userTriggered);
+        }
     }
 
     disconnect(user) {
@@ -310,6 +312,10 @@ class Game {
         } else {
             return endSubmitPhaseStatus.ALREADY_ENDED;
         }
+    }
+
+    endSubmitPhase() {
+        // TODO
     }
 
     startSubmitPhase(user, jCardIndex) {
@@ -495,7 +501,8 @@ async function onConnection(socket) {
     });
 
     createLockedListener(socket, 'jCardChoice', gameGetter, async jCardIndex => {
-        const endTime = game.startSubmitPhase(user, jCardIndex);
+        game.startSubmitPhase(user, jCardIndex);
+        const endTime = game.getEndTime();
         io.to(game.getGameCode()).emit('roundStart', jCardIndex, endTime);
         const round = game.getRound();
         setTimeout(async () => {
