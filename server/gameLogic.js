@@ -313,7 +313,8 @@ class Game {
     }
 
     select(user, index) {
-        if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE) {
+        if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
+            || this.pausedForTooFewPlayers || this.isSkipping) {
             throw new Error("illegal selection attempt by " + user._id + " for index " + index);
         }
         // also need to check that all cards are flipped
@@ -323,18 +324,41 @@ class Game {
 
         this.pCardIndex = index;
         this.userToPlayerMap[this.pCardRefPairs[index][0].creator_id].incrementScore();
+        this.gamePhase = gamePhases.ROUND_OVER;
     }
 
     look(user, index) {
-        // TODO
+        if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
+            || this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("illegal look attempt by " + user._id + " for index " + index);
+        }
+
+        this.pCardIndex = index;
+        this.pCardRefPairs[index][1] = true;
     }
 
     flipAll(user) {
-        // TODO
+        if(!isJudge(user) || this.gamePhase !== gamePhases.JUDGE
+            || this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("illegal flipAll attempt by " + user._id + " for index " + index);
+        }
+
+        for(let pair of this.pCardRefPairs) {
+            pair[1] = true;
+        }
     }
 
     flipCard(user, index) {
-        // TODO. must check is judge and index in bounds and not flipped
+        if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
+            || this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("illegal flip attempt by " + user._id + " for index " + index);
+        }
+
+        if(this.pCardRefPairs[index][1]) {
+            throw new Error("card already flipped!");
+        }
+        this.pCardIndex = index;
+        this.pCardRefPairs[index][1] = true;
     }
 
     submitCard(pCardRef) {
@@ -574,6 +598,7 @@ async function onConnection(socket) {
     createLockedListener(socket, 'flip', gameGetter, async index => {
         game.flipCard(user, index);
         socket.to(game.getGameCode()).emit('flip', index);
+        socket.to(game.getGameCode()).emit('look', index);
     });
 
     createLockedListener(socket, 'flipAll', gameGetter, async () => {
