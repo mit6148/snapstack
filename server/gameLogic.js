@@ -254,7 +254,7 @@ class Game {
 
     skipRound(userTriggered) {
         if(!userTriggered || (userTriggered && !this.pausedForTooFewPlayers &&
-            ([gamePhases.LOBBY, gamePhases.GAME_OVER, gamePhases.ROUND_OVER].includes(this.gamePhase) || this.players[0].connected))) {
+            ![gamePhases.LOBBY, gamePhases.GAME_OVER, gamePhases.ROUND_OVER].includes(this.gamePhase) && !this.players[0].connected)) {
             this.isSkipping = true;
         } else {
             throw new Error("illegal skip triggered! userTriggered: " + userTriggered);
@@ -276,11 +276,18 @@ class Game {
     }
 
     hasSomeoneWon() {
-        // TODO
+        for(let player of this.players) {
+            if(player.score >= this.cardsToWin) {
+                return true;
+            }
+        }
+        return false;
     }
 
     endGame() {
-        // TODO
+        if(this.hasSomeoneWon()) {
+            this.game
+        }
     }
 
     getCreators() {
