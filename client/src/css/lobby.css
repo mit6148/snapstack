@@ -1,7 +1,19 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+.lobby_page {
+  display: flex;
+}
+
+.game_info {
+  flex: 1 1 0;
+}
+
+.whos_joined {
+  flex: 1 1 0;
+}
+
 .game_code {
   text-align: center;
-  font-size: 80px;
+  font-size: 100px;
   text-align: center;
   font-weight: 1000;
   letter-spacing: 0.05em;

@@ -4,6 +4,15 @@ import PlayerMedia from "./PlayerMedia";
 import "../../css/player.css";
 
 export default class PlayerInfo extends React.Component {
+   
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            player_score: 0,
+        };
+    }   
+
     render() {
         return (
             <div className="player_info">
@@ -18,8 +27,14 @@ export default class PlayerInfo extends React.Component {
                     </div>
                     <div className="player_other">
                         <PlayerMedia media={this.props.media} />
-                        <div className="player_score">
-                            Score
+                        <div className="score">
+                            <div className="score_icon">
+                                <img src="/card_icon.png"/>
+                            </div>
+                            <div className="player_score">
+                                {this.state.player_score}
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -27,3 +42,5 @@ export default class PlayerInfo extends React.Component {
         );
     }
 }
+
+//Cards by Adrien Coquet from the Noun Project (card icon!)

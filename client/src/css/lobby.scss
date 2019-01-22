@@ -3,12 +3,22 @@
 @import "./_variables.scss";
 
 .lobby_page{
-	
+	display: flex;
+
 }
 
-.game_code{
+.game_info {
+	flex: 1 1 0;
+
+}
+
+.whos_joined {
+	flex: 1 1 0;
+}
+
+.game_code {
 	text-align: center;
-	font-size: 80px;
+	font-size: 100px;
 	text-align: center;
 	font-weight: 1000;
 

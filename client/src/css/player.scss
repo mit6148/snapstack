@@ -6,39 +6,59 @@
 	text-align: center;
 }
 
+div {
+	color: $black;
+}
+
 .player_info {
+	
+	background-color: $purple-medium;
 	display: flex;
-	width: 400px;
+	width: 300px;
+	border-radius: 15px;
 }
 
 .avatar_container {
-	width: 100px;
-	height: 100px;
-	margin-right: 15px;
+	padding: 10px;
+	width: 80px;
+	height: 80px;
 }
 
 .cropped_avatar {
-	width: 100px;
-	height: 100px;
+	width: 80px;
+	height: 80px;
 	border-radius: 50px;
 	overflow: hidden;
 }
 
 .player_details {
-
+	padding: 5px;
 
 }
 
 .user_name {
-
+	font-size: 24px;
+	font-weight: bold;
 }
 
 .player_other {
 	display: flex;
 }
 
-.player_score {
+.score_icon {
+	height: 30px;
+	width: 30px;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+.score {
+	display: flex;
+}
 
+.player_score {
+	margin-top: 5px;
+	font-size: 20px;
+	font-weight: bold;
 }
 
 
