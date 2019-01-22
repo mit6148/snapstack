@@ -12,7 +12,7 @@ export default class Timer extends React.Component {
     }
 
     render() {
-        let ms = max(this.props.end - this.state.current, 0);
+        let ms = Math.max(this.props.end - this.state.current, 0);
         if (ms === 0) {
             clearInterval(this.interval);
         }
