@@ -3,7 +3,7 @@ const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
-    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates} = require("../config");
+    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE} = require("../config");
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
@@ -53,7 +53,9 @@ Player.from = async user => {
 
 
 class Game {
-    constructor(cardsToWin) {
+    constructor(cardsToWin, _devCode) { // _devCode should not be used except in developer mode
+        _devCode = DEVELOPER_MODE ? _devCode : undefined;
+
         if(typeof(cardsToWin) !== 'number') {
             throw "You have to input a NUMBER of cards to win";
         }
@@ -64,7 +66,7 @@ class Game {
         this.pCardRefPairs = []; // array of pairs [pCardRef, flipped]
         this.pCardIndex = null;
         this.endTime = null;
-        this.gameCode = Game.generateUnusedGameCode();
+        this.gameCode = _devCode || Game.generateUnusedGameCode();
         this.cardsToWin = cardsToWin;
         this.jCardsSeen = [];
         this.pCardsMade = [];
@@ -537,6 +539,15 @@ async function onConnection(socket) {
                 console.error("post-skip-phase timeout in skip had an error: " + err);
             }
         }, WAIT_TIME);
+    });
+}
+
+
+
+if(DEVELOPER_MODE) {
+    User.findOne({_id: "5c46acb51c9d440000ea85a3"}).exec().then(async user => {
+        game = new Game(3, "XYZ");
+        await game.addPlayer(user);
     });
 }
 
