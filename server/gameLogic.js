@@ -37,8 +37,12 @@ class Player {
 
     async checkSaved(pCardIds) {
         const savedIdMap = await UserDetail.findOne({_id: this.detail_id}).select("saved_pairs.pcard").exec()
-            .then(detail => detail.saved_pairs.map(pair => {pair.pcard: true}));
-        return pCardIds.filter(_id => _id in savedIdMap);
+            .then(detail => detail.saved_pairs.map(pair => {
+                const out = {};
+                out[pair.pcard] = true;
+                return out;
+            }));
+        return pCardIds.map(pCard => pCard in savedIdMap);
     }
 }
 
@@ -143,7 +147,6 @@ class Game {
     }
 
     async getVisiblePCards(userOrUndefined) {
-        // TODO:
         /*
         in lobby: return []
         In jchoose: return []
@@ -154,11 +157,12 @@ class Game {
         */
         let pCardRefPairs;
         let show_creator = false;
+        const player = userOrUndefined ? this.getPlayer(userOrUndefined) : undefined;
         switch(this.gamePhase) {
             case gamePhases.LOBBY: case gamePhases.JCHOOSE:
                 return [];
             case gamePhases.SUBMIT:
-                const pCardRef = this.getPlayer(userOrUndefined).pCardRef;
+                const pCardRef = player.pCardRef;
                 if(!pCardRef) {
                     return [];
                 } else {
@@ -170,7 +174,23 @@ class Game {
                 pCardRefPairs = this.pCardRefPairs;
         }
 
-        // TODO
+        const imagesPromise = Promise.all(pCardRefPairs.map(pair => downloadImagePromise(pair[0].image_ref)));
+        const pCardSaved = await (player ? player.checkSaved(pCardRefPairs.map(pair => pair[0]._id)) : {});
+        const images = await imagesPromise;
+
+        const output = [];
+
+        for(let i = 0; i < pCardRefPairs.length; i++) {
+            output.push({
+                _id: pCardRefPairs[i][0]._id,
+                image: images[i],
+                text: pCardRefPairs[i][0].text,
+                faceup: pCardRefPairs[i][1],
+                creator_id: show_creator ? pCardRefPairs[i][0].creator_id : undefined,
+                saveState: pCardSaved[i] || false, // make sure undefined turns into false
+            });
+        }
+        return output;
     }
 
     async start() {
