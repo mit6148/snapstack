@@ -6,6 +6,13 @@
 // 	border-style: solid;
 // }
 
+.card_logo {
+	height: 100%;
+	width: 100%;
+
+	overflow: hidden;
+}
+
 .small {
   transform: scale(0.7, 0.7);
   -ms-transform: scale(0.7, 0.7); /* IE 9 */
@@ -144,6 +151,7 @@
 	height: 90%;
 	width: 90%;
 	background-color: $green-light;
+	border-radius: 10px;
 }
 
 .pcard_back {

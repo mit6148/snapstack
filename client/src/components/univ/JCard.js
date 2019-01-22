@@ -28,7 +28,9 @@ export default class JCard extends Component {
                 if (this.props.faceup === false) {
                     return (
                         <div className="jcard_back" onClick={this.props.onClick}>
-                            <img src="/pancakes.png" />
+                            <div className="card_logo">
+                                <img src="/pancakes.png"/>
+                            </div>
                         </div>
                     );
                 } else {

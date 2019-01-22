@@ -29,7 +29,9 @@ export default class PCard extends Component {
                 if (this.props.faceup === false) {
                     return (
                         <div className="pcard_back" onClick={this.props.onClick}>
-                            <img src="/pancakes.png"/>
+                            <div className="card_logo">
+                                <img src="/pancakes.png"/>
+                            </div>  
                         </div>
                     );
                 } else {

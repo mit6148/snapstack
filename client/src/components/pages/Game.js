@@ -109,7 +109,7 @@ export default class Game extends React.Component {
         if (pCard.faceup !== false) {
             this.setState({
                 cardModal: (
-                    <Modal modalType='zoom_card' onClose={this.setState({cardModal: null})}>
+                    <Modal modalType='zoom_card' onClose={() => this.setState({cardModal: null})}>
                         <PCard  image={pCard.image}
                                 text={pCard.text}
                                 saveState={pCard.saveState}
@@ -146,7 +146,7 @@ export default class Game extends React.Component {
 
     // enable skip round
     isJudgeDisconnected = () => { // TODO remove temp change
-        return true || [JCHOOSE, SUBMIT, JUDGE].includes(this.gameState.gamePhase) && !this.gameState.players[this.gameState.playerIds[0]].connected;
+        return [JCHOOSE, SUBMIT, JUDGE].includes(this.gameState.gamePhase) && !this.gameState.players[this.gameState.playerIds[0]].connected;
     }
 
     // stall at JCHOOSE
