@@ -283,6 +283,9 @@ class Game {
 
     disconnect(user) {
         this.userToPlayerMap[user._id].disconnect();
+        if(this.gamePhase === gamePhases.LOBBY) {
+            this.players = this.players.filter(player => player._id !== user._id); // remove player from list
+        }
     }
 
     hasSomeoneWon() {
@@ -578,6 +581,7 @@ async function onConnection(socket) {
         } catch(reason) {
             return socket.emit('rejectConnection', reason);
         }
+        console.log("game code: " + game.getGameCode());
         socket.join(game.getGameCode());
         emitGameState(socket, user, game);
     });
@@ -593,9 +597,10 @@ async function onConnection(socket) {
             console.log("rejected connection: " + reason)
             return socket.emit('rejectConnection', reason);
         }
-        socket.join(gameCode);
+        socket.join(game.getGameCode());
         emitGameState(socket, user, game);
-        socket.to(gameCode).emit('nuj', await game.getPlayer(user));
+        socket.to(game.getGameCode()).emit('nuj', await game.getPlayer(user));
+        console.log("nuj sent");
     });
 
     createLockedListener(socket, 'startGame', gameGetter, async () => {
@@ -679,6 +684,7 @@ async function onConnection(socket) {
     createLockedListener(socket, 'disconnect', gameGetter, async () => {
         game.disconnect(user);
         io.to(game.getGameCode()).emit('disconnected', user._id);
+        console.log("sent: disconnected");
         await game.tryDestroyAssets();
     });
 
