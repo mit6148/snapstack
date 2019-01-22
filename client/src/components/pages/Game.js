@@ -25,6 +25,7 @@ export default class Game extends React.Component {
         this.gameState = this.props.gameState;
         this.actions = this.props.actions;
         console.log(this.gameState);
+        console.log(this.props.appState);
 
         return (
             <div className="game_page">

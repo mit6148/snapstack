@@ -79,9 +79,8 @@
 
 .enabled_start_btn {
 	@extend .disabled_start_btn;
-	color: $blue-light;
 
-	background-color: $blue-light;
+	background: $blue-light;
 
 	&:hover {
 	background: $blue-medium;
