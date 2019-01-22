@@ -85,7 +85,7 @@ class Game {
         this.cardsToWin = cardsToWin;
         this.jCardsSeen = [];
         this.pCardsMade = [];
-        this.pausedForTooFewPlayers = false;
+        this.pausedForTooFewPlayers = true;
         this.isSkipping = false;
         this._lock = null;
         this.round = 0;
@@ -160,6 +160,8 @@ class Game {
                 throw "Sorry, we're having some trouble. Try again later";
             }
         }
+
+        this.pausedForTooFewPlayers = this.players.length < MIN_PLAYERS;
     }
 
     async getVisiblePCards(userOrUndefined) {
@@ -281,16 +283,6 @@ class Game {
 
     disconnect(user) {
         this.userToPlayerMap[user._id].disconnect();
-    }
-
-    pausedAndShouldResume() {
-        return this.pausedForTooFewPlayers && !this.getTooFewPlayers();
-    }
-
-    resume() {
-        if(this.pausedAndShouldResume()) {
-            this.pausedForTooFewPlayers = false;
-        }
     }
 
     hasSomeoneWon() {
@@ -552,11 +544,7 @@ async function handleSkipRound(userTriggered) {
 
 async function tryStartNewRound(game) {
     await game.startNewRound();
-    if(!game.getTooFewPlayers()) {
-        // can start next round
-        io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
-    }
-    // otherwise, just wait until a new player comes along
+    io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
 }
 
 async function endSubmitPhaseDelayedSendout() {
@@ -608,12 +596,6 @@ async function onConnection(socket) {
         socket.join(gameCode);
         emitGameState(socket, user, game);
         socket.to(gameCode).emit('nuj', await game.getPlayer(user));
-
-        // check to unpause
-        if(game.pausedAndShouldResume()) {
-            game.resume();
-            io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
-        }
     });
 
     createLockedListener(socket, 'startGame', gameGetter, async () => {
