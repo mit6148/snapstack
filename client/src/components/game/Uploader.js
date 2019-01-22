@@ -3,7 +3,9 @@ import React from "react";
 export default class Uploader extends React.Component {
     render() {
         return (
-            null
+            <div>
+                <div onClick={() => this.props.upload('/pancakes.jpg')}></div>
+            </div>
         );
     }
 }

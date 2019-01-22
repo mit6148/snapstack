@@ -36,7 +36,7 @@ export default class GameContainer extends React.Component {
             selectPCard: this.selectPCard,
             skipRound: this.skipRound,
             savePCard: this.savePCard,
-            quitGame: this.props.quitGame
+            quitGame: this.quitGame
         }
 
         this.socket = this.createSocket();
@@ -47,6 +47,8 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
+        console.log(this.state);
+        console.log(this.props.appState);
         return (
             <div>
                 {this.state.gamePhase === LOBBY ? (
@@ -141,6 +143,11 @@ export default class GameContainer extends React.Component {
         }).catch(console.error);
     }
 
+    quitGame = () => {
+        this.socket.disconnect();
+        this.props.quitGame();
+    }
+
     onConnect = () => { // TODO move logic to Home so Lobby is immediately populated
         if (this.props.appState.gameCode === '?') {
             this.socket.emit('newGame', CARDS_TO_WIN);
@@ -155,8 +162,7 @@ export default class GameContainer extends React.Component {
             this.onConnect();
         });
         socket.on('rejectConnection', reason => {
-            socket.disconnect();
-            this.props.quitGame();
+            this.leaveGame();
         });
         socket.on('gameState', (players, gamePhase, jCards, pCards, pCardIndex, endTime, cardsToWin, roundSkipped, gameCode) => {
             this.props.enterGame(gameCode);
