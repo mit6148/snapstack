@@ -13,21 +13,23 @@ export default class PCard extends Component {
         switch (this.props.src) {
             case NO_CARD:
                 return (
-                    <div onClick={this.props.onClick}>
+                    <div className="pcard_empty" onClick={this.props.onClick}>
                     </div>
                 );
             case CARDBACK:
             case FACEDOWN_CARD:
                 return (
                     <div className="pcard_back" onClick={this.props.onClick}>
-                        <div className="logo">
+                        <div className="card_logo">
+                            <img src="/pancakes.png"/>
                         </div>
                     </div>
                 );
             default:
                 if (this.props.faceup === false) {
                     return (
-                        <div onClick={this.props.onClick}>
+                        <div className="pcard_back" onClick={this.props.onClick}>
+                            <img src="/pancakes.png"/>
                         </div>
                     );
                 } else {

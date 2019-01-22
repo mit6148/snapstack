@@ -30,6 +30,7 @@ export default class Game extends React.Component {
         return (
             <div className="game_page">
                 <NavButtons appState={this.props.appState} page='Game' quitGame={this.actions.quitGame} />
+                
                 {this.gameState.gamePhase === JCHOOSE ? (
                     <React.Fragment>
                         <CardBin    jCards={[NO_CARD]}
@@ -45,6 +46,7 @@ export default class Game extends React.Component {
                     <CardBin    jCards={[this.gameState.jCards[this.gameState.jCardIndex]]}
                                 owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
                 )}
+                
                 {[JCHOOSE, SUBMIT].includes(this.gameState.gamePhase) ? (
                     <CardBin    pCards={this.gameState.playerIds.slice(1).map(playerId =>
                                         playerId === this.props.appState.userId
@@ -64,22 +66,26 @@ export default class Game extends React.Component {
                                 save={this.actions.savePCard}
                                 winnerIndex={this.gameState.pCardIndex} />
                 )}
+                
                 {this.gameState.gamePhase === SUBMIT ? <Timer end={this.gameState.endTime} /> : null}
                 {this.canUploadImage() ? <Uploader upload={this.uploadImage} fakeImage={this.gameState.players[this.gameState.playerIds[0]].avatar} /> : null}
                 {this.canFlipAllPCards() ? <div onClick={this.actions.flipAllPCards}>Flip All</div> : null}
                 {this.canSelectPCard() ? <div onClick={this.actions.selectPCard}>Select</div> : null}
+                
                 {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
-                    <div>
+                    <div className="round_skip">
                         The judge has disconnected. Skip round?
                         <div className="home_btn" onClick={this.actions.skipRound}> 
                         Sure </div>
                     </div>
                 ) : null}
+                
                 {this.gameState.roundSkipped ? (
                     <div>
                         Skipping to next round...
                     </div>
                 ) : null}
+                
                 {this.gameState.gamePhase === GAME_OVER ? <div>{this.gameState.players[this.getWinner()].name} has won!</div> : null}
                 {this.state.cardModal}
                 {this.state.pCardEditModal}
@@ -90,7 +96,7 @@ export default class Game extends React.Component {
     uploadImage = image => {
         this.setState({
             pCardEditModal: (
-                <Modal onClose={this.setState({pCardEditModal: null})} persistOnWindowClick={true}>
+                <Modal modalType="zoom_card" onClose={this.setState({pCardEditModal: null})} persistOnWindowClick={true}>
                     <PCardEditor image={image} submit={this.actions.submitPCard} onClose={() => this.setState({pCardEditModal: null})} />
                 </Modal>
             )

@@ -1,5 +1,7 @@
 import React from "react";
 
+import "../../css/game.css";
+
 export default class Timer extends React.Component {
     constructor (props) {
         super(props);
@@ -22,7 +24,7 @@ export default class Timer extends React.Component {
         ms = ('00' + ms).slice(-3);
 
         return (
-            <div>
+            <div className="timer">
                 {minutes+':'+seconds+(minutes === 0 && seconds < 10 ? ('.'+ms) : '')}
             </div>
         );

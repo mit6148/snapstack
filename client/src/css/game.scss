@@ -1,3 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
 
 @import "./_variables.scss";
+
+.timer {
+	font-size: 40px;
+}
+
+.game_page {
+	align-content: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.round_skip {
+	display: none;
+}

@@ -17,6 +17,11 @@ export default class SaveButton extends Component {
                 return (
                     <div>Saved!</div>
                 );
+            default:
+                return (
+                    <div> Error! </div>
+                )
+
         }
     }
 }

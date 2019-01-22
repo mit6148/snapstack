@@ -2,19 +2,56 @@
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
 
+// div {
+// 	border-style: solid;
+// }
+
+.small {
+  transform: scale(0.7, 0.7);
+  -ms-transform: scale(0.7, 0.7); /* IE 9 */
+  -webkit-transform: scale(0.7, 0.7); /* Safari and Chrome */
+  -o-transform: scale(0.7, 0.7); /* Opera */
+  -moz-transform: scale(0.7, 0.7); /* Firefox */
+}
 
 .jcard_bin {
 	display:flex;
 	flex-direction: row;
+	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
+
+}
+
+.pcard_bin {
+	@extend .jcard_bin;
+
+	height: 300px;
+	width: 90%;
+
+	padding: 10px;
+
+	text-align: center;
+
 
 }
 
 .jcard_slot {
 	align-items: flex-start;
 	justify-content: center;
+	display: flex;
+	flex-direction: column;
 
+
+}
+
+.pcard_slot {
+	@extend .jcard_slot;
+	height: 300px;
+	width: 200px;
+	display: flex;
+	flex-direction: column;
+	margin: 20px;
 }
 
 .jcard_object {
@@ -27,8 +64,16 @@
 
 }
 
+.pcard_object {
+	@extend .jcard_slot;
+}
+
 .jcard_info {
 
+}
+
+.pcard_info {
+	@extend .jcard_slot;
 }
 
 .jcard_enlarged {
@@ -37,12 +82,20 @@
 	width: 100%;
 }
 
+.pcard_enlarged {
+	@extend .pcard_front;
+}
+
 .jcard {
 	@extend .jcard_front;
 }
 
+.pcard {
+	@extend .pcard_front;
+}
+
 .jcard_front {	
-	height: 90%;
+	height: 85%;
 	width: 90%;
 	display: flex;
 	flex-direction: column;
@@ -58,9 +111,17 @@
 	margin: 15px;
 }
 
+.pcard_front {
+	@extend .jcard_front;
+
+	border-color: $blue-light;
+
+}
+
 .jcard_empty {
-	height: 60%;
-	width: 60%;
+	
+	height: 85%;
+	width: 90%;
 	display: flex;
 	background-color: $background-v1;
 	justify-content: center;
@@ -72,9 +133,22 @@
 
 }
 
+.pcard_empty {
+	@extend .jcard_empty;
+	height: 200px;
+	width: 120px;
+	border-color: $blue-light;
+}
+
 .jcard_back {
 	height: 90%;
 	width: 90%;
+	background-color: $green-light;
+}
+
+.pcard_back {
+	@extend .jcard_back;
+	background-color: $blue-light;
 }
 
 .jcard_prompt {
