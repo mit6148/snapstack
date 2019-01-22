@@ -24,6 +24,10 @@ class Player {
         this.connected = true;
     }
 
+    disconnect() {
+        this.connected = false;
+    }
+
     resetRoundState() { // after having been removed from a round, so round state is reset
         this.hasPlayed = false;
         this.connected = true;
@@ -227,7 +231,7 @@ class Game {
     }
 
     async tryDestroyAssets() {
-        // TODO. must remove from codetogamemap
+        // TODO. must remove from codetogamemap. only run if there are no players
     }
 
     checkRoomFull() {
@@ -249,8 +253,7 @@ class Game {
     }
 
     skipRound(userTriggered) {
-        // TODO. looser legality limits on non-user-triggered skips
-        if(!userTriggered || (userTriggered &&
+        if(!userTriggered || (userTriggered && !this.pausedForTooFewPlayers &&
             ([gamePhases.LOBBY, gamePhases.GAME_OVER, gamePhases.ROUND_OVER].includes(this.gamePhase) || this.players[0].connected))) {
             this.isSkipping = true;
         } else {
@@ -259,15 +262,17 @@ class Game {
     }
 
     disconnect(user) {
-        // TODO
+        this.getPlayer(user).disconnect();
     }
 
     pausedAndShouldResume() {
-        // TODO
+        return this.pausedForTooFewPlayers && !this.getTooFewPlayers();
     }
 
     resume() {
-        // TODO
+        if(this.pausedAndShouldResume()) {
+            this.pausedForTooFewPlayers = false;
+        }
     }
 
     hasSomeoneWon() {
