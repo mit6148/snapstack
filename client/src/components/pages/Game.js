@@ -97,7 +97,7 @@ export default class Game extends React.Component {
     uploadImage = image => {
         this.setState({
             pCardEditModal: (
-                <Modal modalType="zoom_card" onClose={this.setState({pCardEditModal: null})} persistOnWindowClick={true}>
+                <Modal modalType="zoom_card" onClose={() => this.setState({pCardEditModal: null})} persistOnWindowClick={true}>
                     <PCardEditor image={image} submit={this.actions.submitPCard} onClose={() => this.setState({pCardEditModal: null})} />
                 </Modal>
             )
