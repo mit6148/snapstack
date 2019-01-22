@@ -587,7 +587,7 @@ async function tryStartNewRound(game) {
     io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
 }
 
-async function endSubmitPhaseDelayedSendout() {
+async function endSubmitPhaseDelayedSendout(game) {
     await game.endSubmitPhase();
     setTimeout(async () => {
         try {
@@ -664,7 +664,7 @@ async function onConnection(socket) {
                         case endSubmitPhaseStatus.CAN_END:
                             // submit phase ended in a timeout
                             console.log("ending submit phase");
-                            await endSubmitPhaseDelayedSendout();
+                            await endSubmitPhaseDelayedSendout(game);
                             break;
                         case endSubmitPhaseStatus.SKIP_INSTEAD:
                             // no one submitted, so trigger skip event not caused by any particular user
@@ -689,7 +689,7 @@ async function onConnection(socket) {
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
 
         if(game.allCardsSubmitted()) {
-            await endSubmitPhaseDelayedSendout();
+            await endSubmitPhaseDelayedSendout(game);
         }
     });
 
