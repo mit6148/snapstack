@@ -46,14 +46,15 @@ export default class GameContainer extends React.Component {
     render() {
         return (
             <div>
-                {this.state.gamePhase === LOBBY
-                ?   <Lobby  appState={this.props.appState}
+                {this.state.gamePhase === LOBBY ? (
+                    <Lobby  appState={this.props.appState}
                             gameState={this.state}
                             actions={this.actions} />
-                :   <Game   appState={this.props.appState}
+                ) : (
+                    <Game   appState={this.props.appState}
                             gameState={this.state}
                             actions={this.actions} />
-                }
+                )}
             </div>
         );
     }
