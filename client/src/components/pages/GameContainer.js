@@ -3,7 +3,8 @@ import io from "socket.io-client";
 import update from "immutability-helper";
 import Lobby from "./Lobby";
 import Game from "./Game";
-import { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER, UNSAVED, SAVING, SAVED, CARDS_TO_WIN, MIN_PLAYERS } from "../../../../config.js";
+import {gamePhases, UNSAVED, SAVING, SAVED, CARDS_TO_WIN, MIN_PLAYERS} from "../../../../config.js";
+const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 
 export default class GameContainer extends React.Component {
     constructor(props) {
@@ -171,6 +172,8 @@ export default class GameContainer extends React.Component {
                 cardsToWin: cardsToWin,
                 roundSkipped: roundSkipped
             });
+
+            console.log("ids: " + this.state.playerIds + "\t ")
         });
         socket.on('nuj', player => {
             let playerIds = this.state.players.has(player._id)

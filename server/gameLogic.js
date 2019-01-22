@@ -122,7 +122,9 @@ class Game {
             // new!
             this.checkRoomFull();
             try {
-                this.players.push(await Player.from(user));
+                const player = await Player.from(user);
+                this.players.push(player);
+                this.userToPlayerMap[user._id] = player;
             } catch(err) {
                 console.error("addPlayer had unknown error: " + err);
                 throw "Sorry, we're having some trouble. Try again later";
