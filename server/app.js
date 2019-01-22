@@ -6,14 +6,12 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const path = require('path');
 
-
-const {onConnection, getCurrentGame} = require('./gameLogic');
-
 // local dependencies
 const db = require('./db');
 const passport = require('./passport');
 const passportSocketIo = require('passport.socketio');
 const api = require('./api');
+const {onConnection} = require('./gameLogic');
 const publicPath = path.resolve(__dirname, '..', 'client', 'dist');
 
 // set POST request body parser
