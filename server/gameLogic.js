@@ -10,7 +10,8 @@ const {io} = require('./requirements');
 class Player {
     constructor(user, detail) {
         this._id = user._id;
-        this.name = detail.name;
+        this.name = (detail.firstName && detail.lastName) ? detail.firstName + " " + detail.lastName[0] + "."
+                                                            : (detail.firstName || detail.lastName);
         this.avatar = detail.avatar;
         this.media = detail.media;
         this.detail_id = detail._id
@@ -703,7 +704,7 @@ async function onConnection(socket) {
 
 
 if(DEVELOPER_MODE) {
-    User.findOne({_id: "5c46acb51c9d440000ea85a3"}).exec().then(async user => {
+    User.findOne({_id: "5c46ec131c9d440000ea85a4"}).exec().then(async user => {
         game = new Game(3, "XYZ");
         await game.addPlayer(user);
     });

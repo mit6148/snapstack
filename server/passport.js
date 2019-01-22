@@ -26,7 +26,7 @@ passport.use(new FacebookStrategy({
   clientSecret: process.env.FB_SECRET,
   callbackURL: '/auth/facebook/callback',
   enableProof: true,
-  profileFields: ['id', 'displayName', 'picture.type(large)']
+  profileFields: ['id', 'firstName', 'lastName', 'picture.type(large)']
 }, function(accessToken, refreshToken, profile, done) {
   User.findOne({
     'facebookId': profile.id
@@ -37,7 +37,8 @@ passport.use(new FacebookStrategy({
 
       getAvatarImagePromise(profile).then(function(image) {
         const userDetail = new UserDetail({
-          name: profile.displayName,
+          firstName: profile.firstName,
+          lastName: profile.lastName,
           saved_pairs: [],
           avatar: image,
           description: "I'm on SnapStack!",
