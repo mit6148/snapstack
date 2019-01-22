@@ -3,6 +3,7 @@ import HomeNavBtn from "./HomeNavBtn";
 import AboutNavBtn from "./AboutNavBtn";
 import ProfileNavBtn from "./ProfileNavBtn";
 import LogoutNavBtn from "./LogoutNavBtn";
+import LeaveNavBtn from "./LeaveNavBtn";
 
 import "../../css/nav.css";
 
@@ -48,7 +49,9 @@ export default class NavButtons extends React.Component {
                 );
             case 'Lobby':
                 return (
-                    null
+                    <React.Fragment>
+                        <LeaveNavBtn appState={this.props.appState} quitGame={this.props.quitGame} />
+                    </React.Fragment>
                 );
             case 'Game':
                 return (
