@@ -9,7 +9,6 @@
 h1 {
 	text-align: center;
 	font-size: 80px;
-	text-align: center;
 	font-weight: 1000;
 
 	letter-spacing: 0.05em;
@@ -26,13 +25,38 @@ h1 {
 	}
 }
 
-h2 {
-	text-align: center;
-	font-size: 30px;
-	text-align: center;
+// div {
+// 	border-style: solid;
+// 	border-color: $black;
+// }
+
+.my_profile{
+	margin-top: 40px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+
 }
 
-.picture_container {
+.profile_container {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.photo_section {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+}	
+
+.circle_picture_container {
 	display: inline-block;
 	height: 200px;
 	width: 200px;
@@ -42,40 +66,28 @@ h2 {
 	overflow: hidden;
 
 	box-shadow: 2px 4px 0px $medium-gray;
+
+	margin: 10px;
+}
+
+.square_picture_container {
+	display: inline-block;
+	height: 200px;
+	width: 200px;
+
+	border-radius: 10px;
+
+	overflow: hidden;
+
+	margin: 10px;
+
+	box-shadow: 2px 4px 0px $medium-gray;
+
 }
 
 .profile_picture {
 	height: 100%;
 	width: 100%;
-}
-
-.profile_page {
-	display: fixed;
-}
-
-.profile_section {
-	padding: 15px;
-	display: inline-block;
-	background-color: $black;
-
-	max-width: 700px;
-	min-width: 60%;
-	text-align: center;
-
-	border-radius: 10px;
-}
-
-.about_me {
-	@extend .profile_section;
-
-}
-
-.social_media {
-	@extend .profile_section;
-}
-
-.saved_cards {
-	@extend .profile_section;
 }
 
 .edit_btn {
@@ -85,7 +97,7 @@ h2 {
 	background-color: $green-light;
 	box-shadow: 0px 5px 0px $green-medium;
 	margin: 1em auto;
-	padding: 5px;
+	padding: 4px;
 	text-align: center;
 	
 	width: 50px;
@@ -107,4 +119,49 @@ h2 {
 	  box-shadow: 0 2px $green-dark;
 	  transform: translateY(3px);
 	}
+}
+
+.info_section {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	padding: 10px;
+	margin-left: 5px;
+
+	flex: 2;
+
+	justify-content: center;
+
+}
+.profile_name {
+	font-size: 25px;
+	text-align: left;
+}
+
+.profile_description {
+	word-wrap: break-word;
+	max-width: 400px;
+	text-align: left;
+	margin-top: 5px;
+	margin-bottom: 5px;
+
+	font-weight: bold;
+}
+
+.profile_social_media {
+	text-align: left;
+	font-weight: bold;
+}
+
+.my_snapstack {
+}
+
+.saved_cards {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 10px;
+
+	align-items: center;
+	justify-content: center;
 }

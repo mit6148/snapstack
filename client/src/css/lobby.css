@@ -9,6 +9,7 @@
 .non_start_btn {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   flex: 9;
 }
 
@@ -62,6 +63,9 @@
   text-decoration: none;
 }
 
+.enabled_start_btn {
+  color: #0683E2;
+}
 .enabled_start_btn:hover {
   background: #0677CE;
   box-shadow: 0 5px #056BBA;

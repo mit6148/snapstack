@@ -1,52 +1,77 @@
 import React from "react";
 import NavButtons from "../nav/NavButtons";
 import Card from "../univ/Card.js";
+import PlayerMedia from "../univ/PlayerMedia.js";
 
 import "../../css/profile.css";
+import "../../css/player.css";
 
 export default class Profile extends React.Component {
     render() {
         return ( //Todo, work on modals for Edit and Cards!
             <div className="profile_text profile_page">
-            	<NavButtons appState={this.props.appState} page='Profile' profileId={this.props.id} logout={this.props.logout} />
-                <h1> Profile </h1>
+	            <NavButtons appState={this.props.appState} page='Profile' profileId={this.props.id} logout={this.props.logout} />
 
-                <h2> About Me </h2>
-                <div className="about_me">
-	                <div className="picture_container">
-	                	<img className="profile_pic" src="/pancakes.jpg"/>
-	                </div>
+	            <div className="profile_container">
+	            	<div className="my_profile">
 
-	                <div className="user_name">
-	                	First Last
-	                </div>
+	            		<div className="photo_section">
+            			  	<div className="circle_picture_container">
+                				<img className="profile_picture" src="/pancakes.jpg"/>
+                			</div>
+                			<div className='edit_btn'>
+            					Edit
+            				</div>
+            			</div>
 
-	                <div className="user_description">
-	                	User Description
-	                </div>
-
-	                <div className="edit_btn"> 
-	                	Edit
-	                </div>
-	            </div>
-
-	            <h2> Social Media </h2>
-	            <div className="social_media">
-	            	<div className="social_media_link">
-	            		Facebook
+	                	<div className="info_section">
+	            		    <div className="profile_name">
+                				<h2> Melody Phu </h2>
+                			</div>	
+                			<div className="profile_description">
+                				Hi, welcome to SnapStack! The profile is still a work in progress,
+                				so thank you for your patience as we improve it :D xoxo, the SnapStack team
+                			</div>
+	            			<div className='edit_btn'>
+	            				Edit
+	            			</div>
+	            		</div>
 	            	</div>
-	            	<div className="edit_btn">
-	            		Edit
+
+	            	<div className="my_snapstack">
+	            		<h2> My SnapStack </h2>
+	            		<div className="saved_cards">
+	            			<div className="square_picture_container">
+	            				<img src="/chris.jpg"/>
+	            			</div>
+	            			<div className="square_picture_container">
+	            				<img src="/melody.jpg"/>
+	            			</div>
+	            			<div className="square_picture_container">
+	            				<img src="/nikhil.jpg"/>
+	            			</div>
+	            			<div className="square_picture_container">
+	            				<img src="/chris.jpg"/>
+	            			</div>
+	            			<div className="square_picture_container">
+	            				<img src="/melody.jpg"/>
+	            			</div>
+	            			<div className="square_picture_container">
+	            				<img src="/nikhil.jpg"/>
+	            			</div>
+	            			<div className="square_picture_container">
+	            				<img src="/chris.jpg"/>
+	            			</div>
+	            			<div className="square_picture_container">
+	            				<img src="/melody.jpg"/>
+	            			</div>
+	            			<div className="square_picture_container">
+	            				<img src="/nikhil.jpg"/>
+	            			</div>
+	            		</div>
 	            	</div>
 	            </div>
-                
-              	<h2> My Snapstack </h2>
-              	<div className="saved_cards">
-              		<Card faceup={true} zoome={false}>
-              		</Card>
-              	</div>
-
-            </div>
+           	</div>
         );
     }
 }
