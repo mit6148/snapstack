@@ -5,6 +5,8 @@ import Lobby from "./Lobby";
 import Game from "./Game";
 import { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER, UNSAVED, SAVING, SAVED, CARDS_TO_WIN, MIN_PLAYERS } from "../../../../config.js";
 
+import "../../css/game.css";
+
 export default class GameContainer extends React.Component {
     constructor(props) {
         super(props);
