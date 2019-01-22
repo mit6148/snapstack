@@ -19,7 +19,9 @@ export default class PCard extends Component {
             case CARDBACK:
             case FACEDOWN_CARD:
                 return (
-                    <div onClick={this.props.onClick}>
+                    <div className="pcard_back" onClick={this.props.onClick}>
+                        <div className="logo">
+                        </div>
                     </div>
                 );
             default:
