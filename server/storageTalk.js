@@ -1,7 +1,8 @@
 const {Storage} = require('@google-cloud/storage');
 const path = require('path');
 
-const storage = new Storage({projectId: "snapstack", keyFilename: path.join(__dirname, 'storage-secret.json')});
+const storage = new Storage({projectId: "snapstack",
+                            keyFilename: process.env.GCP_CREDENTIALS_PATH || path.join(__dirname, 'storage-secret.json')});
 
 const bucket = storage.bucket('snapstack-photos');
 
