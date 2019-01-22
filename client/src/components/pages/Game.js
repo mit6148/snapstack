@@ -123,11 +123,11 @@ export default class Game extends React.Component {
     }
 
     canFlipAllPCards = () => {
-        return this.gameState.gamePhase === JUDGE && this.gameState.pCardsFacedown > 0;
+        return this.gameState.gamePhase === JUDGE && this.isJudge() && this.gameState.pCardsFacedown > 0;
     }
 
     canSelectPCard = () => {
-        return this.gameState.gamePhase === JUDGE && this.gameState.pCardsFacedown === 0 && this.gameState.pCardIndex !== null;
+        return this.gameState.gamePhase === JUDGE && this.isJudge() && this.gameState.pCardsFacedown === 0 && this.gameState.pCardIndex !== null;
     }
 
     getWinner = () => {
