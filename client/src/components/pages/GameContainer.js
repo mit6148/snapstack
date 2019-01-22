@@ -15,7 +15,7 @@ export default class GameContainer extends React.Component {
         this.state = {
             gamePhase: LOBBY, // LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER
             playerIds: [], // judge is playerIds[0]
-            players: new Map(), // {_id: {_id, name, avatar, media{fb, insta}, score, hasPlayed, connected}}
+            players: {}, // {_id: {_id, name, avatar, media{fb, insta}, score, hasPlayed, connected}}
             jCards: null, // [string]; [NUM_JCARDS] if JCHOOSE, [NUM_JCARDS or 1] otherwise
             jCardIndex: null, // selected if SUBMIT, JUDGE, ROUND_OVER, or GAME_OVER
             pCards: null, // [{_id, image, text, faceup, creator_id, saveState}]; [0] if JCHOOSE, [0] or [1] if SUBMIT, [n] otherwise
@@ -160,7 +160,7 @@ export default class GameContainer extends React.Component {
             this.setState({
                 gamePhase: gamePhase,
                 playerIds: players.map(player => player._id),
-                players: new Map(players.map(player => [player._id, player])),
+                players: Object.assign({}, ...players.map(player => ({[player._id]: player}))),
                 jCards: jCards,
                 jCardIndex: 0,
                 pCards: pCards.map(pCard => update(pCard, {saveState: {$set: UNSAVED}})),
@@ -169,8 +169,6 @@ export default class GameContainer extends React.Component {
                 cardsToWin: cardsToWin,
                 roundSkipped: roundSkipped
             });
-
-            console.log("ids: " + this.state.playerIds + "\t ")
         });
         socket.on('nuj', player => {
             let playerIds = this.state.players.has(player._id)
@@ -193,7 +191,8 @@ export default class GameContainer extends React.Component {
         socket.on('roundStart', (jCardIndex, endTime) => {
             this.setState({
                 gamePhase: SUBMIT,
-                players: new Map(Array.from(this.state.players, ([playerId, player]) => [playerId, update(player, {hasPlayed: {$set: false}})])),
+                players: update(this.state.players, Object.assign({}, ...this.state.playerIds.map(playerId =>
+                            ({[playerId]: {hasPlayed: {$set: false}}})))),
                 jCardIndex: jCardIndex,
                 endTime: endTime
             });
