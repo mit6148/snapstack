@@ -14,7 +14,7 @@ export default class GameContainer extends React.Component {
         super(props);
 
         this.state = {
-            gamePhase: LOBBY, // LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER
+            gamePhase: null, // LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER
             playerIds: [], // judge is playerIds[0]
             players: {}, // {_id: {_id, name, avatar, media{fb, insta}, score, hasPlayed, connected}}
             jCards: null, // [string]; [NUM_JCARDS] if JCHOOSE, [NUM_JCARDS or 1] otherwise
@@ -140,7 +140,7 @@ export default class GameContainer extends React.Component {
         }).catch(console.error);
     }
 
-    onConnect = () => {
+    onConnect = () => { // TODO move logic to Home so Lobby is immediately populated
         if (this.props.appState.gameCode === '?') {
             this.socket.emit('newGame', CARDS_TO_WIN);
         } else {
