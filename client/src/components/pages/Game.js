@@ -24,6 +24,7 @@ export default class Game extends React.Component {
     render() {
         this.gameState = this.props.gameState;
         this.actions = this.props.actions;
+        console.log(this.gameState);
 
         return (
             <div className="game_page">
@@ -43,7 +44,7 @@ export default class Game extends React.Component {
                 )}
                 {[JCHOOSE, SUBMIT].includes(this.gameState.gamePhase) ? (
                     <CardBin    pCards={this.gameState.playerIds.slice(1).map(playerId =>
-                                        playerId === this.appState.userId
+                                        playerId === this.props.appState.userId
                                         ? (this.gameState.pCards.length === 1 ? this.gameState.pCards[0] : NO_CARD)
                                         : (this.gameState.players[playerId].hasPlayed ? CARDBACK : NO_CARD))}
                                 owners={this.gameState.playerIds.map(playerId => this.gameState.players[playerId])}
@@ -114,7 +115,7 @@ export default class Game extends React.Component {
     }
 
     isJudge = () => {
-        return this.appState.userId === this.gameState.playerIds[0];
+        return this.props.appState.userId === this.gameState.playerIds[0];
     }
 
     canUploadImage = () => {

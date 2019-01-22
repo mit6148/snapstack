@@ -71,6 +71,7 @@ export default class GameContainer extends React.Component {
         this.setState({
             jCardIndex: jCardIndex
         });
+        console.log('hi');
         this.socket.emit('jCardChoice', jCardIndex);
     }
 

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Image from "./Image.js";
 import Caption from "./Caption.js";
 import Modal from "./Modal.js";
+import { specialCards } from "../../../../config.js";
+const { NO_CARD, CARDBACK, FACEDOWN_CARD } = specialCards;
 
 import "../../css/card.css";
 
