@@ -639,7 +639,7 @@ async function onConnection(socket) {
     createLockedListener(socket, 'submitCard', gameGetter, async (image, text) => {
         const pCardRef = await generatePCardRef(user, image, text);
         game.submitCard(pCardRef);
-        socket.emit('turnedIn', user._id, pCard._id);
+        socket.emit('turnedIn', user._id, pCardRef._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
 
         if(game.getEndSubmitPhaseStatus(game.getRound()) === endSubmitPhaseStatus.CAN_END) {

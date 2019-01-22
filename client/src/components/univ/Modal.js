@@ -32,6 +32,19 @@ export default class Modal extends React.Component {
                         </div>
                     </div>
                 );
+            default:
+                return (
+                    <div>
+                        <div onClick={this.props.persistOnWindowClick ? null : this.props.onClose}>
+                        </div>
+                        <div>
+                            <div>
+                                {this.props.children}
+                            </div>
+                            <div className="modal_close_btn fas fa-times" onClick={this.props.onClose} />
+                        </div>
+                    </div>
+                );
         }
     }
 }

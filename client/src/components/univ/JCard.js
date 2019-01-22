@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Image from "./Image.js";
-import Caption from "./Caption.js";
-import Modal from "./Modal.js";
+import Image from "./Image";
+import Caption from "./Caption";
+import Modal from "./Modal";
 import { specialCards } from "../../../../config.js";
 const { NO_CARD, CARDBACK, FACEDOWN_CARD } = specialCards;
 

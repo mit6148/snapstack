@@ -73,13 +73,21 @@ export default class GameContainer extends React.Component {
         this.setState({
             jCardIndex: jCardIndex
         });
-        console.log('hi');
         this.socket.emit('jCardChoice', jCardIndex);
     }
 
     // player action
-    submitPCard = () => {
-        // TODO
+    submitPCard = (image, text) => {
+        this.setState({
+            pCards: [{
+                image: image,
+                text: text,
+                creator_id: this.props.appState.userId,
+                faceup: true,
+                saveState: UNSAVED
+            }]
+        });
+        this.socket.emit('submitCard', image, text);
     }
 
     // judge action
@@ -162,7 +170,7 @@ export default class GameContainer extends React.Component {
             this.onConnect();
         });
         socket.on('rejectConnection', reason => {
-            this.leaveGame();
+            this.quitGame();
         });
         socket.on('gameState', (players, gamePhase, jCards, pCards, pCardIndex, endTime, cardsToWin, roundSkipped, gameCode) => {
             this.props.enterGame(gameCode);
