@@ -567,7 +567,7 @@ function createLockedListener(socket, event, gameGetter, func) {
     });
 }
 
-async function handleSkipRound(userTriggered) {
+async function handleSkipRound(game, userTriggered) {
     game.skipRound(userTriggered);
     console.log('about to wait to skip round');
     io.to(game.getGameCode()).emit('skipped');
@@ -669,7 +669,7 @@ async function onConnection(socket) {
                         case endSubmitPhaseStatus.SKIP_INSTEAD:
                             // no one submitted, so trigger skip event not caused by any particular user
                             console.log('skipping due to no submission');
-                            await handleSkipRound(false);
+                            await handleSkipRound(game, false);
                             break;
                         case endSubmitPhaseStatus.ALREADY_ENDED:
                             // timer is irrelevant since submit phase already ended, so do nothing
@@ -739,7 +739,7 @@ async function onConnection(socket) {
         await game.tryDestroyAssets();
     });
 
-    createLockedListener(socket, 'skip', gameGetter, async () => await handleSkipRound(true));
+    createLockedListener(socket, 'skip', gameGetter, async () => await handleSkipRound(game, true));
 }
 
 
