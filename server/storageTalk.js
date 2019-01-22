@@ -40,5 +40,11 @@ function downloadImagePromise(name) {
     return bucket.file(name).download().then(data => data[0]); // data[0] is the file data
 }
 
+function deleteImagePromise(name) { // returns true if succeeded
+    return bucket.file(name).delete().then(resp => true).catch(err => {
+        return err.code == 404; // 404 means already deleted
+    });
+}
 
-module.exports = {uploadImagePromise, downloadImagePromise};
+
+module.exports = {uploadImagePromise, downloadImagePromise, deleteImagePromise};
