@@ -316,7 +316,7 @@ class Game {
 
     select(user, index) {
         if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
-            || this.pausedForTooFewPlayers || this.isSkipping) {
+                            || this.pausedForTooFewPlayers || this.isSkipping) {
             throw new Error("illegal selection attempt by " + user._id + " for index " + index);
         }
         // also need to check that all cards are flipped
@@ -331,7 +331,7 @@ class Game {
 
     look(user, index) {
         if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
-            || this.pausedForTooFewPlayers || this.isSkipping) {
+                            || this.pausedForTooFewPlayers || this.isSkipping) {
             throw new Error("illegal look attempt by " + user._id + " for index " + index);
         }
 
@@ -341,7 +341,7 @@ class Game {
 
     flipAll(user) {
         if(!isJudge(user) || this.gamePhase !== gamePhases.JUDGE
-            || this.pausedForTooFewPlayers || this.isSkipping) {
+                            || this.pausedForTooFewPlayers || this.isSkipping) {
             throw new Error("illegal flipAll attempt by " + user._id + " for index " + index);
         }
 
@@ -352,7 +352,7 @@ class Game {
 
     flipCard(user, index) {
         if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE
-            || this.pausedForTooFewPlayers || this.isSkipping) {
+                            || this.pausedForTooFewPlayers || this.isSkipping) {
             throw new Error("illegal flip attempt by " + user._id + " for index " + index);
         }
 
@@ -392,7 +392,14 @@ class Game {
     }
 
     startSubmitPhase(user, jCardIndex) {
-        // TODO. check is judge. doesn't need to handle starting timeout, but does need to check for too few players. check in bounds
+        if(!isJudge(user) || jCardIndex < 0 || jCardIndex >= this.jCards.length || this.gamePhase !== gamePhases.JCHOOSE ||
+                                this.pausedForTooFewPlayers || this.isSkipping) {
+            throw new Error("can't start submit phase (jcard choice) with user: " + user._id + " index: " + jCardIndex);
+        } else {
+            this.gamePhase = gamePhases.SUBMIT;
+            this.jCards = [this.jCards[jCardIndex]];
+            this.endTime = Date.now() + TIME_LIMIT_MILLIS;
+        }
     }
 
     getRound() {
