@@ -62,7 +62,6 @@ class Player {
 }
 
 Player.from = async user => {
-    console.log(user.detail_id);
     const detail = await UserDetail.findOne({_id: user.detail_id}).exec();
     return new Player(user, detail);
 }
