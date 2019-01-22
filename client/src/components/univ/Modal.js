@@ -32,10 +32,22 @@ export default class Modal extends React.Component {
                         </div>
                     </div>
                 );
+            case 'jcard_selector':
+                return (
+                    <div>
+                        <div className="modal_window">
+                        </div>
+                        <div className="modal_container_card">
+                            <div className="modal_contents_card">
+                                {this.props.children}
+                            </div>
+                        </div>
+                    </div>
+                );
             default:
                 return (
                     <div>
-                        <div onClick={this.props.persistOnWindowClick ? null : this.props.onClose}>
+                        <div className="modal_window" onClick={this.props.persistOnWindowClick ? null : this.props.onClose}>
                         </div>
                         <div>
                             <div>

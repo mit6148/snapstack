@@ -34,9 +34,11 @@ export default class Game extends React.Component {
                     <React.Fragment>
                         <CardBin    jCards={[NO_CARD]}
                                     owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
-                        <CardBin    jCards={this.gameState.jCards}
-                                    onClick={this.isJudge() ? this.actions.selectJCard : null}
-                                    enlarged={true} />
+                        <Modal modalType="jcard_selector">
+                            <CardBin    jCards={this.gameState.jCards}
+                                        onClick={this.isJudge() ? this.actions.selectJCard : null}
+                                        enlarged={true} />
+                        </Modal>
                     </React.Fragment>
                 ) : (
                     <CardBin    jCards={[this.gameState.jCards[this.gameState.jCardIndex]]}
