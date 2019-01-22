@@ -122,7 +122,9 @@ class Game {
             // new!
             this.checkRoomFull();
             try {
-                this.players.push(await Player.from(user));
+                const player = await Player.from(user);
+                this.players.push(player);
+                this.userToPlayerMap[user._id] = player;
             } catch(err) {
                 console.error("addPlayer had unknown error: " + err);
                 throw "Sorry, we're having some trouble. Try again later";
@@ -137,6 +139,7 @@ class Game {
         In submit: user is provided, give back array with only zero/one elem: the user's submitted pcard, including it's saveState
         In judge: no user provided, 
         */
+        return [];
     }
 
     async start() {
@@ -164,7 +167,7 @@ class Game {
     getPlayer(user) {
         const player = this.userToPlayerMap[user._id];
         if(!player) {
-            throw "tried to get player who isn't in game!";
+            throw "tried to get player who isn't in game!: " + user._id;
         }
         return player.format();
     }
@@ -321,7 +324,7 @@ function createLockedListener(socket, event, gameGetter, func) {
                 await func.apply(this, arguments);
             }
         } catch(err) {
-            console.error("socket triggered error: " + err + "\n" + err.stack);
+            console.error("socket triggered error while handling " + event + ": " + err + (err.stack ? ("\n" + err.stack) : ""));
 
             // WARNING: maybe we don't want this?
             socket.disconnect();
@@ -372,6 +375,7 @@ async function onConnection(socket) {
             game = Game.gameWithCode(gameCode);
             await game.addPlayer(user);
         } catch(reason) {
+            console.log("rejected connection: " + reason)
             return socket.emit('rejectConnection', reason);
         }
         socket.join(gameCode);

@@ -7,7 +7,7 @@ export default class PlayerList extends React.Component {
             <div>
                 Players
                 {this.props.players.map(player => (
-                    <PlayerListCell player={player} />
+                    <PlayerListCell player={player} key={player._id} />
                 ))}
             </div>
         );

@@ -3,7 +3,8 @@ import io from "socket.io-client";
 import update from "immutability-helper";
 import Lobby from "./Lobby";
 import Game from "./Game";
-import { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER, UNSAVED, SAVING, SAVED, CARDS_TO_WIN, MIN_PLAYERS } from "../../../../config.js";
+import {gamePhases, UNSAVED, SAVING, SAVED, CARDS_TO_WIN, MIN_PLAYERS} from "../../../../config.js";
+const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 
 import "../../css/game.css";
 
@@ -45,23 +46,18 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
-        if (this.state.gamePhase === LOBBY) {
-            return (
-                <div>
-                    <Lobby  appState={this.props.appState}
+        return (
+            <div>
+                {this.state.gamePhase === LOBBY
+                ?   <Lobby  appState={this.props.appState}
                             gameState={this.state}
                             actions={this.actions} />
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <Game   appState={this.props.appState}
+                :   <Game   appState={this.props.appState}
                             gameState={this.state}
                             actions={this.actions} />
-                </div>
-            );
-        }
+                }
+            </div>
+        );
     }
 
     startGame = () => {
@@ -173,6 +169,8 @@ export default class GameContainer extends React.Component {
                 cardsToWin: cardsToWin,
                 roundSkipped: roundSkipped
             });
+
+            console.log("ids: " + this.state.playerIds + "\t ")
         });
         socket.on('nuj', player => {
             let playerIds = this.state.players.has(player._id)
