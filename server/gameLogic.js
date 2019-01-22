@@ -15,7 +15,6 @@ class Player {
         this.media = detail.media;
         this.detail_id = detail._id
         this.score = 0;
-        this.hasPlayed = false;
         this.connected = true;
         this.pCardRef = null;
     }
@@ -31,7 +30,6 @@ class Player {
     }
 
     resetRoundState() { // after having been removed from a round, so round state is reset
-        this.hasPlayed = false;
         this.connected = true;
         this.pCardRef = null;
     }
@@ -40,11 +38,15 @@ class Player {
         this.score++;
     }
 
+    play(pCardRef) {
+        this.pCardRef = pCardRef;
+    }
+
 // OBSERVERS (note that fields are expected to be accessed directly)
 
     format() {
         return {_id: this._id, name: this.name, avatar: this.avatar, media: this.media,
-                score: this.score, hasPlayed: this.hasPlayed, connected: this.connected};
+                score: this.score, hasPlayed: this.pCardRef !== null, connected: this.connected};
     }
 
     async checkSaved(pCardIds) {
@@ -362,7 +364,14 @@ class Game {
     }
 
     submitCard(pCardRef) {
-        // TODO
+        const player = this.userToPlayerMap[pCardRef.creator_id];
+        this.pCardsMade.push(pCardRef._id); // must add to list so it can be dereferenced later
+
+        if(player.pCardRef) {
+            throw new Error("user " + player._id + "tried to submit a card twice!");
+        } else {
+            player.play(pCardRef);
+        }
     }
 
     getEndSubmitPhaseStatus(round) {
@@ -378,7 +387,8 @@ class Game {
     }
 
     endSubmitPhase() {
-        // TODO
+        this.gamePhase = gamePhases.JUDGE;
+        this.endTime = null;
     }
 
     startSubmitPhase(user, jCardIndex) {
@@ -450,6 +460,10 @@ Game.generateUnusedGameCode = () => {
 };
 
 
+async function generatePCardRef(user, image, text) {
+    // TODO
+}
+
 
 async function emitGameState(socket, user, game) {
     const [players, gamePhase, jCards, visiblePCards, pCardIndex, endTime, isSkipping, gameCode] = await Promise.all(
@@ -505,6 +519,15 @@ async function tryStartNewRound(game) {
         io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
     }
     // otherwise, just wait until a new player comes along
+}
+
+async function endSubmitPhaseDelayedSendout() {
+    await game.endSubmitPhase();
+    setTimeout(async () => {
+        game.withLock(async () => {
+            io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+        });
+    }, WAIT_TIME);
 }
 
 async function onConnection(socket) {
@@ -571,15 +594,14 @@ async function onConnection(socket) {
                     switch(game.getEndSubmitPhaseStatus(round)) {
                         case endSubmitPhaseStatus.CAN_END:
                             // submit phase ended in a timeout
-                            await game.endSubmitPhase();
-                            io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+                            await endSubmitPhaseDelayedSendout();
                             break;
                         case endSubmitPhaseStatus.SKIP_INSTEAD:
                             // no one submitted, so trigger skip event not caused by any particular user
                             await handleSkipRound(false);
                             break;
                         case endSubmitPhaseStatus.ALREADY_ENDED:
-                            // timer is irrelevant since submit phase already ended
+                            // timer is irrelevant since submit phase already ended, so do nothing
                     }
                 });
             } catch(err) {
@@ -593,6 +615,10 @@ async function onConnection(socket) {
         game.submitCard(pCardRef);
         socket.emit('turnedIn', user._id, pCard._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
+
+        if(game.getEndSubmitPhaseStatus(game.getRound()) === endSubmitPhaseStatus.CAN_END) {
+            await endSubmitPhaseDelayedSendout();
+        }
     });
 
     createLockedListener(socket, 'flip', gameGetter, async index => {
