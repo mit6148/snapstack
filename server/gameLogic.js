@@ -2,7 +2,7 @@ const User = require('./models/user');
 const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
-const {gamePhases, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
+const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
     NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE} = require("../config");
 const {uploadImagePromise, downloadImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
@@ -231,7 +231,7 @@ class Game {
     }
 
     async endSubmitPhase() {
-        // TODO. must add on placeholders for all those who didn't submit
+        // TODO
     }
 
     checkRoomFull() {
@@ -252,8 +252,8 @@ class Game {
         return this.players.map(player => player.format());
     }
 
-    skipRound() {
-        // TODO
+    skipRound(userTriggered) {
+        // TODO. looser legality limits on non-user-triggered skips
     }
 
     disconnect(user) {
@@ -300,8 +300,16 @@ class Game {
         // TODO
     }
 
-    canEndSubmitPhase(round) {
-        return round === this.round && this.gamePhase === gamePhases.SUBMIT;
+    getEndSubmitPhaseStatus(round) {
+        if(round === this.round && this.gamePhase === gamePhases.SUBMIT) {
+            if(this.pCardRefPairs.length === 0) {
+                return endSubmitPhaseStatus.SKIP_INSTEAD;
+            } else {
+                return endSubmitPhaseStatus.CAN_END;
+            }
+        } else {
+            return endSubmitPhaseStatus.ALREADY_ENDED;
+        }
     }
 
     startSubmitPhase(user, jCardIndex) {
@@ -412,6 +420,18 @@ function createLockedListener(socket, event, gameGetter, func) {
     });
 }
 
+async function handleSkipRound(userTriggered) {
+    game.skipRound(userTriggered);
+    io.to(game.getGameCode()).emit('skipped');
+    setTimeout(async () => {
+        try {
+            await game.withLock(tryStartNewRound);
+        } catch(err) {
+            console.error("post-skip-phase timeout in skip had an error: " + err);
+        }
+    }, WAIT_TIME);
+}
+
 async function tryStartNewRound(game) {
     await game.startNewRound();
     if(!game.getTooFewPlayers()) {
@@ -481,10 +501,18 @@ async function onConnection(socket) {
         setTimeout(async () => {
             try {
                 await game.withLock(async () => {
-                    if(game.canEndSubmitPhase(round)) {
-                        // the timer is actually relevant
-                        await game.endSubmitPhase();
-                        io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+                    switch(game.getEndSubmitPhaseStatus(round)) {
+                        case endSubmitPhaseStatus.CAN_END:
+                            // submit phase ended in a timeout
+                            await game.endSubmitPhase();
+                            io.to(game.getGameCode()).emit('pCards', await game.getVisiblePCards());
+                            break;
+                        case endSubmitPhaseStatus.SKIP_INSTEAD:
+                            // no one submitted, so trigger skip event not caused by any particular user
+                            await handleSkipRound(false);
+                            break;
+                        case endSubmitPhaseStatus.ALREADY_ENDED:
+                            // timer is irrelevant since submit phase already ended
                     }
                 });
             } catch(err) {
@@ -540,17 +568,7 @@ async function onConnection(socket) {
         await game.tryDestroyAssets();
     });
 
-    createLockedListener(socket, 'skip', gameGetter, async () => {
-        game.skipRound();
-        io.to(game.getGameCode()).emit('skipped');
-        setTimeout(async () => {
-            try {
-                await game.withLock(tryStartNewRound);
-            } catch(err) {
-                console.error("post-skip-phase timeout in skip had an error: " + err);
-            }
-        }, WAIT_TIME);
-    });
+    createLockedListener(socket, 'skip', gameGetter, async () => await handleSkipRound(true));
 }
 
 
