@@ -12,27 +12,25 @@
 .non_start_btn {
 	display: flex;
 	flex-direction: row;
-
+	flex-wrap: wrap;
 	flex: 9;
 }
 
 .start_btn_div {
 	flex: 1;
 }
+
 .game_info {
 	flex: 1 1 0;
 	justify-content: center;
-
 }
 
 .whos_joined {
 	flex: 3 3 0;
 
-
 }
 
 .game_code {
-
 	text-align: center;
 	font-size: 100px;
 	text-align: center;
@@ -63,7 +61,6 @@
 }
 
 .disabled_start_btn {
-
 	color: $white;
 	font-size: 25px;
 	background-color: $medium-gray;
@@ -82,6 +79,7 @@
 
 .enabled_start_btn {
 	@extend .disabled_start_btn;
+	color: $blue-light;
 
 	&:hover {
 	background: $blue-medium;

@@ -11,6 +11,10 @@
 
 }
 
+h1 {
+	font-family: raleway, sans-serif;
+}
+
 div {
 	color: $black;
 }
@@ -87,7 +91,8 @@ div {
 .fb_btn {
 
 	background-color: $fb_blue;
-	font-size: 25px;
+	font-size: 24px;
+	width: 24px;
 	color: $white;
 	padding: 4px;
 	box-shadow: 0px 2px 0px $dark-gray;
@@ -109,9 +114,10 @@ div {
 
 .insta_btn {
 	box-shadow: 0px 2px 0px $dark-gray;
-	font-size: 25px;
+	font-size: 24px;
 	color: $white;
 	padding: 4px;
+	width: 24px;
 	background: 
 		radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%),
 	    radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%),

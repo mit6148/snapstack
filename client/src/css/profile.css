@@ -6,7 +6,6 @@
 h1 {
   text-align: center;
   font-size: 80px;
-  text-align: center;
   font-weight: 1000;
   letter-spacing: 0.05em;
   background: -webkit-linear-gradient(#0683E2, #12B780);
@@ -20,18 +19,47 @@ h1:hover {
   animation: flash linear 1s;
 }
 
-h2 {
-  text-align: center;
-  font-size: 30px;
-  text-align: center;
+.my_profile {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.picture_container {
+.profile_container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo_section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle_picture_container {
   display: inline-block;
   height: 200px;
   width: 200px;
   border-radius: 100px;
   overflow: hidden;
+  box-shadow: 2px 4px 0px #7E7C82;
+  margin: 10px;
+}
+
+.square_picture_container {
+  display: inline-block;
+  height: 200px;
+  width: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px;
   box-shadow: 2px 4px 0px #7E7C82;
 }
 
@@ -40,27 +68,13 @@ h2 {
   width: 100%;
 }
 
-.profile_page {
-  display: fixed;
-}
-
-.profile_section, .saved_cards, .social_media, .about_me {
-  padding: 15px;
-  display: inline-block;
-  background-color: #3B3B3D;
-  max-width: 700px;
-  min-width: 60%;
-  text-align: center;
-  border-radius: 10px;
-}
-
 .edit_btn {
   color: #F4F4F4;
   font-size: 15px;
   background-color: #12B780;
   box-shadow: 0px 5px 0px #10A070;
   margin: 1em auto;
-  padding: 5px;
+  padding: 4px;
   text-align: center;
   width: 50px;
   border-radius: 0.4em;
@@ -75,6 +89,44 @@ h2 {
   background-color: #10A070;
   box-shadow: 0 2px #0E8C62;
   transform: translateY(3px);
+}
+
+.info_section {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 10px;
+  margin-left: 5px;
+  flex: 2;
+  justify-content: center;
+}
+
+.profile_name {
+  font-size: 25px;
+  text-align: left;
+}
+
+.profile_description {
+  word-wrap: break-word;
+  max-width: 400px;
+  text-align: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.profile_social_media {
+  text-align: left;
+  font-weight: bold;
+}
+
+.saved_cards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=profile.css.map */
