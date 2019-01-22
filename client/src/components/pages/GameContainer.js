@@ -43,23 +43,18 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
-        if (this.state.gamePhase === LOBBY) {
-            return (
-                <div>
-                    <Lobby  appState={this.props.appState}
+        return (
+            <div>
+                {this.state.gamePhase === LOBBY
+                ?   <Lobby  appState={this.props.appState}
                             gameState={this.state}
                             actions={this.actions} />
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <Game   appState={this.props.appState}
+                :   <Game   appState={this.props.appState}
                             gameState={this.state}
                             actions={this.actions} />
-                </div>
-            );
-        }
+                }
+            </div>
+        );
     }
 
     startGame = () => {
