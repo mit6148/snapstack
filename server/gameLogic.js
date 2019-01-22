@@ -535,7 +535,7 @@ async function handleSkipRound(userTriggered) {
     io.to(game.getGameCode()).emit('skipped');
     setTimeout(async () => {
         try {
-            await game.withLock(tryStartNewRound);
+            await game.withLock(async () => tryStartNewRound(game));
         } catch(err) {
             console.error("post-skip-phase timeout in skip had an error: " + err);
         }
