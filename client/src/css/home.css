@@ -21,9 +21,9 @@ body {
 .logo:hover {
   height: 100%;
   width: 100%;
-  -webkit-animation: spin 2s linear;
-  -moz-animation: spin 2s linear;
-  animation: spin 2s linear;
+  -webkit-animation: spin 1s linear;
+  -moz-animation: spin 1s linear;
+  animation: spin 1s linear;
 }
 
 @-moz-keyframes spin {

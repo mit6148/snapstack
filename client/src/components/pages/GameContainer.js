@@ -6,6 +6,8 @@ import Game from "./Game";
 import {gamePhases, UNSAVED, SAVING, SAVED, CARDS_TO_WIN, MIN_PLAYERS} from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 
+import "../../css/game.css";
+
 export default class GameContainer extends React.Component {
     constructor(props) {
         super(props);
