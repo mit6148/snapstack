@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+.player_list {
+  text-align: center;
+}
+
+.player_info {
+  display: flex;
+  width: 400px;
+}
+
+.avatar_container {
+  width: 100px;
+  height: 100px;
+  margin-right: 15px;
+}
+
+.cropped_avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.player_other {
+  display: flex;
+}
+
+/*# sourceMappingURL=player.css.map */

@@ -27,7 +27,7 @@ export default class Lobby extends React.Component {
                     </div>
                 </h2>
                 
-                <h2> Players: 
+                <h2> Who's Joined: 
                 </h2>
                 
                 <PlayerList players={this.gameState.playerIds.map(playerId => this.gameState.players[playerId])} />
