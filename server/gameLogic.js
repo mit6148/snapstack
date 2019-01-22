@@ -374,6 +374,7 @@ class Game {
         if(player.pCardRef) {
             throw new Error("user " + player._id + "tried to submit a card twice!");
         } else {
+            this.pCardRefPairs.push([pCardRef, false]);
             player.play(pCardRef);
         }
     }
@@ -404,6 +405,10 @@ class Game {
             this.jCards = [this.jCards[jCardIndex]];
             this.endTime = Date.now() + TIME_LIMIT_MILLIS;
         }
+    }
+
+    allCardsSubmitted() {
+        return this.players.length - 1 === this.pCardRefPairs.length; // everyone but judge submitted
     }
 
     getRound() {
@@ -642,7 +647,7 @@ async function onConnection(socket) {
         socket.emit('turnedIn', user._id, pCard._id);
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
 
-        if(game.getEndSubmitPhaseStatus(game.getRound()) === endSubmitPhaseStatus.CAN_END) {
+        if(game.allCardsSubmitted()) {
             await endSubmitPhaseDelayedSendout();
         }
     });
