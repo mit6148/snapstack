@@ -3,7 +3,7 @@ const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
-    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS} = require("../config");
+    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID} = require("../config");
 const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 
@@ -230,6 +230,12 @@ class Game {
         this.gamePhase = gamePhases.JCHOOSE;
         this.players.push(this.players.shift()); // rotate the player order
         this.players = this.players.filter(player => player.connected); // do this after rotating so that if judge disconnected, still good
+        
+        if(DEVELOPER_MODE && this.players.length >= 2 && this.players[0]._id == LAZY_B_ID) {
+            const temp = this.players[0];
+            this.players[0] = this.players[1];
+            this.players[1] = temp;
+        }
         for(let player of this.players) {
             player.resetRoundState();
         }
@@ -720,7 +726,7 @@ async function onConnection(socket) {
 
 
 if(DEVELOPER_MODE) {
-    User.findOne({_id: "5c46ec131c9d440000ea85a4"}).exec().then(async user => {
+    User.findOne({_id: LAZY_B_ID}).exec().then(async user => {
         game = new Game(3, "XYZ");
         await game.addPlayer(user);
     });
