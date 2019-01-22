@@ -20,6 +20,8 @@ class Player {
         this.pCardRef = null;
     }
 
+// MUTATORS
+
     connect() {
         this.connected = true;
     }
@@ -33,6 +35,12 @@ class Player {
         this.connected = true;
         this.pCardRef = null;
     }
+
+    incrementScore() {
+        this.score++;
+    }
+
+// OBSERVERS (note that fields are expected to be accessed directly)
 
     format() {
         return {_id: this._id, name: this.name, avatar: this.avatar, media: this.media,
@@ -67,7 +75,7 @@ class Game {
         this.players = []; // first player is judge
         this.userToPlayerMap = {}; // still keeps removed players
         this.jCards = [];
-        this.pCardRefPairs = []; // array of pairs [pCardRef, flipped]
+        this.pCardRefPairs = []; // array of pairs [pCardRef, faceup]
         this.pCardIndex = null;
         this.endTime = null;
         this.gameCode = _devCode || Game.generateUnusedGameCode();
@@ -287,15 +295,34 @@ class Game {
     endGame() {
         if(this.hasSomeoneWon()) {
             this.game
+        } else {
+            throw new Error("end game without winning!");
         }
     }
 
     getCreators() {
-        // TODO
+        return this.pCardRefPairs.map(pair => pair[0]._id);
+    }
+
+    isJudge(user) {
+        return this.players.length > 0 && user._id === this.players[0]._id;
+    }
+
+    isValidPCardIndex(index) {
+        return 0 <= index && index < this.pCardRefPairs.length;
     }
 
     select(user, index) {
-        // TODO
+        if(!isJudge(user) || !isValidPCardIndex(index) || this.gamePhase !== gamePhases.JUDGE) {
+            throw new Error("illegal selection attempt by " + user._id + " for index " + index);
+        }
+        // also need to check that all cards are flipped
+        if(!this.pCardRefPairs.every(pair => pair[1])) {
+            throw new Error("user " + user._id + " attempted to select card without having flipped all others");
+        }
+
+        this.pCardIndex = index;
+        this.userToPlayerMap[this.pCardRefPairs[index][0].creator_id].incrementScore();
     }
 
     look(user, index) {
@@ -431,9 +458,6 @@ function createLockedListener(socket, event, gameGetter, func) {
             }
         } catch(err) {
             console.error("socket triggered error while handling " + event + ": " + err + (err.stack ? ("\n" + err.stack) : ""));
-
-            // WARNING: maybe we don't want this?
-            socket.disconnect();
         }
     });
 }
@@ -564,7 +588,7 @@ async function onConnection(socket) {
 
     createLockedListener(socket, 'select', gameGetter, async index => {
         game.select(user, index);
-        io.to(game.getGameCode()).emit('select', game.getCreators());
+        io.to(game.getGameCode()).emit('select', index, game.getCreators());
         setTimeout(async () => {
             try {
                 await game.withLock( async () => {
