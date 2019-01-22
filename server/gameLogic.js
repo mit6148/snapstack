@@ -243,14 +243,29 @@ class Game {
             {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
             {$sample: {size: NUM_JCARDS}}, // WARNING: try to prevent concurrent modification error & memory excess (100MB)
             ]).exec();
-        this.jCards = jCards.map(jCard => jCard.text);
-        this.jCardsSeen = this.jCardsSeen.concat(jCards.map(jCard => jCard._id));
+
+        await this.generateJCards();
         this.pCardRefPairs = [];
         this.pCardIndex = null;
         this.endTime = null;
         this.pausedForTooFewPlayers = this.players.length < MIN_PLAYERS;
         this.isSkipping = false;
         this.round++;
+    }
+
+    async generateJCards() {
+        const newJCards = await JCard.aggregate([
+            {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
+            {$sample: {size: NUM_JCARDS}}, // WARNING: try to prevent concurrent modification error & memory excess (100MB)
+            ]).exec();
+        if(newJCards.length !== NUM_JCARDS) {
+            // fluke $sample result or out of jcards! allow a second round through jcards
+            this.jCardsSeen = [];
+            await this.generateJCards();
+        } else {
+            this.jCards = newJCards;
+            this.jCardsSeen = this.jCardsSeen.concat(newJCards.map(jCard => jCard._in));
+        }
     }
 
     async tryDestroyAssets() { // only destroy if there are no players CONNECTED, not just in play. otherwise, return silently
@@ -430,7 +445,7 @@ class Game {
     }
 
     getJCards() {
-        return this.jCards;
+        return this.jCards.map(jCard => jCard.text);
     }
 
     getPCardIndex() {
