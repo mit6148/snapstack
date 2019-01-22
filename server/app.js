@@ -1,5 +1,7 @@
 require('dotenv').config(); // keep this as first line
 
+console.log("test env variable: " + process.env.TEST_ENVIRONMENT_VARIABLE);
+
 const {http, express, app, server, io} = require('./requirements');
 const bodyParser = require('body-parser');
 const session = require('express-session');
