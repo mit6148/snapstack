@@ -16,16 +16,15 @@ div {
 }
 
 .player_info {
-	border-style: solid;
-	border-color: $dark-gray;
+
 	border-width: 2;
 	background-color: $purple-light;
 	display: flex;
-	width: 300px;
+	width: 275px;
 	border-radius: 15px;
 	margin: 5px;
 
-	box-shadow: 0px 2px 0px $dark-gray;
+	box-shadow: 0px 4px 0px $purple-dark;
 }
 
 .avatar_container {
@@ -60,6 +59,7 @@ div {
 	font-weight: bold;
 	padding: 5px;
 	text-align: left;
+	overflow: hidden;
 }
 
 .player_other {
@@ -84,37 +84,33 @@ div {
 	margin-left: 5px;
 }
 
-.media_btn {
-	font-size: 25px;
-	padding: 4px;
-}
-
 .fb_btn {
 
 	background-color: $fb_blue;
-	border-radius: 5px;
-	height: 34px;
-	width: 32px;
-	//filter: drop-shadow(1px 2px $dark-gray);
+	font-size: 25px;
+	color: $white;
+	padding: 4px;
+	box-shadow: 0px 2px 0px $dark-gray;
+	border-radius: 6px;
 
 	margin-right: 15px;
+
+	&:active {
+	  box-shadow: 0 2px 0px $dark-gray;
+	  transform: translateY(1px);
+	}
+
+	&:hover {
+	cursor: pointer;
+	}
+
 }
 
-.fb_logo {
-	margin-bottom: 1px;
+
+.insta_btn {
+	box-shadow: 0px 2px 0px $dark-gray;
+	font-size: 25px;
 	color: $white;
-}
-
-.insta-btn{
-	color: $white;
-	box-shadow: 0px 2px $dark-gray;
-	border-radius: 10px;
-	align-content: center;
-}
-
-.insta_logo {
-
-	color: white;
 	padding: 4px;
 	background: 
 		radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%),
@@ -132,6 +128,15 @@ div {
 	    /////// corner gradients
 	    linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);
 	border-radius: 10px;
+
+	&:active {
+	  box-shadow: 0 2px 0px $dark-gray;
+	  transform: translateY(1px);
+	}
+
+	&:hover {
+	cursor: pointer;
+	}
 
 }
 
