@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Questrial|Thasadith");
+
 div {
-  font-family: "Thasadith", sans-serif;
+  font-family: "Raleway", sans-serif;
   display: block;
   text-align: center;
 }
@@ -17,6 +18,11 @@ div {
 body {
   background-color: #C6C3DB;
 }
+
+img {
+  width: 100%;
+}
+
 
 .logo:hover {
   height: 100%;
@@ -58,6 +64,7 @@ body {
 }
 
 .title {
+  font-family: "Thasadith", sans-serif;
   text-align: center;
   font-size: 120px;
   text-align: center;

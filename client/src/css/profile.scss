@@ -3,7 +3,7 @@
 @import "./_variables.scss";
 
 .profile_text {
-	font-family: Thasadith, sans-serif; 
+	font-family: "Thasadith", sans-serif; 
 }
 
 h1 {
@@ -126,9 +126,9 @@ h1 {
 	flex-direction: column;
 	flex-wrap: wrap;
 	padding: 10px;
-	margin-left: 5px;
+	margin-left: 10px;
 
-	flex: 2;
+	flex: 2.5;
 
 	justify-content: center;
 
@@ -144,7 +144,7 @@ h1 {
 	text-align: left;
 	margin-top: 5px;
 	margin-bottom: 5px;
-
+	font-size: 14px;
 	font-weight: bold;
 }
 

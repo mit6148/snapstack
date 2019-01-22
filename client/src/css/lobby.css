@@ -2,6 +2,7 @@
 .lobby_page {
   display: flex;
   flex-direction: column;
+  align-items: center;
   height: 100%;
   width: 100%;
 }
@@ -18,12 +19,14 @@
 }
 
 .game_info {
-  flex: 1 1 0;
+  flex: 2 2 0;
   justify-content: center;
+  margin: 20px;
 }
 
 .whos_joined {
-  flex: 3 3 0;
+  flex: 5 5 0;
+  margin: 20px;
 }
 
 .game_code {

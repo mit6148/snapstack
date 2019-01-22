@@ -29,7 +29,7 @@ const MIN_PLAYERS = 3;
 
 const MAX_PLAYERS = 7;
 
-const TIME_LIMIT_MILLIS = 12000;
+const TIME_LIMIT_MILLIS = 120000;
 
 const TIME_LIMIT_FORGIVE_MILLIS = 2000;
 
@@ -43,5 +43,7 @@ const WAIT_TIME = 2000; // between events that would otherwise be emitted concur
 
 const DEVELOPER_MODE = true;
 
+const LAZY_B_ID = "5c46ec131c9d440000ea85a4";
+
 module.exports = {gamePhases, saveStates, endSubmitPhaseStatus, specialCards, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
-    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, MIN_PLAYERS, DEVELOPER_MODE};
+    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, MIN_PLAYERS, DEVELOPER_MODE, LAZY_B_ID};

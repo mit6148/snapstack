@@ -32,12 +32,12 @@ function uploadImagePromise(image) {
             .on('finish', () => {
                 resolve(name);
             })
-            .end(Buffer.from(image));
+            .end(Buffer.from(image)); // WARNING: inefficient coding as utf-8 when is just base64. fix later, but change download too
     });
 }
 
 function downloadImagePromise(name) {
-    return bucket.file(name).download().then(data => data[0].toString('base64')); // data[0] is the file data
+    return bucket.file(name).download().then(data => data[0].toString()); // data[0] is the file data
 }
 
 function deleteImagePromise(name) { // returns true if succeeded
