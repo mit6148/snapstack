@@ -35,7 +35,6 @@ export default class Game extends React.Component {
                         <CardBin    jCards={[NO_CARD]}
                                     owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
                         <CardBin    jCards={this.gameState.jCards}
-                                    owners={[this.gameState.players[this.gameState.playerIds[0]]]}
                                     onClick={this.isJudge() ? this.actions.selectJCard : null}
                                     enlarged={true} />
                     </React.Fragment>
@@ -48,7 +47,7 @@ export default class Game extends React.Component {
                                         playerId === this.props.appState.userId
                                         ? (this.gameState.pCards.length === 1 ? this.gameState.pCards[0] : NO_CARD)
                                         : (this.gameState.players[playerId].hasPlayed ? CARDBACK : NO_CARD))}
-                                owners={this.gameState.playerIds.map(playerId => this.gameState.players[playerId])}
+                                owners={this.gameState.playerIds.slice(1).map(playerId => this.gameState.players[playerId])}
                                 onClick={this.viewPCard} />
                 ) : this.gameState.gamePhase === JUDGE ? (
                     <CardBin    pCards={this.gameState.pCards}
