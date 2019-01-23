@@ -24,48 +24,50 @@ function getAvatarImagePromise(profile) { // always resolves
 passport.use(new FacebookStrategy({
   clientID: 543314346187914,
   clientSecret: process.env.FB_SECRET,
-  callbackURL: 'https://snap-stack.herokuapp.com/auth/facebook/callback',
+  callbackURL: '/auth/facebook/callback',
   enableProof: true,
   profileFields: ['id', 'first_name', 'last_name', 'picture.type(large)']
 }, function(accessToken, refreshToken, profile, done) {
   User.findOne({
     'facebookId': profile.id
-  }, function(err, user) {
+  }, async function(err, user) {
     if (err) return done(err);
 
     if (!user) {
 
-      getAvatarImagePromise(profile).then(function(image) {
+      let user;
+
+      try {
+        const avatarPromise = getAvatarImagePromise(profile);
+
         const userDetail = new UserDetail({
           firstName: profile.name.givenName,
           lastName: profile.name.familyName,
           saved_pairs: [],
-          avatar: image,
           description: "I'm on SnapStack!",
           media: {},
         });
 
-        const user = new User({
+        user = new User({
           facebookId: profile.id,
           detail_id: userDetail._id,
         });
 
-        userDetail.save(function(err) {
-          if(err) {
-            console.log("error saving user details in passport: " + err);
-          }
-          return done(err, user);
-        });
+        const userSavePromise = user.save();
 
-        user.save(function(err) {
-          if(err) {
-            console.log("error saving user in passport: " + err);
-          }
-          return done(err, user);
-        });
-      });
+        userDetail.avatar = await avatarPromise;
+
+        await userDetail.save();
+
+        await userSavePromise;
+
+        return done(null, user)
+      } catch(err) {
+        console.log("error in login: " + err);
+        return done(err, user);
+      }
+
     } else {
-      // TODO(niks): update user in case their Facebook profile changed
       return done(err, user);
     }
   });
