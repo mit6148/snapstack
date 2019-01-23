@@ -115,7 +115,7 @@ class Game {
             this._lock = [];
             return null;
         } else {
-            return new Promise(function(resolve, reject) {
+            return new Promise((resolve, reject) =>  {
                 this._lock.push(resolve);
             });
         }
