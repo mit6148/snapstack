@@ -397,7 +397,10 @@ class Game {
         this.pCardsMade.push(pCardRef._id); // must add to list so it can be dereferenced later
 
         if(player.pCardRef) {
-            throw new Error("user " + player._id + "tried to submit a card twice!");
+            throw new Error("user " + player._id + " tried to submit a card twice!");
+        } else if(player === this.players[0]) {
+            // player is the judge!
+            throw new Error("user " + player._id + " tried to submit a card as the judge!");
         } else {
             this.pCardRefPairs.push([pCardRef, false]);
             player.play(pCardRef);
@@ -622,6 +625,8 @@ async function onConnection(socket) {
         try {
             await game.addPlayer(user);
         } catch(reason) {
+            game = undefined; // make sure doesn't start doing game events as if were part of game
+            console.log("rejected connection: " + reason)
             return socket.emit('rejectConnection', reason);
         }
         console.log("game code: " + game.getGameCode());
@@ -637,6 +642,7 @@ async function onConnection(socket) {
             game = Game.gameWithCode(gameCode);
             await game.addPlayer(user);
         } catch(reason) {
+            game = undefined; // make sure doesn't start doing game events as if were part of game
             console.log("rejected connection: " + reason)
             return socket.emit('rejectConnection', reason);
         }
