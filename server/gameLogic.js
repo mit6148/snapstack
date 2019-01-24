@@ -68,6 +68,19 @@ Player.from = async user => {
 }
 
 
+
+
+function shuffle(array) {
+    for(let i = array.length; i >= 2;) {
+        const r = Math.floor(Math.random() * i);
+        i--;
+        const t = array[i];
+        array[i] = array[r];
+        array[r] = t;
+    }
+}
+
+
 class Game {
     constructor(cardsToWin, _devCode) { // _devCode should not be used except in developer mode
         _devCode = DEVELOPER_MODE ? _devCode : undefined;
@@ -221,13 +234,8 @@ class Game {
             throw "Cannot start game in this state!";
         }
         // randomize player order, then start round
-        for(let i = this.players.length; i >= 2;) {
-            const r = Math.floor(Math.random() * i);
-            i--;
-            const t = this.players[i];
-            this.players[i] = this.players[r];
-            this.players[r] = t;
-        }
+        shuffle(this.players);
+
         await this.startNewRound();
     }
 
@@ -439,6 +447,7 @@ class Game {
     endSubmitPhase() {
         this.gamePhase = gamePhases.JUDGE;
         this.endTime = null;
+        shuffle(this.pCardRefPairs);
     }
 
     startSubmitPhase(user, jCardIndex) {
@@ -607,8 +616,8 @@ async function tryStartNewRound(game) {
     io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
 }
 
-async function endSubmitPhaseDelayedSendout(game, delay) {
-    await game.endSubmitPhase();
+function endSubmitPhaseDelayedSendout(game, delay) {
+    game.endSubmitPhase();
     setTimeout(async () => {
         try {
             await game.withLock(async () => {
