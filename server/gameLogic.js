@@ -6,6 +6,7 @@ const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LI
     NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID} = require("../config");
 const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
+const db = require('./db');
 
 class Player {
     constructor(user, detail) {
@@ -255,6 +256,22 @@ class Game {
         this.pausedForTooFewPlayers = this.players.length < MIN_PLAYERS;
         this.isSkipping = false;
         this.round++;
+    }
+
+    async trySave(user, pCardId) { // good if there is 1 jCard and the given pCard is currently in play, and updated the database with ref
+        const index = this.pCardRefPairs.map(pair => pair[0]._id).indexOf(pCardId);
+
+        if(this.jCards.length === 1 && index >= 0) {
+            const session = await db.startSession();
+            session.startTransaction();
+            const detailUpdatePromise = UserDetail.updateOne({_id: user.detail_id},
+                                            {$push: {saved_pairs: {jcard: this.jCards[0]._id, pcard: pCardId}}}).session(session).exec();
+            await PCardRef.updateOne({_id: pCardId}, {$inc: {ref_count: 1}}).session(session);
+            await detailUpdatePromise;
+            await session.commitTransaction();
+        } else {
+            throw new Error("invalid save request, or maybe saved right as the round changed");
+        }
     }
 
     async generateJCards() {
@@ -743,9 +760,20 @@ async function onConnection(socket) {
         io.to(game.getGameCode()).emit('disconnected', user._id);
         console.log("sent: disconnected");
         await game.tryDestroyAssets();
+        game = undefined;
     });
 
     createLockedListener(socket, 'skip', gameGetter, async () => await handleSkipRound(game, true));
+
+    createLockedListener(socket, 'saveCard', gameGetter, async (pCardId) => {
+        try {
+            await game.trySave(user, pCardId);
+            socket.emit('cardSaved', pCardId);
+        } catch(err) {
+            console.error("save card had error: " + error + "\n" + error.stack);
+            socket.emit('cardSaveFailed', pCardId);
+        }
+    });
 }
 
 
