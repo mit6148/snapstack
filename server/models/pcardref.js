@@ -9,7 +9,7 @@ const PCardRefSchema = new mongoose.Schema ({
   image_ref			: String,
   creator_id        : ObjectId,
   ref_count			: Int32,
-  in_play           : Boolean,
+  server            : String, // name of server, or empty string if not in play
 });
 
 // compile model from schema

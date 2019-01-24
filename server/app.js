@@ -8,6 +8,8 @@ const path = require('path');
 
 // local dependencies
 const db = require('./db');
+const PCardRef = require('./models/pcardref');
+const {deleteImagePromise} = require('./storageTalk');
 const passport = require('./passport');
 const passportSocketIo = require('passport.socketio');
 const api = require('./api');
@@ -21,7 +23,18 @@ app.use(bodyParser.json());
 
 
 // TODO: storage cleanup operations: delete unreferenced pcards and their images
+async function cleanUpOldPCards() {
+  console.log("\n\nstarting to delete old stuff from this server\n\n");
+  const pCardRefs = await PCardRef.find({server: {$in: [process.env.SERVER_NAME, ""]}, ref_count: 0}).exec();
+  console.log("trying to delete " + pCardRefs.length + " items");
+  const imageDeleted = await Promise.all(pCardRefs.map(pCardRef => deleteImagePromise(pCardRef.image_ref)));
+  const toDelete = pCardRefs.filter((pCardRef, index) => imageDeleted[index]).map(pCardRef => pCardRef._id);
+  await PCardRef.deleteMany({_id: {$in: toDelete}}).exec();
+  console.log("\n\nsucceeded in deleting " + toDelete.length + " items");
+  console.log("finished deleting old stuff from this server\n\n");
+}
 
+cleanUpOldPCards().catch(err => console.error("\n\n\n\nstorage cleanup error!!:" + err.stack));
 
 
 // set up sessions
