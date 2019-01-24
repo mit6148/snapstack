@@ -52,7 +52,7 @@ class Player {
     }
 
     async checkSaved(pCardIds) {
-        const savedIdMap = await UserDetail.findOne({_id: this.detail_id}).select("saved_pairs.pcard").exec()
+        const savedIdMap = await UserDetail.findById({_id: this.detail_id}).select("saved_pairs.pcard").exec()
             .then(detail => detail.saved_pairs.map(pair => {
                 const out = {};
                 out[pair.pcard] = true;
@@ -63,7 +63,7 @@ class Player {
 }
 
 Player.from = async user => {
-    const detail = await UserDetail.findOne({_id: user.detail_id}).exec();
+    const detail = await UserDetail.findById({_id: user.detail_id}).exec();
     return new Player(user, detail);
 }
 
