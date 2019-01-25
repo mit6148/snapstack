@@ -42,8 +42,8 @@ export default class GameContainer extends React.Component {
         this.socket = this.createSocket();
     }
 
-    componentDidMount() {
-        window.addEventListener('beforeunload', () => this.socket.disconnect()); // TODO debug
+    componentWillUnmount() {
+        this.socket.disconnect();
     }
 
     render() {

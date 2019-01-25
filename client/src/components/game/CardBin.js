@@ -3,7 +3,7 @@ import JCard from "../univ/JCard";
 import PCard from "../univ/PCard";
 import PlayerInfo from "../univ/PlayerInfo";
 import { specialCards } from "../../../../config.js";
-const { NO_CARD, CARDBACK, FACEDOWN_CARD } = specialCards;
+const { NO_CARD, CARDBACK, FACEDOWN_CARD, LOADING_CARD } = specialCards;
 
 import "../../css/card.css";
 
