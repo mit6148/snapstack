@@ -80,6 +80,32 @@ function shuffle(array) {
     }
 }
 
+class LinkedList {
+    constructor() {
+        this.header = {next: null};
+        this.tail = this.header;
+    }
+
+    push(obj) {
+        const next = {obj: obj, next: null};
+        this.tail.next = next;
+        this.tail = next;
+    }
+
+    isEmpty() {
+        return this.header.next === null;
+    }
+
+    shift() {
+        const ans = this.header.next.obj;
+        this.header.next = this.header.next.next;
+        if(this.isEmpty()) {
+            this.tail = this.header;
+        }
+        return ans;
+    }
+}
+
 
 class Game {
     constructor(cardsToWin, _devCode) { // _devCode should not be used except in developer mode
@@ -126,7 +152,7 @@ class Game {
 
     lock() {
         if(this._lock === null) {
-            this._lock = [];
+            this._lock = new LinkedList();
             return null;
         } else {
             return new Promise((resolve, reject) =>  {
@@ -136,10 +162,10 @@ class Game {
     }
 
     unlock() {
-        if(this._lock.length === 0) {
+        if(this._lock.isEmpty()) {
             this._lock = null;
         } else {
-            const next = this._lock.shift(); // WARNING: O(n) when could be O(1) with linked list. can fix later
+            const next = this._lock.shift();
             next(null);
         }
     }
