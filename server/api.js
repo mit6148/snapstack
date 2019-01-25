@@ -59,7 +59,7 @@ router.get('/pcards/:_ids', connect.ensureLoggedIn(), async function(req, res) {
         const pCardRefs = await PCardRef.find({_id: {$in: _ids}});
         const imagesPromise = Promise.all(pCardRefs.map(pCardRef => downloadImagePromise(pCardRef.image_ref)));
         const creators = await User.find({_id: {$in: pCardRefs.map(pCardRef => pCardRef.creator_id)}}).exec();
-        const details = await UserDetail.find({_id: {$in: creators.map(creator => creator._id)}}).exec();
+        const details = await UserDetail.find({_id: {$in: creators.map(creator => creator.detail_id)}}).exec();
         const detailIdToName = {};
         for(let detail of details) {
             detailIdToName[detail._id] = (detail.firstName && detail.lastName) ? detail.firstName + " " + detail.lastName[0]
@@ -76,7 +76,8 @@ router.get('/pcards/:_ids', connect.ensureLoggedIn(), async function(req, res) {
                                         creator_id: pCardRefs[i].creator_id, creator_name: creatorIdToName[pCardRefs[i].creator_id]};
         }
 
-        res.send(_ids.map(_id => pcardIdToInfo[_id]));
+        const out = _ids.map(_id => pcardIdToInfo[_id]);
+        res.send(out);
     } catch(err) {
         res.status(500);
         res.send({status: 500, message: "something went wrong"});

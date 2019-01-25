@@ -2,6 +2,7 @@ import React from "react";
 import update from "immutability-helper";
 import NavButtons from "../nav/NavButtons";
 import Card from "../univ/Card.js";
+import PCard from "../univ/PCard";
 import PlayerMedia from "../univ/PlayerMedia.js";
 import { specialCards } from "../../../../config.js";
 const { NO_CARD, CARDBACK, FACEDOWN_CARD, LOADING_CARD } = specialCards;
