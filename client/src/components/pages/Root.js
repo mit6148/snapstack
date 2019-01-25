@@ -9,6 +9,14 @@ import "../../css/login.css";
 import "../../css/nav.css";
 
 export default class Root extends React.Component {
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            gameLoaded: false
+        };
+    }
+
     render() {
         if (this.props.appState.userId === null) {
             return (
@@ -17,21 +25,31 @@ export default class Root extends React.Component {
                 </div>
             );
         }
-        else if (this.props.appState.gameCode === null) {
-            return (
-                <div className='home_page'>
-                    <Home appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} />
-                </div>
-            );
-        }
         else {
             return (
-                <div className='game_page'>
-                    <GameContainer appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} />
-                </div>
+                <React.Fragment>
+                    {this.state.gameLoaded ? null : (
+                        <Home appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} />
+                    )}
+                    {this.props.appState.gameCode === null ? null : (
+                        <GameContainer appState={this.props.appState} enterGame={this.enterGame} quitGame={this.quitGame} />
+                    )}
+                </React.Fragment>
             );
         }
     }
+
+    enterGame = gameCode => {
+        this.setState({
+            gameLoaded: true
+        });
+        this.props.enterGame(gameCode);
+    }
+
+    quitGame = () => {
+        this.setState({
+            gameLoaded: false
+        });
+        this.props.quitGame();
+    }
 }
-
-
