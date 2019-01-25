@@ -5,7 +5,7 @@ const storageInfo = {projectId: "snapstack"};
 if(process.env.GCP_PRIVATE_KEY && process.env.GCP_CLIENT_EMAIL) {
     storageInfo.credentials = {private_key: process.env.GCP_PRIVATE_KEY, client_email: process.env.GCP_CLIENT_EMAIL};
 } else {
-    storageInfo.keyFilename = path.join(__dirname, 'storage-secret.json');
+    storageInfo.keyFilename = path.join(__dirname, 'storage-secret.json'); // for developer ease on localhost only
 }
 const storage = new Storage(storageInfo);
 
@@ -48,7 +48,7 @@ function downloadImagePromise(name) {
 
 function deleteImagePromise(name) { // returns true if succeeded
     return bucket.file(name).delete().then(resp => true).catch(err => {
-        return err.code == 404; // 404 means already deleted
+        return err.code === 404; // 404 means already deleted
     });
 }
 

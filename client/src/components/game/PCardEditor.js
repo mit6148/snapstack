@@ -5,8 +5,8 @@ export default class PCardEditor extends React.Component {
         return (
             <div>
                 <img src={this.props.image} />
-                bunbunbun
-                <div onClick={() => this.submit(this.props.image, 'bunbunbun')}>Submit</div>
+                <input id="caption-input" type="text" />
+                <div onClick={() => this.submit(this.props.image, document.getElementById('caption-input').value)}>Submit</div>
             </div>
         );
     }

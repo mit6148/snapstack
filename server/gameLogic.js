@@ -6,6 +6,7 @@ const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LI
     NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID} = require("../config");
 const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
+const db = require('./db');
 
 class Player {
     constructor(user, detail) {
@@ -30,7 +31,7 @@ class Player {
         this.connected = false;
     }
 
-    resetRoundState() { // after having been removed from a round, so round state is reset
+    resetRoundState() {
         this.connected = true;
         this.pCardRef = null;
     }
@@ -51,7 +52,7 @@ class Player {
     }
 
     async checkSaved(pCardIds) {
-        const savedIdMap = await UserDetail.findOne({_id: this.detail_id}).select("saved_pairs.pcard").exec()
+        const savedIdMap = await UserDetail.findById({_id: this.detail_id}).select("saved_pairs.pcard").exec()
             .then(detail => detail.saved_pairs.map(pair => {
                 const out = {};
                 out[pair.pcard] = true;
@@ -62,8 +63,21 @@ class Player {
 }
 
 Player.from = async user => {
-    const detail = await UserDetail.findOne({_id: user.detail_id}).exec();
+    const detail = await UserDetail.findById({_id: user.detail_id}).exec();
     return new Player(user, detail);
+}
+
+
+
+
+function shuffle(array) {
+    for(let i = array.length; i >= 2;) {
+        const r = Math.floor(Math.random() * i);
+        i--;
+        const t = array[i];
+        array[i] = array[r];
+        array[r] = t;
+    }
 }
 
 
@@ -115,7 +129,7 @@ class Game {
             this._lock = [];
             return null;
         } else {
-            return new Promise(function(resolve, reject) {
+            return new Promise((resolve, reject) =>  {
                 this._lock.push(resolve);
             });
         }
@@ -220,13 +234,8 @@ class Game {
             throw "Cannot start game in this state!";
         }
         // randomize player order, then start round
-        for(let i = this.players.length; i >= 2;) {
-            const r = Math.floor(Math.random() * i);
-            i--;
-            const t = this.players[i];
-            this.players[i] = this.players[r];
-            this.players[r] = t;
-        }
+        shuffle(this.players);
+
         await this.startNewRound();
     }
 
@@ -235,7 +244,7 @@ class Game {
         this.players.push(this.players.shift()); // rotate the player order
         this.players = this.players.filter(player => player.connected); // do this after rotating so that if judge disconnected, still good
         
-        if(DEVELOPER_MODE && this.players.length >= 2 && this.players[0]._id == LAZY_B_ID) {
+        if(DEVELOPER_MODE && this.players.length >= 2 && this.players[0]._id == LAZY_B_ID) { // make sure lazy b isn't judge
             const temp = this.players[0];
             this.players[0] = this.players[1];
             this.players[1] = temp;
@@ -255,6 +264,22 @@ class Game {
         this.pausedForTooFewPlayers = this.players.length < MIN_PLAYERS;
         this.isSkipping = false;
         this.round++;
+    }
+
+    async trySave(user, pCardId) { // good if there is 1 jCard and the given pCard is currently in play, and updated the database with ref
+        const index = this.pCardRefPairs.map(pair => pair[0]._id).indexOf(pCardId);
+
+        if(this.jCards.length === 1 && index >= 0) {
+            const session = await db.startSession();
+            session.startTransaction();
+            const detailUpdatePromise = UserDetail.updateOne({_id: user.detail_id},
+                                            {$push: {saved_pairs: {jcard: this.jCards[0]._id, pcard: pCardId}}}).session(session).exec();
+            await PCardRef.updateOne({_id: pCardId}, {$inc: {ref_count: 1}}).session(session);
+            await detailUpdatePromise;
+            await session.commitTransaction();
+        } else {
+            throw new Error("invalid save request, or maybe saved right as the round changed");
+        }
     }
 
     async generateJCards() {
@@ -397,7 +422,10 @@ class Game {
         this.pCardsMade.push(pCardRef._id); // must add to list so it can be dereferenced later
 
         if(player.pCardRef) {
-            throw new Error("user " + player._id + "tried to submit a card twice!");
+            throw new Error("user " + player._id + " tried to submit a card twice!");
+        } else if(player === this.players[0]) {
+            // player is the judge!
+            throw new Error("user " + player._id + " tried to submit a card as the judge!");
         } else {
             this.pCardRefPairs.push([pCardRef, false]);
             player.play(pCardRef);
@@ -419,6 +447,7 @@ class Game {
     endSubmitPhase() {
         this.gamePhase = gamePhases.JUDGE;
         this.endTime = null;
+        shuffle(this.pCardRefPairs);
     }
 
     startSubmitPhase(user, jCardIndex) {
@@ -511,7 +540,7 @@ async function generatePCardRef(user, image, text) {
         image_ref: image_ref,
         creator_id: user._id,
         ref_count: 0,
-        in_play: true,
+        server: process.env.SERVER_NAME || "unknown", // server name 'unknown' in case of messed up env
     });
     await pCardRef.save();
     return pCardRef;
@@ -527,7 +556,7 @@ async function dereferencePCards(pCardIds) {
         }
     }
     await PCardRef.deleteMany({_id: {$in: deletedIds}}).exec(); // WARNING: could make more efficient
-    await PCardRef.updateMany({_id: {$in: pCardIds}}, {$set: {in_play: false}}).exec();
+    await PCardRef.updateMany({_id: {$in: pCardIds}}, {$set: {server: ""}}).exec(); // empty server string = not in play
 }
 
 
@@ -567,7 +596,7 @@ function createLockedListener(socket, event, gameGetter, func) {
     });
 }
 
-async function handleSkipRound(userTriggered) {
+async function handleSkipRound(game, userTriggered) {
     game.skipRound(userTriggered);
     console.log('about to wait to skip round');
     io.to(game.getGameCode()).emit('skipped');
@@ -587,8 +616,8 @@ async function tryStartNewRound(game) {
     io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
 }
 
-async function endSubmitPhaseDelayedSendout() {
-    await game.endSubmitPhase();
+function endSubmitPhaseDelayedSendout(game, delay) {
+    game.endSubmitPhase();
     setTimeout(async () => {
         try {
             await game.withLock(async () => {
@@ -599,7 +628,7 @@ async function endSubmitPhaseDelayedSendout() {
         } catch(err) {
             throw new Error("error in end submit phase delayed sendout: " + err + "\n" + err.stack);
         }
-    }, WAIT_TIME);
+    }, delay);
 }
 
 async function onConnection(socket) {
@@ -622,6 +651,8 @@ async function onConnection(socket) {
         try {
             await game.addPlayer(user);
         } catch(reason) {
+            game = undefined; // make sure doesn't start doing game events as if were part of game
+            console.log("rejected connection: " + reason)
             return socket.emit('rejectConnection', reason);
         }
         console.log("game code: " + game.getGameCode());
@@ -637,6 +668,7 @@ async function onConnection(socket) {
             game = Game.gameWithCode(gameCode);
             await game.addPlayer(user);
         } catch(reason) {
+            game = undefined; // make sure doesn't start doing game events as if were part of game
             console.log("rejected connection: " + reason)
             return socket.emit('rejectConnection', reason);
         }
@@ -664,12 +696,12 @@ async function onConnection(socket) {
                         case endSubmitPhaseStatus.CAN_END:
                             // submit phase ended in a timeout
                             console.log("ending submit phase");
-                            await endSubmitPhaseDelayedSendout();
+                            await endSubmitPhaseDelayedSendout(game, WAIT_TIME - TIME_LIMIT_FORGIVE_MILLIS); // same total delay as usual
                             break;
                         case endSubmitPhaseStatus.SKIP_INSTEAD:
                             // no one submitted, so trigger skip event not caused by any particular user
                             console.log('skipping due to no submission');
-                            await handleSkipRound(false);
+                            await handleSkipRound(game, false);
                             break;
                         case endSubmitPhaseStatus.ALREADY_ENDED:
                             // timer is irrelevant since submit phase already ended, so do nothing
@@ -689,7 +721,7 @@ async function onConnection(socket) {
         socket.to(game.getGameCode()).emit('turnedIn', user._id);
 
         if(game.allCardsSubmitted()) {
-            await endSubmitPhaseDelayedSendout();
+            await endSubmitPhaseDelayedSendout(game, WAIT_TIME);
         }
     });
 
@@ -737,9 +769,20 @@ async function onConnection(socket) {
         io.to(game.getGameCode()).emit('disconnected', user._id);
         console.log("sent: disconnected");
         await game.tryDestroyAssets();
+        game = undefined;
     });
 
-    createLockedListener(socket, 'skip', gameGetter, async () => await handleSkipRound(true));
+    createLockedListener(socket, 'skip', gameGetter, async () => await handleSkipRound(game, true));
+
+    createLockedListener(socket, 'saveCard', gameGetter, async (pCardId) => {
+        try {
+            await game.trySave(user, pCardId);
+            socket.emit('cardSaved', pCardId);
+        } catch(err) {
+            console.error("save card had error: " + error + "\n" + error.stack);
+            socket.emit('cardSaveFailed', pCardId);
+        }
+    });
 }
 
 

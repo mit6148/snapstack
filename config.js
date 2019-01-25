@@ -41,7 +41,7 @@ const GAME_CODE_LENGTH = 3;
 
 const WAIT_TIME = 2000; // between events that would otherwise be emitted concurrently
 
-const DEVELOPER_MODE = true;
+const DEVELOPER_MODE = false;
 
 const LAZY_B_ID = "5c46ec131c9d440000ea85a4";
 
