@@ -48,17 +48,17 @@ export default class Uploader extends React.Component {
         } else {
             fileOrBlob = e.dataTransfer.files[0];
         }
-        this.submit(fileOrBlob);
+        this.upload(fileOrBlob);
     };
 
     clickUpload = (e) => {
-        this.submit(document.getElementById("dragndrop_file_input").files[0]);
+        this.upload(document.getElementById("dragndrop_file_input").files[0]);
     };
 
-    submit = async (fileOrBlob) => {
+    upload = async (fileOrBlob) => {
         const r = new FileReader();
         r.onloadend = () => {
-            this.props.submit(r.result);
+            this.props.upload(r.result);
         }
         r.readAsDataURL(fileOrBlob);
     };
