@@ -9,7 +9,7 @@ import Modal from "../univ/Modal";
 import { gamePhases, saveStates, specialCards, MIN_PLAYERS } from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 const { UNSAVED, SAVING, SAVED } = saveStates;
-const { NO_CARD, CARDBACK, FACEDOWN_CARD } = specialCards;
+const { NO_CARD, CARDBACK, FACEDOWN_CARD, LOADING_CARD } = specialCards;
 
 import "../../css/game.css";
 import "../../css/card.css";

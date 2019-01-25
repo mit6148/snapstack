@@ -4,7 +4,7 @@ import Caption from "./Caption";
 import Modal from "./Modal";
 import SaveButton from "./SaveButton";
 import { specialCards } from "../../../../config.js";
-const { NO_CARD, CARDBACK, FACEDOWN_CARD } = specialCards;
+const { NO_CARD, CARDBACK, FACEDOWN_CARD, LOADING_CARD } = specialCards;
 
 import "../../css/card.css";
 
@@ -25,6 +25,11 @@ export default class PCard extends Component {
                         </div>
                     </div>
                 );
+            case LOADING_CARD: // TODO styling
+                return (
+                    <div>
+                    </div>
+                );
             default:
                 if (this.props.faceup === false) {
                     return (
@@ -40,7 +45,7 @@ export default class PCard extends Component {
                             <div className='container'>
                                 <img src={this.props.image} />
                             </div>
-                            <Caption text={this.props.text} />
+                            <Caption text={this.props.text} creator={this.props.creator} creatorId={this.props.creatorId} />
                             <SaveButton saveState={this.props.saveState} save={this.props.save} />
                         </div>
                     );

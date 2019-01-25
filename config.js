@@ -23,6 +23,7 @@ const specialCards = {
     NO_CARD: 0,
     CARDBACK: 1,
     FACEDOWN_CARD: 2,
+    LOADING_CARD: 3,
 };
 
 const MIN_PLAYERS = 3;

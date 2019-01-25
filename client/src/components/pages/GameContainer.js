@@ -42,8 +42,8 @@ export default class GameContainer extends React.Component {
         this.socket = this.createSocket();
     }
 
-    componentDidMount() {
-        window.addEventListener('beforeunload', () => this.socket.disconnect()); // TODO debug
+    componentWillUnmount() {
+        this.socket.disconnect();
     }
 
     render() {
@@ -140,15 +140,7 @@ export default class GameContainer extends React.Component {
                         : pCard
                     )
         });
-        fetch('/api/save/'+pCardId).then(res => {
-            this.setState({
-                pCards: this.state.pCards.map(pCard =>
-                            pCard._id === pCardId
-                            ? update(pCard, {saveState: {$set: res.status === 200 ? SAVED : UNSAVED}})
-                            : pCard
-                        )
-            });
-        }).catch(console.error);
+        this.socket.emit('saveCard', pCardId);
     }
 
     quitGame = () => {
@@ -288,6 +280,24 @@ export default class GameContainer extends React.Component {
         socket.on('skipped', () => {
             this.setState({
                 roundSkipped: true
+            });
+        });
+        socket.on('cardSaved', pCardId => {
+            this.setState({
+                pCards: this.state.pCards.map(pCard =>
+                            pCard._id === pCardId
+                            ? update(pCard, {saveState: {$set: SAVED}})
+                            : pCard
+                        )
+            });
+        });
+        socket.on('cardSaveFailed', pCardId => {
+            this.setState({
+                pCards: this.state.pCards.map(pCard =>
+                            pCard._id === pCardId
+                            ? update(pCard, {saveState: {$set: UNSAVED}})
+                            : pCard
+                        )
             });
         });
         return socket;
