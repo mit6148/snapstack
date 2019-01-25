@@ -6,24 +6,18 @@ export default class Uploader extends React.Component {
     constructor (props) {
         super(props);
 
-        // let r = new FileReader();
-        // r.readAsDataURL('~/Pictures/Avatar.jpg');
-        // r.onloadend = this.setState({
-        //     image: r.result
-        // });
+        this.state = {
+            formDragOver: false,
+            inputHasFocus: false
+        };
 
-    }
-
-    componentDidMount() {
-        const input = document.getElementById("dragndrop_file_input");
-        const box = document.getElementById("")
     }
 
     render() {
         return (
-            <div id="dragndrop_box" onDrag={this.mute} onDragStart={this.mute} onDragEnd={this.endDrag}
-                onDragOver={this.startDrag} onDragEnter={this.startDrag} onDragLeave={this.endDrag} onDrop={this.drop}>
-                <input type="file" name="files[]" id="dragndrop_file_input" accept="image/*"
+            <div id="dragndrop_box" className={this.state.formDragOver ? "is-dragover" : ""} onDrag={this.mute} onDragStart={this.mute}
+                onDragEnd={this.endDrag} onDragOver={this.startDrag} onDragEnter={this.startDrag} onDragLeave={this.endDrag} onDrop={this.drop}>
+                <input type="file" name="files[]" id="dragndrop_file_input" accept="image/*" className={this.state.inputHasFocus ? "has-focus" : ""}
                     onChange={this.clickUpload} onFocus={this.focusInput} onBlur={this.unfocusInput}/>
                 <label htmlFor="dragndrop_file_input"><strong>Choose</strong> or drag an image.</label>
             </div>
@@ -37,12 +31,12 @@ export default class Uploader extends React.Component {
 
     startDrag = (e) => {
         this.mute(e);
-        document.getElementById("dragndrop_box").classList.add('is-dragover');
+        this.setState({formDragOver: true});
     };
 
     endDrag = (e) => {
         this.mute(e);
-        document.getElementById("dragndrop_box").classList.remove('is-dragover');
+        this.setState({formDragOver: false});
     };
 
     drop = async (e) => {
@@ -70,10 +64,10 @@ export default class Uploader extends React.Component {
     };
 
     focusInput = (e) => {
-        document.getElementById("dragndrop_file_input").classList.add("has-focus");
+        this.setState({inputHasFocus: true});
     };
 
     unfocusInput = (e) => {
-        document.getElementById("dragndrop_file_input").classList.remove("has-focus");
+        this.setState({inputHasFocus: false});
     };
 }
