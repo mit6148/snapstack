@@ -5,7 +5,7 @@
 .modal_window {
   position: fixed;
   top: 0%;
-  bottom: 0%;
+  left: 0%;
 
   background-color: rgba(0, 0, 0, 0.7);
   height: 100%;
@@ -45,9 +45,8 @@
 .modal_container_jcard_selector {
   @extend .modal_container;
 
-  height: 800px;
-  max-height: 80%;
-  width: 1200px;
+  height: 60%;
+  width: 60%;
   max-width: 90%;
 
 }
