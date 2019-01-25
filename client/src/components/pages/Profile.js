@@ -50,7 +50,7 @@ export default class Profile extends React.Component {
         let pCardIds = num ? this.state.pCardIds.slice(this.state.pCards.length, this.state.pCards.length + num) : this.state.pCardIds.slice(this.state.pCards.length);
         if (pCardIds.length === 0) return;
 
-        fetch('/api/pcards/'+pCardIds).then(res => res.json()).then(pCards => {
+        return fetch('/api/pcards/'+pCardIds).then(res => res.json()).then(pCards => {
             this.setState({
                 pCards: update(this.state.pCards, {$push: pCards})
             });
