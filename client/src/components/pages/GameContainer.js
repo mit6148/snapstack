@@ -52,7 +52,7 @@ export default class GameContainer extends React.Component {
         console.log(this.state);
         console.log(this.props.appState);
         return (
-            <div className='game_page'>
+            <React.Fragment>
                 {this.state.gamePhase === LOBBY ? (
                     <Lobby  appState={this.props.appState}
                             gameState={this.state}
@@ -62,7 +62,7 @@ export default class GameContainer extends React.Component {
                             gameState={this.state}
                             actions={this.actions} />
                 )}
-            </div>
+            </React.Fragment>
         );
     }
 

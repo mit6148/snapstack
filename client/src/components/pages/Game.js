@@ -42,11 +42,11 @@ export default class Game extends React.Component {
                             <React.Fragment>
                                 <CardBin    jCards={[NO_CARD]}
                                             owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
-                            <Modal modalType="jcard_selector">
-                                    <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
-                                    <CardBin    jCards={this.gameState.jCards}
-                                                onClick={this.isJudge() ? this.actions.selectJCard : null}
-                                                enlarged={true} />
+                                <Modal modalType="jcard_selector">
+                                        <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
+                                        <CardBin    jCards={this.gameState.jCards}
+                                                    onClick={this.isJudge() ? this.actions.selectJCard : null}
+                                                    enlarged={true} />
                                 </Modal>
                             </React.Fragment>
                         ) : (
@@ -105,7 +105,7 @@ export default class Game extends React.Component {
                     </div>
                     
                     <div className='user_actionables'>
-                        {this.canUploadImage() ? <Uploader upload={this.uploadImage} fakeImage={this.gameState.players[this.gameState.playerIds[0]].avatar} /> : null}
+                        {this.canUploadImage() ? <Uploader upload={this.uploadImage} /> : null}
                         {this.canFlipAllPCards() ? <div onClick={this.actions.flipAllPCards}>Flip All</div> : null}
                         {this.canSelectPCard() ? <div onClick={this.actions.selectPCard}>Select</div> : null}
                     </div>
