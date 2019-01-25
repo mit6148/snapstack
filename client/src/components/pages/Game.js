@@ -173,7 +173,7 @@ export default class Game extends React.Component {
     }
 
     // enable skip round
-    isJudgeDisconnected = () => { // TODO remove temp change
+    isJudgeDisconnected = () => {
         return [JCHOOSE, SUBMIT, JUDGE].includes(this.gameState.gamePhase) && !this.gameState.players[this.gameState.playerIds[0]].connected;
     }
 

@@ -46,7 +46,7 @@ export default class Root extends React.Component {
         this.props.enterGame(gameCode);
     }
 
-    quitGame = () => {
+    quitGame = reason => { //TODO display reason
         this.setState({
             gameLoaded: false
         });
