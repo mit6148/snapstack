@@ -572,23 +572,22 @@ async function emitGameState(socket, user, game) {
 }
 
 /**
-creates a socket listener for event, checks that only newGame and joinGame are allowed to not come with a game already made.
-Then, for everything but newGame and joinGame, it locks the game object while it runs so that all others on the same game
+creates a socket listener for event, checks that not having a game is only allowed if gameGetter is null
+Then, for everything where the game is recieved and shouldLock, it locks the game object while it runs so that all others on the same game
 will await it. Finally it runs the handler and then unlocks.
 */
-function createLockedListener(socket, event, gameGetter, func) {
+function createLockedListener(socket, event, gameGetter, shouldLock, func) {
     socket.on(event, async function() {
         console.log("backend handling: " + event)
         const game = gameGetter ? gameGetter() : null;
 
-        if(!game && !(['newGame', 'joinGame'].includes(event))) {
-            // WARNING: special values used here!
+        if(!game && gameGetter) {
             console.error("attempted to do game action " + event + " without a game");
             return;
         }
 
         try {
-            if(game) {
+            if(game && shouldLock) {
                 await game.withLock(async () => await func.apply(this, arguments));
             } else {
                 await func.apply(this, arguments);
@@ -646,7 +645,7 @@ async function onConnection(socket) {
 
     const gameGetter = () => game;
 
-    createLockedListener(socket, 'newGame', null, async cardsToWin => {
+    createLockedListener(socket, 'newGame', null, false, async cardsToWin => {
         if(game) {
             throw "tried to create a game on the same socket as an existing one!";
         }
@@ -663,7 +662,7 @@ async function onConnection(socket) {
         emitGameState(socket, user, game);
     });
 
-    createLockedListener(socket, 'joinGame', null, async gameCode => {
+    createLockedListener(socket, 'joinGame', null, false, async gameCode => {
         if(game) {
             throw "tried to join game on the same socket as an existing one!";
         }
@@ -681,12 +680,12 @@ async function onConnection(socket) {
         console.log("nuj sent");
     });
 
-    createLockedListener(socket, 'startGame', gameGetter, async () => {
+    createLockedListener(socket, 'startGame', gameGetter, true, async () => {
         await game.start();
         io.to(game.getGameCode()).emit('judgeAssign', game.getPlayer_ids(), game.getJCards());
     });
 
-    createLockedListener(socket, 'jCardChoice', gameGetter, async jCardIndex => {
+    createLockedListener(socket, 'jCardChoice', gameGetter, true, async jCardIndex => {
         game.startSubmitPhase(user, jCardIndex);
         const endTime = game.getEndTime();
         io.to(game.getGameCode()).emit('roundStart', jCardIndex, endTime);
@@ -717,7 +716,7 @@ async function onConnection(socket) {
         }, endTime - Date.now() + TIME_LIMIT_FORGIVE_MILLIS);
     });
 
-    createLockedListener(socket, 'submitCard', gameGetter, async (image, text) => {
+    createLockedListener(socket, 'submitCard', gameGetter, true, async (image, text) => {
         const pCardRef = await generatePCardRef(user, image, text);
         game.submitCard(pCardRef);
         socket.emit('turnedIn', user._id, pCardRef._id);
@@ -728,23 +727,23 @@ async function onConnection(socket) {
         }
     });
 
-    createLockedListener(socket, 'flip', gameGetter, async index => {
+    createLockedListener(socket, 'flip', gameGetter, true, async index => {
         game.flipCard(user, index);
         socket.to(game.getGameCode()).emit('flip', index);
         socket.to(game.getGameCode()).emit('look', index);
     });
 
-    createLockedListener(socket, 'flipAll', gameGetter, async () => {
+    createLockedListener(socket, 'flipAll', gameGetter, true, async () => {
         game.flipAll(user);
         socket.to(game.getGameCode()).emit('flipAll');
     });
 
-    createLockedListener(socket, 'look', gameGetter, async index => {
+    createLockedListener(socket, 'look', gameGetter, true, async index => {
         game.look(user, index);
         socket.to(game.getGameCode()).emit('look', index);
     });
 
-    createLockedListener(socket, 'select', gameGetter, async index => {
+    createLockedListener(socket, 'select', gameGetter, true, async index => {
         game.select(user, index);
         io.to(game.getGameCode()).emit('select', index, game.getCreators());
         setTimeout(async () => {
@@ -767,7 +766,7 @@ async function onConnection(socket) {
         }, WAIT_TIME);
     });
 
-    createLockedListener(socket, 'disconnect', gameGetter, async () => {
+    createLockedListener(socket, 'disconnect', gameGetter, true, async () => {
         game.disconnect(user);
         io.to(game.getGameCode()).emit('disconnected', user._id);
         console.log("sent: disconnected");
@@ -775,9 +774,9 @@ async function onConnection(socket) {
         game = undefined;
     });
 
-    createLockedListener(socket, 'skip', gameGetter, async () => await handleSkipRound(game, true));
+    createLockedListener(socket, 'skip', gameGetter, true, async () => await handleSkipRound(game, true));
 
-    createLockedListener(socket, 'saveCard', gameGetter, async (pCardId) => {
+    createLockedListener(socket, 'saveCard', gameGetter, true, async (pCardId) => {
         try {
             await game.trySave(user, pCardId);
             socket.emit('cardSaved', pCardId);
@@ -785,6 +784,10 @@ async function onConnection(socket) {
             console.error("save card had error: " + error + "\n" + error.stack);
             socket.emit('cardSaveFailed', pCardId);
         }
+    });
+
+    createLockedListener(socket, 'chat', gameGetter, false, async message => {
+        io.to(game.getGameCode()).emit('chat', message);
     });
 }
 
