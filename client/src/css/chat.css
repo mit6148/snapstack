@@ -5,6 +5,9 @@
     left: 0px;
     right: 0px;
     z-index: 1000;
+    --chat-message-border-radius: 10px;
+    --chat-message-color: blue;
+    --chat-message-bg-color: white;
 }
 
 .chatColumn {
@@ -26,8 +29,7 @@
 }
 
 .chatBox-titleBar {
-    position: absolute;
-    top: 0;
+    position: relative;
     width: 100%;
     height: 9.5%;
     background-color: white;
@@ -35,16 +37,63 @@
 }
 
 .chatBox-history {
-    position: absolute;
-    top: 36px;
+    position: relative;
     width: 100%;
     height: 80%;
-    background-color: red;
+    background-color: var(--chat-message-bg-color);
+    display: block;
+    overflow-y: scroll;
+}
+
+.messageRow-outer {
+    position: relative;
+    width: 100%;
+    background-color: var(--chat-message-bg-color);
+    margin-bottom: 5px;
+}
+
+.messageRow-tight {
+    position: relative;
+    width: 80%;
+    border-radius: var(--chat-message-border-radius);
+    background-color: var(--chat-message-color);
+}
+
+.messageRow-tight.message-sent-from-self {
+/*TODO: make float right*/
+}
+
+.messageRow-left {
+    position: absolute;
+    left: 0;
+    width: 20%;
+    height: 100%;
+    background-color: var(--chat-message-bg-color);
+    border-radius: 0 0 var(--chat-message-border-radius) 0;
+}
+
+.messageRow-right {
+    position: relative;
+    left: 20%;
+    width: 80%;
+    height: 100%;
+    background-color: var(--chat-message-bg-color);
+    border-radius: 0 var(--chat-message-border-radius) var(--chat-message-border-radius) var(--chat-message-border-radius);
+}
+
+.messageRow-inner {
+    position: relative;
+    background-color: var(--chat-message-color);
+    border-radius: var(--chat-message-border-radius) var(--chat-message-border-radius) var(--chat-message-border-radius) 0;
+}
+
+.message {
+    margin: 0;
+    display: block;
 }
 
 .chatBox-entry {
-    position: absolute;
-    bottom: 0;
+    position: relative;
     width: 100%;
     height: 10.5%;
     background-color: white;

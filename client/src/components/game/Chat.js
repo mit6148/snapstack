@@ -13,7 +13,7 @@ export default class Chat extends React.Component {
         this.state = {
             minimized: false,
             unread: 0,
-            messages: [["test message", LAZY_B_ID]] // pairs of form [message, sender name]
+            messages: [["test message asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf", LAZY_B_ID], ["my message", this.props.userId]] // pairs of form [message, sender name]
         }
     }
 
@@ -33,6 +33,7 @@ export default class Chat extends React.Component {
                                         <ChatMessage
                                             message={pair[0]}
                                             sender={pair[1]}
+                                            previousSender={(this.state.messages[index - 1] || [])[1]}
                                             nextSender={(this.state.messages[index + 1] || [])[1]}
                                             playerMap={this.props.playerMap}
                                             userId={this.props.userId}

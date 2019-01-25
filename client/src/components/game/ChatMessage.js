@@ -4,6 +4,30 @@ import "../../css/chat.css";
 
 export default class ChatMessage extends React.Component {
     render() {
-        return <div>{this.props.message}</div>
+        let tightRowClasses = ["messageRow-tight"];
+        if(this.props.sender === this.props.userId) {
+            tightRowClasses.push("message-sent-from-self");
+        } else {
+            tightRowClasses.push("message-sent-from-other");
+        }
+        if(this.props.sender !== this.props.previousSender) {
+            tightRowClasses.push("message-first-in-group");
+        }
+        if(this.props.sender !== this.props.nextSender) {
+            tightRowClasses.push("message-last-in-group");
+        }
+        return (
+            <div className="messageRow-outer">
+                <div className={tightRowClasses.join(" ")}>
+                    <div className="messageRow-left">
+                    </div>
+                    <div className="messageRow-right">
+                        <div className="messageRow-inner">
+                            <p className="message"> {this.props.message} </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            );
     }
 }
