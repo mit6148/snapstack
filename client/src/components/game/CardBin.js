@@ -21,14 +21,14 @@ export default class CardBin extends React.Component {
                                         onClick={this.props.onClick ? (() => this.props.onClick(index, jCard)) : null}
                                         enlarged={this.props.enlarged} />
                             </div>
-                            <div className="small jcard_info">
-                                {!this.props.owners || !this.props.owners[index] ? null : (
-                                    <PlayerInfo name={this.props.owners[index].name}
-                                                avatar={this.props.owners[index].avatar}
-                                                media={this.props.owners[index].media}
-                                                score={this.props.owners[index].score}
-                                                connected={this.props.owners[index].connected} />
-                                )}
+                            <div class="jcard_info">
+                                    {!this.props.owners || !this.props.owners[index] ? null : (
+                                        <PlayerInfo name={this.props.owners[index].name}
+                                                    avatar={this.props.owners[index].avatar}
+                                                    media={this.props.owners[index].media}
+                                                    score={this.props.owners[index].score}
+                                                    connected={this.props.owners[index].connected} />
+                                    )}
                             </div>
                         </div>
                     ))}
@@ -48,14 +48,15 @@ export default class CardBin extends React.Component {
                                         saveState={pCard.saveState}
                                         save={() => this.props.save(index)} />
                             </div>
-                            <div className="small pcard_info">
-                                {!this.props.owners || !this.props.owners[index] ? null : (
-                                    <PlayerInfo name={this.props.owners[index].name}
-                                                avatar={this.props.owners[index].avatar}
-                                                media={this.props.owners[index].media}
-                                                score={this.props.owners[index].score}
-                                                connected={this.props.owners[index].connected} />
-                                )}
+                            <div className='pcard_info'>
+                                    {!this.props.owners || !this.props.owners[index] ? null : (
+                                        <PlayerInfo name={this.props.owners[index].name}
+                                                    avatar={this.props.owners[index].avatar}
+                                                    media={this.props.owners[index].media}
+                                                    score={this.props.owners[index].score}
+                                                    connected={this.props.owners[index].connected} />
+                                    )}
+
                             </div>
                         </div>
                     ))}

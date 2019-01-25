@@ -3,11 +3,12 @@
   position: fixed;
   top: 0%;
   left: 0%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.6);
   height: 100%;
   width: 100%;
   z-index: 500;
   text-align: center;
+  align-contents: center;
 }
 
 .modal_command {
@@ -17,6 +18,7 @@
 
 .modal_container, .modal_container_card, .modal_container_jcard_selector, .modal_container_join {
   position: fixed;
+  margin: auto;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
@@ -47,6 +49,7 @@
 
 .modal_contents, .modal_contents_card, .modal_contents_jcard_selector, .modal_contents_join {
   position: fixed;
+  margin: auto;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);

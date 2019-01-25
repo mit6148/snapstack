@@ -20,7 +20,7 @@ export default class Home extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='home_page'>
                 <div className="home_center">
                     <Title/>
                     <div className="logo_container">

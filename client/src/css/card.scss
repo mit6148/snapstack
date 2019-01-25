@@ -2,108 +2,121 @@
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
 
-// div {
-// 	border-style: solid;
-// }
 
-.card_logo {
-	height: 100%;
-	width: 100%;
 
-	overflow: hidden;
-}
 
-.small {
-  transform: scale(0.7, 0.7);
-  -ms-transform: scale(0.7, 0.7); /* IE 9 */
-  -webkit-transform: scale(0.7, 0.7); /* Safari and Chrome */
-  -o-transform: scale(0.7, 0.7); /* Opera */
-  -moz-transform: scale(0.7, 0.7); /* Firefox */
-}
-
-.jcard_bin {
+.card_bin {
 	display:flex;
 	flex-direction: row;
-	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
+}
+
+.card_slot {
+	display: flex;
+	flex-direction: column;
+
+
+
+	height: 100%;
 
 }
 
-.pcard_bin {
-	@extend .jcard_bin;
+.card_object {
 
-	height: 300px;
-	width: 90%;
+	flex: 0 0 85%;
 
-	padding: 10px;
+	display: flex;
+	align-items: center;
+	justify-contents: center;
 
-	text-align: center;
+}
 
 
+.card_info {
+
+	flex: 0 0 15%;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+}
+
+.card_general {
+	height: 80%;
+	width: 80%;
+}
+
+.card_small {
+	@extend .card_general;
+}
+
+.card_large {
+
+}
+
+.card_front {
+
+	@extend .card_general;
+
+}
+
+.card_back {
+
+	@extend .card_general;
+}
+
+.card_empty {
+
+	@extend .card_general;	
+
+	margin: auto;
+
+	border-radius: 10px;
+
+	border-style: dashed;
+
+}
+
+
+// START OF JCARD TYPES:
+
+.jcard_bin {
+	@extend .card_bin;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
 }
 
 .jcard_slot {
-	align-items: flex-start;
-	justify-content: center;
-	display: flex;
-	flex-direction: column;
+	@extend .card_slot;
+	width: 28%;
 
-
-}
-
-.pcard_slot {
-	@extend .jcard_slot;
-	height: 300px;
-	width: 200px;
-	display: flex;
-	flex-direction: column;
-	margin: 20px;
 }
 
 .jcard_object {
-	text-align: center;
-	justify-content: center;
-	height: 300px;
-	width: 200px;
-	display: flex;
-	align-items: center;
+	@extend .card_object;
 
 }
 
-.pcard_object {
-	@extend .jcard_slot;
-}
 
 .jcard_info {
+	@extend .card_info;
+
 
 }
 
-.pcard_info {
-	@extend .jcard_slot;
+.jcard_small {
+	@extend .card_small;
+
 }
 
-.jcard_enlarged {
-	@extend .jcard_front;
+.jcard_large {
+	@extend .card_large;
+
 	height: 100%;
 	width: 100%;
-}
-
-.pcard_enlarged {
-	@extend .pcard_front;
-}
-
-.jcard {
-	@extend .jcard_front;
-}
-
-.pcard {
-	@extend .pcard_front;
-}
-
-.jcard_front {	
-	height: 85%;
-	width: 90%;
 	display: flex;
 	flex-direction: column;
 	background-color: $white;
@@ -116,54 +129,118 @@
 	box-shadow: 1px 3px 0px $green-dark;
 
 	margin: 15px;
+
 }
 
-.pcard_front {
-	@extend .jcard_front;
+.jcard {
 
-	border-color: $blue-light;
+	
+}
+
+.jcard_front {
+
+
+}
+
+.jcard_back {
+	@extend .card_back;
 
 }
 
 .jcard_empty {
-	
-	height: 85%;
-	width: 90%;
-	display: flex;
-	background-color: $background-v1;
-	justify-content: center;
-	align-items: center;
-	border-style: dashed;
-	border-radius: 10px;
+	@extend .card_empty;
+
 	border-color: $green-light;
-	border-width: 3px;
+}
+
+
+//START OF PCARD TYPES
+
+.pcard_bin {
+	@extend .card_bin;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+
+	justify-content: center;
+	align-content: center;
+
+
+}
+
+.pcard_slot {
+	@extend .card_slot;
+	flex: 0 1 10%;
+
+	width: 14%;
+
+}
+
+.pcard_object {
+	@extend .card_object;
+
+}
+
+
+.pcard_info {
+	@extend .card_info;
+
+}
+
+.pcard_small {
+	@extend .card_small;
+
+}
+
+.pcard_large {
+	@extend .card_large;
+}
+
+.pcard_front {
+	@extend .card_front;
+
+}
+
+.pcard_back {
+	@extend .card_back;
+
 
 }
 
 .pcard_empty {
-	@extend .jcard_empty;
-	height: 200px;
-	width: 120px;
+	@extend .card_empty;
+
 	border-color: $blue-light;
+
+
 }
 
-.jcard_back {
-	height: 90%;
-	width: 90%;
-	background-color: $green-light;
-	border-radius: 10px;
+// modified player info!!
+
+.pcard_info .player_info {
+
+	transform: scale(0.45, 0.45);
+
+	border-width: 2;
+	background-color: $purple-light;
+	display: flex;
+	width: 360px;
+	border-radius: 15px;
+
+	box-shadow: 0px 4px 0px $purple-dark;
+
+
 }
 
-.pcard_back {
-	@extend .jcard_back;
-	background-color: $blue-light;
+.jcard_info .player_info {
+	transform: scale(0.45, 0.45);
+
+	border-width: 2;
+	background-color: $purple-light;
+	display: flex;
+	width: 360px;
+	border-radius: 15px;
+
+	box-shadow: 0px 4px 0px $purple-dark;
 }
-
-.jcard_prompt {
-	word-wrap: break-word;
-	color: $black;
-	padding: 10px;
-}
-
-
-

@@ -22,7 +22,7 @@ export default class App extends React.Component {
 
     render() { // TODO don't render until user is fetched; TODO /profile doesn't redirect when not logged in
         return (
-            <div>
+            <div className="fill_parent">
                 <Switch>
                     <Route exact path="/" render={() => <Root appState={this.state} enterGame={this.enterGame} quitGame={this.quitGame} />} />
                     <Route exact path="/about" render={() => <About appState={this.state} />} />

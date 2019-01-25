@@ -32,62 +32,89 @@ export default class Game extends React.Component {
             <div className="game_page">
                 <NavButtons appState={this.props.appState} page='Game' quitGame={this.actions.quitGame} />
                 
-                {this.gameState.gamePhase === JCHOOSE ? (
-                    <React.Fragment>
-                        <CardBin    jCards={[NO_CARD]}
-                                    owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
-                        <Modal modalType="jcard_selector">
-                            <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
-                            <CardBin    jCards={this.gameState.jCards}
-                                        onClick={this.isJudge() ? this.actions.selectJCard : null}
-                                        enlarged={true} />
-                        </Modal>
-                    </React.Fragment>
-                ) : (
-                    <CardBin    jCards={[this.gameState.jCards[this.gameState.jCardIndex]]}
-                                owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
-                )}
-                
-                {[JCHOOSE, SUBMIT].includes(this.gameState.gamePhase) ? (
-                    <CardBin    pCards={this.gameState.playerIds.slice(1).map(playerId =>
-                                        playerId === this.props.appState.userId
-                                        ? (this.gameState.pCards.length === 1 ? this.gameState.pCards[0] : NO_CARD)
-                                        : (this.gameState.players[playerId].hasPlayed ? CARDBACK : NO_CARD))}
-                                owners={this.gameState.playerIds.slice(1).map(playerId => this.gameState.players[playerId])}
-                                onClick={this.viewPCard} />
-                ) : this.gameState.gamePhase === JUDGE ? (
-                    <CardBin    pCards={this.gameState.pCards}
-                                onClick={this.viewPCard}
-                                save={this.actions.savePCard}
-                                judgeFocusIndex={this.gameState.pCardIndex} />
-                ) : (
-                    <CardBin    pCards={this.gameState.pCards}
-                                owners={this.gameState.pCards.map(pCard => pCard.creator_id ? this.gameState.players[pCard.creator_id] : null)}
-                                onClick={this.viewPCard}
-                                save={this.actions.savePCard}
-                                winnerIndex={this.gameState.pCardIndex} />
-                )}
-                
-                {this.gameState.gamePhase === SUBMIT ? <Timer end={this.gameState.endTime} /> : null}
-                {this.canUploadImage() ? <Uploader upload={this.uploadImage} fakeImage={this.gameState.players[this.gameState.playerIds[0]].avatar} /> : null}
-                {this.canFlipAllPCards() ? <div onClick={this.actions.flipAllPCards}>Flip All</div> : null}
-                {this.canSelectPCard() ? <div onClick={this.actions.selectPCard}>Select</div> : null}
-                
-                {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
-                    <div className="round_skip">
-                        The judge has disconnected. Skip round?
-                        <div className="home_btn" onClick={this.actions.skipRound}> 
-                        Sure </div>
+                <div className='game_page_row1'>
+                    <div className="timer_section">
+                        {this.gameState.gamePhase === SUBMIT ? <Timer end={this.gameState.endTime} /> : null}
                     </div>
-                ) : null}
-                
-                {this.gameState.roundSkipped ? (
-                    <div>
-                        Skipping to next round...
+
+                    <div className='judge_section'>
+                        {this.gameState.gamePhase === JCHOOSE ? (
+                            <React.Fragment>
+                                <CardBin    jCards={[NO_CARD]}
+                                            owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
+                            <Modal modalType="jcard_selector">
+                                    <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
+                                    <CardBin    jCards={this.gameState.jCards}
+                                                onClick={this.isJudge() ? this.actions.selectJCard : null}
+                                                enlarged={true} />
+                                </Modal>
+                            </React.Fragment>
+                        ) : (
+                            <CardBin    jCards={[this.gameState.jCards[this.gameState.jCardIndex]]}
+                                        owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
+                        )}
                     </div>
-                ) : null}
-                
-                {this.gameState.gamePhase === GAME_OVER ? <div>{this.gameState.players[this.getWinner()].name} has won!</div> : null}
+
+                    <div className="notification_section">
+                        {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
+                            <div className="round_skip">
+                                The judge has disconnected. Skip round?
+                                <div className="home_btn" onClick={this.actions.skipRound}> 
+                                Sure </div>
+                            </div>
+                        ) : null}
+                        
+                        {this.gameState.roundSkipped ? (
+                            <div>
+                                Skipping to next round...
+                            </div>
+                        ) : null}
+                        {this.gameState.gamePhase === GAME_OVER ? <div>{this.gameState.players[this.getWinner()].name} has won!</div> : null}
+                    </div>
+
+                </div>
+
+                <div className="game_page_row2">
+                    {[JCHOOSE, SUBMIT].includes(this.gameState.gamePhase) ? (
+                        <CardBin    pCards={this.gameState.playerIds.slice(1).map(playerId =>
+                                            playerId === this.props.appState.userId
+                                            ? (this.gameState.pCards.length === 1 ? this.gameState.pCards[0] : NO_CARD)
+                                            : (this.gameState.players[playerId].hasPlayed ? CARDBACK : NO_CARD))}
+                                    owners={this.gameState.playerIds.slice(1).map(playerId => this.gameState.players[playerId])}
+                                    onClick={this.viewPCard} />
+                    ) : this.gameState.gamePhase === JUDGE ? (
+                        <CardBin    pCards={this.gameState.pCards}
+                                    onClick={this.viewPCard}
+                                    save={this.actions.savePCard}
+                                    judgeFocusIndex={this.gameState.pCardIndex} />
+                    ) : (
+                        <CardBin    pCards={this.gameState.pCards}
+                                    owners={this.gameState.pCards.map(pCard => pCard.creator_id ? this.gameState.players[pCard.creator_id] : null)}
+                                    onClick={this.viewPCard}
+                                    save={this.actions.savePCard}
+                                    winnerIndex={this.gameState.pCardIndex} />
+                    )}
+
+                </div>
+
+                <div className="game_page_row3">
+                    <div className="game_code_section">
+                        Game Code: 
+                        <h2> {this.props.appState.gameCode}
+                        </h2>
+                    </div>
+                    
+                    <div className='user_actionables'>
+                        {this.canUploadImage() ? <Uploader upload={this.uploadImage} fakeImage={this.gameState.players[this.gameState.playerIds[0]].avatar} /> : null}
+                        {this.canFlipAllPCards() ? <div onClick={this.actions.flipAllPCards}>Flip All</div> : null}
+                        {this.canSelectPCard() ? <div onClick={this.actions.selectPCard}>Select</div> : null}
+                    </div>
+
+                    <div className='chat_box_section'>
+
+                    </div>
+                </div>
+
                 {this.state.cardModal}
                 {this.state.pCardEditModal}
             </div>

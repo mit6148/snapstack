@@ -5,6 +5,11 @@ div {
   text-align: center;
 }
 
+.home_page {
+  height: 100%;
+  width: 100%;
+}
+
 .logo_container {
   display: inline-block;
   height: 160px;
@@ -21,27 +26,8 @@ body {
 .logo:hover {
   height: 100%;
   width: 100%;
-  -webkit-animation: spin 1s linear;
-  -moz-animation: spin 1s linear;
-  animation: spin 1s linear;
 }
 
-@-moz-keyframes spin {
-  100% {
-    -moz-transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes spin {
-  100% {
-    -webkit-transform: rotate(360deg);
-  }
-}
-@keyframes spin {
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
 .home_center, .login_center {
   display: block;
   font-size: 2em;
