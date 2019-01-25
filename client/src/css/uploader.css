@@ -1,0 +1,52 @@
+#dragndrop_box
+{
+    width: 50%;
+    max-width: 680px;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 1.25rem;
+    background-color: #c8dadf;
+    position: relative;
+    padding: 100px 20px;
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+}
+
+#dragndrop_box.is-dragover
+{
+    outline-offset: -20px;
+    outline-color: #c8dadf;
+    background-color: #fff;
+}
+
+
+#dragndrop_file_input
+{
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+#dragndrop_file_input + label
+{
+    max-width: 80%;
+    text-overflow: ellipsis;
+    white-space: normal;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+}
+#dragndrop_file_input + label:hover strong,
+#dragndrop_file_input:focus + label strong,
+#dragndrop_file_input.has-focus + label strong
+{
+    color: #39bfd3;
+}
+#dragndrop_file_input:focus + label,
+#dragndrop_file_input.has-focus + label
+{
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
