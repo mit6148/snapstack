@@ -9,7 +9,7 @@ export default class Timer extends React.Component {
         this.state = {
             minimized: false,
             unread: 0,
-            messages: [] // pairs of form [message, sender _id]
+            messages: [] // pairs of form [message, sender name]
         }
     }
 
@@ -21,10 +21,13 @@ export default class Timer extends React.Component {
                 </div>
                 <div className="chatBox-history">
                     {
-                        this.state.messages.map()
+                        this.state.messages.map((pair, index) => 
+                                <ChatMessage message={pair[0]} sender={pair[1]} key={index} />
+                            );
                     }
                 </div>
                 <div className="chatBox-entry">
+                    <input /> {/*TODO*/}
                 </div>
             </div>
         );
