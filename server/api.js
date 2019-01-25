@@ -30,7 +30,7 @@ router.get('/profile/:_id', connect.ensureLoggedIn(), async function(req, res) {
             const detail = await UserDetail.findById(user.detail_id);
             const jCardIds = detail.saved_pairs.map(pair => pair.jcard);
             const jCards = await JCard.find({_id: {$in: jCardIds}}).exec();
-            const saved_pairs = detail.saved_pairs.map((pair, index) => {jCardText: jCards[index].text, pCardId: pair.pcard});
+            const saved_pairs = detail.saved_pairs.map((pair, index) => ({jCardText: jCards[index].text, pCardId: pair.pcard}));
             res.send({
                 _id: user._id,
                 firstName: detail.firstName,
