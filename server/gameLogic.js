@@ -340,10 +340,6 @@ class Game {
         }
     }
 
-    getUserName(user) {
-        return this.userToPlayerMap[user._id].name;
-    }
-
     getPlayer(user) {
         const player = this.userToPlayerMap[user._id];
         if(!player) {
@@ -817,7 +813,7 @@ async function onConnection(socket) {
     });
 
     createLockedListener(socket, 'chat', gameGetter, false, async message => {
-        io.to(game.getGameCode()).emit('chat', message, game.getUserName(user));
+        io.to(game.getGameCode()).emit('chat', message, user._id);
     });
 }
 
