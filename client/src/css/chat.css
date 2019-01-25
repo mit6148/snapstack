@@ -55,12 +55,13 @@
 .messageRow-tight {
     position: relative;
     width: 80%;
+    min-height: 34px; /* TODO: make variables to calculate.8*.2*.8*width */
     border-radius: var(--chat-message-border-radius);
     background-color: var(--chat-message-color);
 }
 
 .messageRow-tight.message-sent-from-self {
-/*TODO: make float right*/
+/*TODO: make sent from self styles*/
 }
 
 .messageRow-left {
@@ -70,6 +71,27 @@
     height: 100%;
     background-color: var(--chat-message-bg-color);
     border-radius: 0 0 var(--chat-message-border-radius) 0;
+}
+
+.message-avatar-outer {
+    position: absolute;
+    width: 80%;
+    padding-top: 80%;
+    height: 0;
+    bottom: 0;
+}
+
+.messageRow-tight:not(.message-last-in-group) .message-avatar-outer,
+.messageRow-tight.message-sent-from-self .message-avatar-outer {
+    display: none;
+}
+
+.message-avatar-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 100%;
 }
 
 .messageRow-right {

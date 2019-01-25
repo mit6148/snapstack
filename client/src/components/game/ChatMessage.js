@@ -20,6 +20,9 @@ export default class ChatMessage extends React.Component {
             <div className="messageRow-outer">
                 <div className={tightRowClasses.join(" ")}>
                     <div className="messageRow-left">
+                        <div className="message-avatar-outer">
+                            <img className="message-avatar-inner" src={this.props.playerMap[this.props.sender].avatar}/>
+                        </div>
                     </div>
                     <div className="messageRow-right">
                         <div className="messageRow-inner">

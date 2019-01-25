@@ -13,7 +13,7 @@ export default class Chat extends React.Component {
         this.state = {
             minimized: false,
             unread: 0,
-            messages: [["test message asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf asdf", LAZY_B_ID], ["my message", this.props.userId]] // pairs of form [message, sender name]
+            messages: [["test message asdf asdf asdf asdf", LAZY_B_ID], ["test message asdf asdf asdf asdf", LAZY_B_ID], ["my message", this.props.userId]] // pairs of form [message, sender name]
         }
     }
 
