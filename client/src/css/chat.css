@@ -1,0 +1,51 @@
+.chatLayer {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 1000;
+}
+
+.chatColumn {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 89px; /*based on gchat constant margin to right of chat=351-262px*/
+    width: 262px;
+}
+
+.chatBox {
+    position: absolute;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    height: 380px;
+    border-width: 0;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.chatBox-titleBar {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 9.5%;
+    background-color: white;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.chatBox-history {
+    position: absolute;
+    top: 36px;
+    width: 100%;
+    height: 80%;
+    background-color: red;
+}
+
+.chatBox-entry {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10.5%;
+    background-color: white;
+}
