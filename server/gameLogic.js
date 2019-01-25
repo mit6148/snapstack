@@ -269,7 +269,10 @@ class Game {
     async trySave(user, pCardId) { // good if there is 1 jCard and the given pCard is currently in play, and updated the database with ref
         const index = this.pCardRefPairs.map(pair => pair[0]._id).indexOf(pCardId);
 
-        if(this.jCards.length === 1 && index >= 0) {
+        if(this.jCards.length === 1 && index >= 0 && pCardId.match(/^[a-zA-Z0-9]+$/)) {
+            if(this.userToPlayerMap[user._id].checkSaved([pCardId])[0]) {
+                return; // already saved
+            }
             const session = await db.startSession();
             session.startTransaction();
             const detailUpdatePromise = UserDetail.updateOne({_id: user.detail_id},
