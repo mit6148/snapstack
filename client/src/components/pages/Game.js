@@ -38,21 +38,8 @@ export default class Game extends React.Component {
                     </div>
 
                     <div className='judge_section'>
-                        {this.gameState.gamePhase === JCHOOSE ? (
-                            <React.Fragment>
-                                <CardBin    jCards={[NO_CARD]}
-                                            owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
-                                <Modal modalType="jcard_selector">
-                                        <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
-                                        <CardBin    jCards={this.gameState.jCards}
-                                                    onClick={this.isJudge() ? this.actions.selectJCard : null}
-                                                    enlarged={true} />
-                                </Modal>
-                            </React.Fragment>
-                        ) : (
-                            <CardBin    jCards={[this.gameState.jCards[this.gameState.jCardIndex]]}
-                                        owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
-                        )}
+                        <CardBin    jCards={[this.gameState.gamePhase === JCHOOSE ? NO_CARD : this.gameState.jCards[this.gameState.jCardIndex]]}
+                                    owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
                     </div>
 
                     <div className="notification_section">
@@ -115,6 +102,14 @@ export default class Game extends React.Component {
                     </div>
                 </div>
 
+                {this.gameState.gamePhase === JCHOOSE ? (
+                    <Modal modalType="jcard_selector">
+                        <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
+                        <CardBin    jCards={this.gameState.jCards}
+                                    onClick={this.isJudge() ? this.actions.selectJCard : null}
+                                    enlarged={true} />
+                    </Modal>
+                ) : null}
                 {this.state.cardModal}
                 {this.state.pCardEditModal}
             </div>

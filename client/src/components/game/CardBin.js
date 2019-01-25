@@ -21,7 +21,7 @@ export default class CardBin extends React.Component {
                                         onClick={this.props.onClick ? (() => this.props.onClick(index, jCard)) : null}
                                         enlarged={this.props.enlarged} />
                             </div>
-                            <div class="jcard_info">
+                            <div className="jcard_info">
                                     {!this.props.owners || !this.props.owners[index] ? null : (
                                         <PlayerInfo name={this.props.owners[index].name}
                                                     avatar={this.props.owners[index].avatar}
