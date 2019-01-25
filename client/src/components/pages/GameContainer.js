@@ -14,7 +14,7 @@ export default class GameContainer extends React.Component {
         super(props);
 
         this.state = {
-            gamePhase: LOBBY, // LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER
+            gamePhase: null, // LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER
             playerIds: [], // judge is playerIds[0]
             players: {}, // {_id: {_id, name, avatar, media{fb, insta}, score, hasPlayed, connected}}
             jCards: null, // [string]; [NUM_JCARDS] if JCHOOSE, [NUM_JCARDS or 1] otherwise
@@ -47,10 +47,12 @@ export default class GameContainer extends React.Component {
     }
 
     render() {
+        if (this.state.gamePhase === null) return null;
+
         console.log(this.state);
         console.log(this.props.appState);
         return (
-            <div className='game_page'>
+            <React.Fragment>
                 {this.state.gamePhase === LOBBY ? (
                     <Lobby  appState={this.props.appState}
                             gameState={this.state}
@@ -60,7 +62,7 @@ export default class GameContainer extends React.Component {
                             gameState={this.state}
                             actions={this.actions} />
                 )}
-            </div>
+            </React.Fragment>
         );
     }
 
@@ -143,12 +145,12 @@ export default class GameContainer extends React.Component {
         this.socket.emit('saveCard', pCardId);
     }
 
-    quitGame = () => {
+    quitGame = reason => {
         this.socket.disconnect();
-        this.props.quitGame();
+        this.props.quitGame(reason);
     }
 
-    onConnect = () => { // TODO move logic to Home so Lobby is immediately populated
+    onConnect = () => {
         if (this.props.appState.gameCode === '?') {
             this.socket.emit('newGame', CARDS_TO_WIN);
         } else {
@@ -162,7 +164,7 @@ export default class GameContainer extends React.Component {
             this.onConnect();
         });
         socket.on('rejectConnection', reason => {
-            this.quitGame();
+            this.quitGame(reason);
         });
         socket.on('gameState', (players, gamePhase, jCards, pCards, pCardIndex, endTime, cardsToWin, roundSkipped, gameCode) => {
             this.props.enterGame(gameCode);
