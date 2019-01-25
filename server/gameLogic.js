@@ -813,7 +813,7 @@ async function onConnection(socket) {
     });
 
     createLockedListener(socket, 'chat', gameGetter, false, async message => {
-        io.to(game.getGameCode()).emit('chat', message);
+        io.to(game.getGameCode()).emit('chat', message, user._id);
     });
 }
 
