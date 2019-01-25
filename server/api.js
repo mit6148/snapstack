@@ -6,6 +6,7 @@ const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const connect = require('connect-ensure-login');
 const {downloadImagePromise} = require('./storageTalk');
+const db = require('./db');
 
 
 const router = express.Router();
@@ -47,9 +48,9 @@ router.get('/profile/:_id', connect.ensureLoggedIn(), async function(req, res) {
     }
 });
 
-router.get('/pcards', connect.ensureLoggedIn(), async function(req, res) {
+router.get('/pcards/:_ids', connect.ensureLoggedIn(), async function(req, res) {
     try {
-        const _ids = Object.keys(req.query._ids || {}); // _ids is an object with the keys being desired ids, values not used
+        const _ids = req.params._ids.split(",");
         const pCardRefs = await PCardRef.find({_id: {$in: _ids}});
         const images = await Promise.all(pCardRefs.map(pCardRef => downloadImagePromise(pCardRef.image_ref)));
         const out = {};
@@ -63,6 +64,32 @@ router.get('/pcards', connect.ensureLoggedIn(), async function(req, res) {
         res.send({status: 500, message: "something went wrong"});
         console.error("error in fetching pcards: " + err.stack);
     }
-})
+});
+
+
+router.get('/unsave/:_id', connect.ensureLoggedIn(), async function(req, res) {
+    const session = await db.startSession();
+    session.startTransaction();
+    try {
+        const match = await UserDetail.findOneAndUpdate({_id: req.user.detail_id, saved_pairs: {$elemMatch: {pcard: req.params._id}}},
+                                                        {$pull: {saved_pairs: {pcard: req.params._id}}}).session(session).exec();
+        if(match) {
+            console.log("unsaved a card");
+            await PCardRef.updateOne({_id: req.params._id}, {$inc: {ref_count: -1}}).session(session).exec();
+            session.commitTransaction(); // WARNING: could also remove pcard here, but instead just wait for a server restart
+            res.send({});
+        } else {
+            session.abortTransaction();
+            console.log("failed to unsave");
+            res.status(404);
+            res.send({status: 404, message: "no such card saved, so can't unsave"});
+        }
+    } catch(err) {
+        session.abortTransaction();
+        console.error("failed to unsave with error: " + err.stack);
+        res.status(500);
+        res.send({status: 500, message: "something went wrong!"});
+    }
+});
 
 module.exports = router;

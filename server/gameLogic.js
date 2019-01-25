@@ -2,8 +2,8 @@ const User = require('./models/user');
 const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
-const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS,
-    NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID} = require("../config");
+const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN,
+    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID} = require("../config");
 const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 const db = require('./db');
@@ -269,7 +269,10 @@ class Game {
     async trySave(user, pCardId) { // good if there is 1 jCard and the given pCard is currently in play, and updated the database with ref
         const index = this.pCardRefPairs.map(pair => pair[0]._id).indexOf(pCardId);
 
-        if(this.jCards.length === 1 && index >= 0) {
+        if(this.jCards.length === 1 && index >= 0 && pCardId.match(/^[a-zA-Z0-9]+$/)) {
+            if(this.userToPlayerMap[user._id].checkSaved([pCardId])[0]) {
+                return; // already saved
+            }
             const session = await db.startSession();
             session.startTransaction();
             const detailUpdatePromise = UserDetail.updateOne({_id: user.detail_id},
@@ -791,6 +794,8 @@ if(DEVELOPER_MODE) {
     User.findOne({_id: LAZY_B_ID}).exec().then(async user => {
         game = new Game(3, "XYZ");
         await game.addPlayer(user);
+        const other = await User.findOne({_id: LETHARGIC_B_ID}).exec();
+        await game.addPlayer(other);
     });
 }
 
