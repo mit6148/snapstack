@@ -50,15 +50,33 @@ router.get('/profile/:_id', connect.ensureLoggedIn(), async function(req, res) {
 
 router.get('/pcards/:_ids', connect.ensureLoggedIn(), async function(req, res) {
     try {
+        if(!req.params._ids.match(/^[a-zA-Z0-9]+(,[a-zA-Z0-9]+)*/)) {
+            res.status(400);
+            res.send({status: 400, message: "invalid input"});
+            return;
+        }
         const _ids = req.params._ids.split(",");
         const pCardRefs = await PCardRef.find({_id: {$in: _ids}});
-        const images = await Promise.all(pCardRefs.map(pCardRef => downloadImagePromise(pCardRef.image_ref)));
-        const out = {};
+        const imagesPromise = Promise.all(pCardRefs.map(pCardRef => downloadImagePromise(pCardRef.image_ref)));
+        const creators = await User.find({_id: {$in: pCardRefs.map(pCardRef => pCardRef.creator_id)}}).exec();
+        const details = await UserDetail.find({_id: {$in: creators.map(creator => creator._id)}}).exec();
+        const detailIdToName = {};
+        for(let detail of details) {
+            detailIdToName[detail._id] = (detail.firstName && detail.lastName) ? detail.firstName + " " + detail.lastName[0]
+                                                            : (detail.firstName || detail.lastName || "No Name");
+        }
+        const creatorIdToName = {};
+        for(let creator of creators) {
+            creatorIdToName[creator._id] = detailIdToName[creator.detail_id];
+        }
+        const images = await imagesPromise;
+        const pcardIdToInfo = {};
         for(let i = 0; i < pCardRefs.length; i++) {
-            out[pCardRefs[i]._id] = {_id: pCardRefs[i]._id, image: images[i], text: pCardRefs[i].text, creator_id: pCardRefs[i].creator_id};
+            pcardIdToInfo[pCardRefs[i]._id] = {_id: pCardRefs[i]._id, image: images[i], text: pCardRefs[i].text,
+                                        creator_id: pCardRefs[i].creator_id, creator_name: creatorIdToName[pCardRefs[i].creator_id]};
         }
 
-        res.send(out);
+        res.send(_ids.map(_id => pcardIdToInfo[_id]));
     } catch(err) {
         res.status(500);
         res.send({status: 500, message: "something went wrong"});
