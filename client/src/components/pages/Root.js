@@ -20,9 +20,7 @@ export default class Root extends React.Component {
     render() {
         if (this.props.appState.userId === null) {
             return (
-                <div className='login_page'>
-                    <Login appState={this.props.appState} />
-                </div>
+                <Login appState={this.props.appState} />
             );
         }
         else {

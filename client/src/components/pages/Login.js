@@ -8,12 +8,13 @@ import "../../css/home.css";
 export default class Login extends React.Component {
     render() {
         return (
-            <div className="login_center">
-                <Title />
-                <a className="login_btn" href="/auth/facebook">Log In</a>
-                <NavButtons appState={this.props.appState} page='Login' />
+            <div className='login_page'>
+                <div className="login_center">
+                    <Title />
+                    <a className="login_btn" href="/auth/facebook">Log In</a>
+                    <NavButtons appState={this.props.appState} page='Login' />
+                </div>
             </div>
-            
         );
     }
 }
