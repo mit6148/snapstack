@@ -1,26 +1,10 @@
-
-/*
-    AUTHOR: Osvaldas Valutis, www.osvaldas.info
-*/
-
-
-
-@import url( '_normalize.css' );
-
-a
-{
-    color: currentColor;
-    text-decoration: none;
-}
-
-
 .drag_input
 {
     width: 50%;
     max-width: 680px;
     text-align: center;
     margin: 0 auto;
-    font-size: 1.25rem; /* 20 */
+    font-size: 1.25rem;
     background-color: #c8dadf;
     position: relative;
     padding: 100px 20px;
@@ -37,16 +21,16 @@ a
     outline-color: #c8dadf;
     background-color: #fff;
 }
-.box__dragndrop,
-.box__icon
+.dragndrop_span,
+.dragndrop_icon
 {
     display: none;
 }
-.drag_input .box__dragndrop
+.drag_input .dragndrop_span
 {
     display: inline;
 }
-.drag_input .box__icon
+.drag_input .dragndrop_icon
 {
     width: 100%;
     height: 80px;
@@ -56,21 +40,7 @@ a
 }
 
 
-@-webkit-keyframes appear-from-inside
-{
-    from    { -webkit-transform: translateY( -50% ) scale( 0 ); }
-    75%     { -webkit-transform: translateY( -50% ) scale( 1.1 ); }
-    to      { -webkit-transform: translateY( -50% ) scale( 1 ); }
-}
-@keyframes appear-from-inside
-{
-    from    { transform: translateY( -50% ) scale( 0 ); }
-    75%     { transform: translateY( -50% ) scale( 1.1 ); }
-    to      { transform: translateY( -50% ) scale( 1 ); }
-}
-
-
-.box__file
+.dragndrop_file
 {
     width: 0.1px;
     height: 0.1px;
@@ -79,7 +49,7 @@ a
     position: absolute;
     z-index: -1;
 }
-.box__file + label
+.dragndrop_file + label
 {
     max-width: 80%;
     text-overflow: ellipsis;
@@ -88,30 +58,15 @@ a
     display: inline-block;
     overflow: hidden;
 }
-.box__file + label:hover strong,
-.box__file:focus + label strong,
-.box__file.has-focus + label strong
+.dragndrop_file + label:hover strong,
+.dragndrop_file:focus + label strong,
+.dragndrop_file.has-focus + label strong
 {
     color: #39bfd3;
 }
-.box__file:focus + label,
-.box__file.has-focus + label
+.dragndrop_file:focus + label,
+.dragndrop_file.has-focus + label
 {
     outline: 1px dotted #000;
     outline: -webkit-focus-ring-color auto 5px;
-}
-
-.box__button
-{
-    font-weight: 700;
-    color: #e5edf1;
-    background-color: #39bfd3;
-    display: none;
-    padding: 8px 16px;
-    margin: 40px auto 0;
-}
-.box__button:hover,
-.box__button:focus
-{
-    background-color: #0f3c4b;
 }
