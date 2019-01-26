@@ -6,7 +6,6 @@ import Uploader from "../game/Uploader";
 import PCard from "../univ/PCard";
 import PCardEditor from "../game/PCardEditor";
 import Modal from "../univ/Modal";
-import Chat from "../game/Chat";
 import { gamePhases, saveStates, specialCards, MIN_PLAYERS } from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 const { UNSAVED, SAVING, SAVED } = saveStates;
@@ -113,8 +112,6 @@ export default class Game extends React.Component {
                 ) : null}
                 {this.state.cardModal}
                 {this.state.pCardEditModal}
-                <Chat playerMap={this.props.gameState.players} userId={this.props.appState.userId}
-                    chatMessages={this.props.gameState.chatMessages} sendChat={this.props.actions.sendChat} />
             </div>
         );
     }

@@ -35,6 +35,17 @@ export default class Chat extends React.Component {
         this.textInput = input;
     }
 
+    saveHistory = history => {
+        this.history = history;
+    }
+
+    scrollToBottom = () => {
+        if(this.history) {
+            this.history.scrollTop = this.history.scrollHeight;
+            console.log("scrolling to bottom");
+        }
+    }
+
     toggleMinimized = () => {
         this.setState({minimized: !this.state.minimized});
     }
@@ -49,7 +60,7 @@ export default class Chat extends React.Component {
                     <div className="chatBox-titleBar-text"> Game Chat </div>
                     <div className="chatBox-titleBar-minimizeButton"></div>
                 </div>
-                <div className="chatBox-history">
+                <div className="chatBox-history" ref={this.saveHistory}>
                     {
                         this.props.chatMessages.map((pair, index) => (
                                 <ChatMessage
@@ -59,7 +70,9 @@ export default class Chat extends React.Component {
                                     nextSender={(this.props.chatMessages[index + 1] || [])[1]}
                                     playerMap={this.props.playerMap}
                                     userId={this.props.userId}
-                                    key={index} />
+                                    key={index}
+                                    onMount={this.scrollToBottom}
+                                    />
                             ))
                     }
                 </div>

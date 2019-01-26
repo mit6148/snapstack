@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import update from "immutability-helper";
 import Lobby from "./Lobby";
 import Game from "./Game";
+import Chat from "../game/Chat";
 import {gamePhases, saveStates, CARDS_TO_WIN, MIN_PLAYERS} from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 const { UNSAVED, SAVING, SAVED } = saveStates;
@@ -64,6 +65,9 @@ export default class GameContainer extends React.Component {
                             gameState={this.state}
                             actions={this.actions} />
                 )}
+
+                <Chat playerMap={this.state.players} userId={this.props.appState.userId}
+                    chatMessages={this.state.chatMessages} sendChat={this.sendChat} />
             </React.Fragment>
         );
     }
@@ -312,8 +316,12 @@ export default class GameContainer extends React.Component {
         });
 
         socket.on('chat', (message, userId) => {
+            let chatMessages = this.state.chatMessages.concat([[message, userId]]);
+            if(chatMessages.length > 300) {
+                chatMessages = chatMessages.slice(150);
+            }
             this.setState({
-                chatMessages: update(this.state.chatMessages, {$push: [[message, userId]]})
+                chatMessages: chatMessages
             });
         });
         return socket;

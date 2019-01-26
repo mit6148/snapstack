@@ -3,6 +3,11 @@ import React from "react";
 import "../../css/chat.css";
 
 export default class ChatMessage extends React.Component {
+
+    componentDidMount() {
+        this.props.onMount();
+    }
+
     render() {
         let tightRowClasses = ["messageRow-tight"];
         if(this.props.sender === this.props.userId) {
