@@ -217,7 +217,7 @@
     width: 100%;
     height: calc(100% * var(--chat-entry-proportion));
     background-color: var(--chat-message-color-self);
-    border-top-color: var(--chat-black-replacement);
+    border-top-color: var(--chat-message-color-self);
     border-top-width: 1px;
     border-top-style: solid;
 }
