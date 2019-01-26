@@ -5,8 +5,11 @@
     left: 0px;
     right: 0px;
     z-index: 1000;
-    --chat-message-border-radius: 10px;
-    --chat-message-color: blue;
+    --chat-message-border-radius-outer: 15px;
+    --chat-message-border-radius-inner: 5px;
+    --chat-message-border-radius-bubble-base: 10px;
+    --chat-message-color-self: green;
+    --chat-message-color-other: blue;
     --chat-message-bg-color: white;
 }
 
@@ -55,13 +58,17 @@
 .messageRow-tight {
     position: relative;
     width: 80%;
-    min-height: 34px; /* TODO: make variables to calculate.8*.2*.8*width */
-    border-radius: var(--chat-message-border-radius);
-    background-color: var(--chat-message-color);
+    border-radius: var(--chat-message-border-radius-outer);
+    background-color: var(--chat-message-color-other);
+}
+
+.messageRow-tight:not(.message-last-in-group) {
+    background-color: var(--chat-message-bg-color);
 }
 
 .messageRow-tight.message-sent-from-self {
-/*TODO: make sent from self styles*/
+    left: 18%;
+    background-color: var(--chat-message-bg-color);
 }
 
 .messageRow-left {
@@ -70,11 +77,16 @@
     width: 20%;
     height: 100%;
     background-color: var(--chat-message-bg-color);
-    border-radius: 0 0 var(--chat-message-border-radius) 0;
+    border-radius: 0 0 var(--chat-message-border-radius-bubble-base) 0;
+}
+
+.message-sent-from-self .messageRow-left {
+    border-radius: 0;
 }
 
 .message-avatar-outer {
     position: absolute;
+    left: 10%;
     width: 80%;
     padding-top: 80%;
     height: 0;
@@ -100,18 +112,44 @@
     width: 80%;
     height: 100%;
     background-color: var(--chat-message-bg-color);
-    border-radius: 0 var(--chat-message-border-radius) var(--chat-message-border-radius) var(--chat-message-border-radius);
+    border-radius: 0 var(--chat-message-border-radius-outer) var(--chat-message-border-radius-outer) var(--chat-message-border-radius-outer);
 }
 
 .messageRow-inner {
     position: relative;
-    background-color: var(--chat-message-color);
-    border-radius: var(--chat-message-border-radius) var(--chat-message-border-radius) var(--chat-message-border-radius) 0;
+    min-height: 34px; /* TODO: make variables to calculate.8*.2*.8*width */
+}
+
+.message-sent-from-other .messageRow-inner {
+    background-color: var(--chat-message-color-other);
+    border-radius: var(--chat-message-border-radius-inner) var(--chat-message-border-radius-outer) var(--chat-message-border-radius-outer) var(--chat-message-border-radius-inner);
+}
+
+.message-sent-from-self .messageRow-inner {
+    background-color: var(--chat-message-color-self);
+    border-radius: var(--chat-message-border-radius-outer) var(--chat-message-border-radius-inner) var(--chat-message-border-radius-inner) var(--chat-message-border-radius-outer);
+}
+
+.message-sent-from-self.message-first-in-group .messageRow-inner {
+    border-top-right-radius: var(--chat-message-border-radius-outer);
+}
+
+.message-sent-from-self.message-last-in-group .messageRow-inner {
+    border-bottom-right-radius: var(--chat-message-border-radius-outer);
+}
+
+.message-sent-from-other.message-first-in-group .messageRow-inner {
+    border-top-left-radius: var(--chat-message-border-radius-outer);
+}
+
+.message-sent-from-other.message-last-in-group .messageRow-inner {
+    border-bottom-left-radius: 0;
 }
 
 .message {
     margin: 0;
     display: block;
+    padding: 2px;
 }
 
 .chatBox-entry {
