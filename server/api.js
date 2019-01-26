@@ -6,7 +6,7 @@ const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const connect = require('connect-ensure-login');
 const {downloadImagePromise} = require('./storageTalk');
-const {MEDIA_KEYS, MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH} = require('../config');
+const {MEDIA_KEYS, MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, MAX_MEDIA_LENGTH} = require('../config');
 const db = require('./db');
 
 
@@ -118,9 +118,11 @@ router.get('/unsave/:_id', connect.ensureLoggedIn(), async function(req, res) {
 router.post('/update/profile', connect.ensureLoggedIn(), async function(req, res) {
     // WARNING: validate image
     try {
-        if(["avatar", "firstName", "lastName", "description"].every(a => typeof(req.body[a]) === 'string') &&
-            req.body.media && Object.keys(req.body.media).every(key => MEDIA_KEYS.has(key)) &&
-            req.body.firstName.length <= MAX_NAME_LENGTH && req.body.lastName.length <= MAX_NAME_LENGTH) {
+        if(["avatar", "firstName", "lastName", "description"].every(a => typeof(req.body[a]) === 'string')
+            && req.body.media && Object.keys(req.body.media)
+                .every(key => MEDIA_KEYS.has(key) && typeof(req.body.media[key]) === 'string'
+                                && req.body.media[key].length <= MAX_MEDIA_LENGTH)
+            && req.body.firstName.length <= MAX_NAME_LENGTH && req.body.lastName.length <= MAX_NAME_LENGTH) {
 
             await UserDetail.updateOne({_id: req.user.detail_id},
                 {$set: {
