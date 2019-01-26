@@ -50,7 +50,7 @@ const LETHARGIC_B_ID = "5c4a8e621c9d44000084e078";
 
 const MEDIA_KEYS = {fb: true, insta: true};
 
-const MAX_DESCRIPTION_LENGTH = 500;
+const MAX_DESCRIPTION_LENGTH = 5000;
 const MAX_NAME_LENGTH = 200;
 const MAX_CAPTION_LENGTH = 100;
 
