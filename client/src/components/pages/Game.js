@@ -113,7 +113,8 @@ export default class Game extends React.Component {
                 ) : null}
                 {this.state.cardModal}
                 {this.state.pCardEditModal}
-                <Chat playerMap={this.props.gameState.players} userId={this.props.appState.userId} />
+                <Chat playerMap={this.props.gameState.players} userId={this.props.appState.userId}
+                    chatMessages={this.props.gameState.chatMessages} sendChat={this.props.actions.sendChat} />
             </div>
         );
     }

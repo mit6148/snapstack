@@ -24,7 +24,8 @@ export default class GameContainer extends React.Component {
             pCardsFacedown: 0, // if JUDGE
             endTime: null, // if SUBMIT
             cardsToWin: null,
-            roundSkipped: false // if JCHOOSE, SUBMIT, or JUDGE
+            roundSkipped: false, // if JCHOOSE, SUBMIT, or JUDGE
+            chatMessages: [] // array of pairs of form [message, sender _id]
         };
 
         this.actions = {
@@ -36,7 +37,8 @@ export default class GameContainer extends React.Component {
             selectPCard: this.selectPCard,
             skipRound: this.skipRound,
             savePCard: this.savePCard,
-            quitGame: this.quitGame
+            quitGame: this.quitGame,
+            sendChat: this.sendChat
         }
 
         this.socket = this.createSocket();
@@ -149,6 +151,12 @@ export default class GameContainer extends React.Component {
         this.socket.disconnect();
         this.props.quitGame(reason);
     }
+
+
+    sendChat = message => {
+        this.socket.emit('chat', message);
+    }
+
 
     onConnect = () => {
         if (this.props.appState.gameCode === '?') {
@@ -300,6 +308,12 @@ export default class GameContainer extends React.Component {
                             ? update(pCard, {saveState: {$set: UNSAVED}})
                             : pCard
                         )
+            });
+        });
+
+        socket.on('chat', (message, userId) => {
+            this.setState({
+                chatMessages: update(this.state.chatMessages, {$push: [[message, userId]]})
             });
         });
         return socket;

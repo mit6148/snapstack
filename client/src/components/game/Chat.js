@@ -12,11 +12,31 @@ export default class Chat extends React.Component {
 
         this.state = {
             minimized: false,
-            messages: [["test message asdf asdf asdf asdf", LAZY_B_ID], ["test message asdf asdf asdf asdf", LAZY_B_ID], ["my message", this.props.userId], ["my different message", this.props.userId], ["another message", this.props.userId], ["my different message", this.props.userId], ["my different message", this.props.userId]] // pairs of form [message, sender name]
         }
     }
 
+    onPressEnter = event => {
+        event.preventDefault();
+        if(event.keyCode === 13) {
+            this.trySendChat();
+        }
+    };
+
+    trySendChat = () => {
+        const text = this.textInput.value;
+        if(text) {
+            // don't send empty chat
+            this.props.sendChat(text);
+            this.textInput.value = '';
+        }
+    };
+
+    saveInput = (input) => {
+        this.textInput = input;
+    }
+
     render() {
+
         return (
             <div className="chatBox">
                 <div className="chatBox-titleBar">
@@ -25,12 +45,12 @@ export default class Chat extends React.Component {
                 </div>
                 <div className="chatBox-history">
                     {
-                        this.state.messages.map((pair, index) => (
+                        this.props.chatMessages.map((pair, index) => (
                                 <ChatMessage
                                     message={pair[0]}
                                     sender={pair[1]}
-                                    previousSender={(this.state.messages[index - 1] || [])[1]}
-                                    nextSender={(this.state.messages[index + 1] || [])[1]}
+                                    previousSender={(this.props.chatMessages[index - 1] || [])[1]}
+                                    nextSender={(this.props.chatMessages[index + 1] || [])[1]}
                                     playerMap={this.props.playerMap}
                                     userId={this.props.userId}
                                     key={index} />
@@ -38,7 +58,11 @@ export default class Chat extends React.Component {
                     }
                 </div>
                 <div className="chatBox-entry">
-                    {/*TODO*/}
+                    <input type="text" className="chatBox-textEntry" ref={this.saveInput}
+                            placeholder="Type to chat..." onKeyUp={this.onPressEnter}/>
+                    <div className="chatBox-sendButton" onClick={this.trySendChat}>
+                        <div className="chatBox-sendButton-text"> Send </div>
+                    </div>
                 </div>
             </div>
         );
