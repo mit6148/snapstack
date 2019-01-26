@@ -169,7 +169,7 @@
     position: relative;
     min-height: calc(var(--chat-row-max-width-proportion-used) * var(--chat-row-left-proportion) * var(--chat-avatar-proportion) * var(--chat-total-width));
     display: inline-block;
-
+    max-width: 100%;
 }
 
 .message-sent-from-other .messageRow-inner {
@@ -209,6 +209,9 @@
     font-size: var(--chat-font-size);
     font-weight: var(--chat-font-weight);
     color: var(--chat-white-replacement);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 
 .chatBox-entry {
