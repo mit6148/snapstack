@@ -12,16 +12,16 @@ export default class CardBin extends React.Component {
         console.log(this.props.pCards);
         if (this.props.jCards !== undefined) {
             return (
-                <div className="jcard_bin">
+                <div className="card_bin">
                     {this.props.jCards.map((jCard, index) => (
-                        <div key={index} className="jcard_slot">
-                            <div className="jcard_object">
+                        <div key={index} className="card_slot">
+                            <div className="card_area">
                                 <JCard  src={jCard}
                                         text={jCard}
                                         onClick={this.props.onClick ? (() => this.props.onClick(index, jCard)) : null}
                                         enlarged={this.props.enlarged} />
                             </div>
-                            <div className="jcard_info">
+                            <div className="card_info_area">
                                     {!this.props.owners || !this.props.owners[index] ? null : (
                                         <PlayerInfo name={this.props.owners[index].name}
                                                     avatar={this.props.owners[index].avatar}
@@ -36,10 +36,10 @@ export default class CardBin extends React.Component {
             );
         } else { // TODO handle judgeFocusIndex, winnerIndex
             return (
-                <div className="pcard_bin">
+                <div className="card_bin" onClick={() => {this.props.pCards.push(NO_CARD); this.props.owners.push(this.props.owners[0]); console.log('hi'); this.forceUpdate();}}>
                     {this.props.pCards.map((pCard, index) => (
-                        <div key={index} className='pcard_slot'>
-                            <div className="pcard_object">
+                        <div key={index} className='card_slot'>
+                            <div className="card_area">
                                 <PCard  src={pCard}
                                         image={pCard.image}
                                         text={pCard.text}
@@ -48,7 +48,7 @@ export default class CardBin extends React.Component {
                                         saveState={pCard.saveState}
                                         save={() => this.props.save(index)} />
                             </div>
-                            <div className='pcard_info'>
+                            <div className='card_info_area'>
                                     {!this.props.owners || !this.props.owners[index] ? null : (
                                         <PlayerInfo name={this.props.owners[index].name}
                                                     avatar={this.props.owners[index].avatar}

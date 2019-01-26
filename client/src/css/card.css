@@ -1,29 +1,36 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
 .card_bin, .pcard_bin, .jcard_bin {
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   justify-content: center;
   align-items: center;
 }
-
-.card_slot, .pcard_slot, .jcard_slot {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.card_bin .card_slot, .card_bin .pcard_slot, .pcard_bin .card_slot, .pcard_bin .pcard_slot, .card_bin .jcard_slot, .pcard_bin .jcard_slot, .jcard_bin .card_slot, .jcard_bin .pcard_slot, .jcard_bin .jcard_slot {
+  position: relative;
+  height: 35vh;
+  width: calc(35vh * 1.2 / 1.9);
 }
-
-.card_object, .pcard_object, .jcard_object {
-  flex: 0 0 85%;
-  display: flex;
-  align-items: center;
-  justify-contents: center;
+.card_bin .card_slot .card_area, .card_bin .pcard_slot .card_area, .pcard_bin .card_slot .card_area, .pcard_bin .pcard_slot .card_area, .card_bin .jcard_slot .card_area, .pcard_bin .jcard_slot .card_area, .jcard_bin .card_slot .card_area, .jcard_bin .pcard_slot .card_area, .jcard_bin .jcard_slot .card_area {
+  position: absolute;
+  left: calc(100% * 0.1 / 1.2);
+  right: calc(100% * 0.1 / 1.2);
+  top: calc(100% * 0.15 / 1.9);
+  bottom: calc(100% * (0.3 + 0.05) / 1.9);
 }
-
-.card_info, .pcard_info, .jcard_info {
-  flex: 0 0 15%;
+.card_bin .card_slot .card_info_area, .card_bin .pcard_slot .card_info_area, .pcard_bin .card_slot .card_info_area, .pcard_bin .pcard_slot .card_info_area, .card_bin .jcard_slot .card_info_area, .pcard_bin .jcard_slot .card_info_area, .jcard_bin .card_slot .card_info_area, .jcard_bin .pcard_slot .card_info_area, .jcard_bin .jcard_slot .card_info_area {
+  position: absolute;
+  width: 100%;
+  height: calc(100% * 0.3 / 1.9);
+  bottom: 0;
+}
+.card_bin .card_slot .card_info_area .player_info, .card_bin .pcard_slot .card_info_area .player_info, .pcard_bin .card_slot .card_info_area .player_info, .pcard_bin .pcard_slot .card_info_area .player_info, .card_bin .jcard_slot .card_info_area .player_info, .pcard_bin .jcard_slot .card_info_area .player_info, .jcard_bin .card_slot .card_info_area .player_info, .jcard_bin .pcard_slot .card_info_area .player_info, .jcard_bin .jcard_slot .card_info_area .player_info {
+  transform: scale(0.45, 0.45);
+  border-width: 2;
+  background-color: #BD9DCC;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 360px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 0px #8E7599;
 }
 
 .card_general, .card_empty, .pcard_empty, .jcard_empty, .card_back, .pcard_back, .jcard_back, .card_front, .pcard_front, .card_small, .pcard_small, .jcard_small {
