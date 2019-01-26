@@ -26,7 +26,7 @@ export default class ChatMessage extends React.Component {
                     </div>
                     <div className="messageRow-right">
                         <div className="messageRow-inner">
-                            <p className="message"> {this.props.message} </p>
+                            <div className="message"> {this.props.message} </div>
                         </div>
                     </div>
                 </div>

@@ -7,7 +7,7 @@
     z-index: 1000;
     --chat-message-border-radius-outer: 15px;
     --chat-message-border-radius-inner: 5px;
-    --chat-message-border-radius-bubble-base: 10px;
+    --chat-message-border-radius-bubble-base: 6px;
     --chat-message-color-self: green;
     --chat-message-color-other: blue;
     --chat-message-bg-color: white;
@@ -52,7 +52,7 @@
     position: relative;
     width: 100%;
     background-color: var(--chat-message-bg-color);
-    margin-bottom: 5px;
+    margin-bottom: 1px;
 }
 
 .messageRow-tight {
@@ -69,6 +69,14 @@
 .messageRow-tight.message-sent-from-self {
     left: 18%;
     background-color: var(--chat-message-bg-color);
+}
+
+.message-sent-from-self .message {
+    text-align: right;
+}
+
+.message-sent-from-other .message {
+    text-align: left;
 }
 
 .messageRow-left {
@@ -112,12 +120,13 @@
     width: 80%;
     height: 100%;
     background-color: var(--chat-message-bg-color);
-    border-radius: 0 var(--chat-message-border-radius-outer) var(--chat-message-border-radius-outer) var(--chat-message-border-radius-outer);
+    overflow: hidden;
 }
 
 .messageRow-inner {
     position: relative;
     min-height: 34px; /* TODO: make variables to calculate.8*.2*.8*width */
+    display: inline-block;
 }
 
 .message-sent-from-other .messageRow-inner {
@@ -128,6 +137,7 @@
 .message-sent-from-self .messageRow-inner {
     background-color: var(--chat-message-color-self);
     border-radius: var(--chat-message-border-radius-outer) var(--chat-message-border-radius-inner) var(--chat-message-border-radius-inner) var(--chat-message-border-radius-outer);
+    float: right;
 }
 
 .message-sent-from-self.message-first-in-group .messageRow-inner {
@@ -135,7 +145,7 @@
 }
 
 .message-sent-from-self.message-last-in-group .messageRow-inner {
-    border-bottom-right-radius: var(--chat-message-border-radius-outer);
+    border-bottom-right-radius: 0;
 }
 
 .message-sent-from-other.message-first-in-group .messageRow-inner {
@@ -148,13 +158,13 @@
 
 .message {
     margin: 0;
-    display: block;
-    padding: 2px;
+    display: inline-block;
+    padding: 5px 10px;
 }
 
 .chatBox-entry {
     position: relative;
     width: 100%;
     height: 10.5%;
-    background-color: white;
+    background-color: var(--chat-message-bg-color);
 }
