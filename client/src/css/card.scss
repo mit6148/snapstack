@@ -2,45 +2,64 @@
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
 
-
-
+$card-width: 1;
+$card-height: 1.4;
+$card-margin-top: 0.15;
+$card-margin-bottom: 0.05;
+$card-margin-side: 0.1;
+$card-slot-width: 1.2;
+$card-area-height: 1.6;
+$card-info-area-height: 0.3;
+$card-slot-height: 1.9;
 
 .card_bin {
-	display:flex;
-	flex-direction: row;
+	display: flex;
+	flex-flow: row wrap;
 	justify-content: center;
 	align-items: center;
+
+	.card_slot {
+		height: 35vh;
+		width: calc(35vh * #{$card-slot-width} / #{$card-slot-height});
+
+		.card_area {
+			position: relative;
+			width: 100%;
+			height: calc(100% * #{$card-area-height} / #{$card-slot-height});
+
+			* {
+				position: absolute;
+				left: calc(100% * #{$card-margin-side} / #{$card-slot-width});
+				right: calc(100% * #{$card-margin-side} / #{$card-slot-width});
+				top: calc(100% * #{$card-margin-top} / #{$card-area-height});
+				bottom: calc(100% * #{$card-margin-bottom} / #{$card-area-height});
+			}
+		}
+
+		.card_info_area {
+			width: 100%;
+			height: calc(100% * #{$card-info-area-height} / #{$card-slot-height});
+
+			.player_info {
+				transform: scale(0.45, 0.45);
+
+				border-width: 2;
+				background-color: $purple-light;
+				display: flex;
+				width: 360px;
+				border-radius: 15px;
+
+				box-shadow: 0px 4px 0px $purple-dark;
+			}
+		}
+	}
 }
-
-.card_slot {
-	display: flex;
-	flex-direction: column;
-
-
-
-	height: 100%;
-
-}
-
-.card_object {
-
-	flex: 0 0 85%;
-
-	display: flex;
-	align-items: center;
-	justify-contents: center;
-
-}
-
 
 .card_info {
 
-	flex: 0 0 15%;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
+}
+.card_object {
+	
 }
 
 .card_general {
