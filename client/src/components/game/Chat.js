@@ -35,11 +35,17 @@ export default class Chat extends React.Component {
         this.textInput = input;
     }
 
+    toggleMinimized = () => {
+        this.setState({minimized: !this.state.minimized});
+    }
+
     render() {
 
         return (
-            <div className="chatBox">
-                <div className="chatBox-titleBar">
+            <div className={
+                "chatBox" + (this.state.minimized ? " chatBox-minimized" : "")
+                }>
+                <div className="chatBox-titleBar" onClick={this.toggleMinimized}>
                     <div className="chatBox-titleBar-text"> Game Chat </div>
                     <div className="chatBox-titleBar-minimizeButton"></div>
                 </div>

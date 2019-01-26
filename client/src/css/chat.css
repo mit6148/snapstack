@@ -13,7 +13,12 @@
     --chat-row-left-proportion: .2;
     --chat-avatar-proportion: .8;
     --chat-total-width: 240px;
-    --chat-total-height: 330px;
+    --chat-maximum-total-height: 330px;
+    --chat-total-height: var(--chat-maximum-total-height);
+    --chat-normal-titleBar-proportion: .095;
+    --chat-titleBar-proportion: var(--chat-normal-titleBar-proportion);
+    --chat-history-proportion: .8;
+    --chat-entry-proportion: .105;
 
     position: fixed;
     right: 2px;
@@ -26,10 +31,17 @@
     color: var(--chat-black-replacement);
 }
 
+.chatBox.chatBox-minimized {
+    --chat-total-height: calc(var(--chat-maximum-total-height) * var(--chat-normal-titleBar-proportion));
+    --chat-titleBar-proportion: 1;
+    --chat-history-proportion: 0;
+    --chat-entry-proportion: 0;
+}
+
 .chatBox-titleBar {
     position: relative;
     width: 100%;
-    height: 9.5%;
+    height: calc(100% * var(--chat-titleBar-proportion));
     background-color: var(--chat-title-bg-color);
     border-radius: 5px 5px 0px 0px;
     border-bottom-width: 1px;
@@ -56,14 +68,14 @@
     background-color: var(--chat-black-replacement);
 }
 
-.chatBox-titleBar-minimizeButton:hover {
+.chatBox-titleBar:hover {
     cursor: pointer;
 }
 
 .chatBox-history {
     position: relative;
     width: 100%;
-    height: 80%;
+    height: calc(100% * var(--chat-history-proportion));
     background-color: var(--chat-message-bg-color);
     display: block;
     overflow-y: scroll;
@@ -189,7 +201,7 @@
 .chatBox-entry {
     position: relative;
     width: 100%;
-    height: 10.5%;
+    height: calc(100% * var(--chat-entry-proportion));
     background-color: var(--chat-message-bg-color);
     border-top-color: var(--chat-black-replacement);
     border-top-width: 1px;
