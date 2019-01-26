@@ -44,17 +44,12 @@ export default class Lobby extends React.Component {
                             3 min
                         </div>
                         <h2>
-                            Min # players:
+                            # players:
                         </h2>
                         <div className="game_settings">
-                            3
+                            3 - 7
                         </div>
-                        <h2>
-                            Max # players:
-                        </h2>
-                        <div className="game_settings">
-                            7
-                        </div>
+
 
                     </div>
 

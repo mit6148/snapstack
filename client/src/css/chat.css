@@ -1,11 +1,13 @@
+
+
 .chatBox {
     --chat-message-border-radius-outer: 15px;
     --chat-message-border-radius-inner: 5px;
     --chat-message-border-radius-bubble-base: 6px;
     --chat-message-color-self: #a7f1b0;
     --chat-message-color-other: #c2c2fd;
-    --chat-message-bg-color: #efefef;
-    --chat-title-bg-color: #f4f4f4;
+    --chat-message-bg-color: #F4F4F4;
+    --chat-title-bg-color: #F4F4F4;
     --chat-black-replacement: #060606;
     --chat-font-size: 1em;
     --chat-font-weight: 100;
@@ -21,7 +23,7 @@
     --chat-entry-proportion: .105;
 
     position: fixed;
-    right: 2px;
+    right: 10px;
     bottom: 0px;
     border-width: 0;
     border-radius: 5px 5px 0px 0px;
@@ -29,6 +31,8 @@
     height: var(--chat-total-height);
     width: var(--chat-total-width);
     color: var(--chat-black-replacement);
+
+    width: 210px;
 }
 
 .chatBox.chatBox-minimized {
@@ -212,10 +216,12 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 80%;
-    height: 100%;
+    width: 70%;
+    height: 90%;
     font-size: var(--chat-font-size);
     font-weight: var(--chat-font-weight);
+    padding: 0px 5px;
+
 }
 
 .chatBox-textEntry:focus {
@@ -229,6 +235,8 @@
     bottom: 0;
     right: 0;
     width: 20%;
+    height: 90%;
+
 }
 
 .chatBox-sendButton-text {
@@ -238,12 +246,15 @@
     font-size: 100%;
     top: 25%;
     text-align: center;
-    padding: 0;
+    padding: 0px 4px;
+
+     ;
 }
 
 
 .chatBox-sendButton:hover {
     cursor: pointer;
+
 }
 
 
