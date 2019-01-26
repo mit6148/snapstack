@@ -13,44 +13,80 @@ $card-info-area-height: 0.3;
 $card-slot-height: 1.9;
 
 .card_bin {
+	@include v-align(relative);
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
 	align-items: center;
 
-	.card_slot {
-		position: relative;
-		height: 35vh;
-		width: calc(35vh * #{$card-slot-width} / #{$card-slot-height});
-
-		.card_area {
-			position: absolute;
-			left: calc(100% * #{$card-margin-side} / #{$card-slot-width});
-			right: calc(100% * #{$card-margin-side} / #{$card-slot-width});
-			top: calc(100% * #{$card-margin-top} / #{$card-slot-height});
-			bottom: calc(100% * (#{$card-info-area-height} + #{$card-margin-bottom}) / #{$card-slot-height});
-		}
-
-		.card_info_area {
-			position: absolute;
-			width: 100%;
-			height: calc(100% * #{$card-info-area-height} / #{$card-slot-height});
-			bottom: 0;
-
-			.player_info {
-				transform: scale(0.45, 0.45);
-
-				border-width: 2;
-				background-color: $purple-light;
-				display: flex;
-				width: 360px;
-				border-radius: 15px;
-
-				box-shadow: 0px 4px 0px $purple-dark;
-			}
+	&.game_card_bin {
+		.card_slot {
+			height: 37.5vh;
+			width: calc(37.5vh * #{$card-slot-width} / #{$card-slot-height});
 		}
 	}
 }
+
+@media (max-aspect-ratio: 63/38) {
+	.card_bin.game_card_bin {
+		.card_slot {
+			width: calc(100vw / 7);
+			height: calc((100vw / 7) * #{$card-slot-height} / #{$card-slot-width});
+		}
+	}
+}
+
+@media (max-aspect-ratio: 21/19) {
+	.card_bin.game_card_bin {
+		.card_slot {
+			height: 25vh;
+			width: calc(25vh * #{$card-slot-width} / #{$card-slot-height});
+		}
+	}
+}
+
+.card_slot {
+	.card_area {
+		position: relative;
+		height: calc(100% * #{$card-area-height} / #{$card-slot-height});
+		width: 100%;
+
+		&:only-child {
+			height: 100%;
+		}
+	}
+
+	.card_info_area {
+		height: calc(100% * #{$card-info-area-height} / #{$card-slot-height});
+		width: 100%;
+	}
+}
+
+.card_area {
+	* {
+		position: absolute;
+		left: calc(100% * #{$card-margin-side} / #{$card-slot-width});
+		right: calc(100% * #{$card-margin-side} / #{$card-slot-width});
+		top: calc(100% * #{$card-margin-top} / #{$card-area-height});
+		bottom: calc(100% * #{$card-margin-bottom} / #{$card-area-height});
+	}
+}
+
+.card_info_area {
+	.player_info {
+		transform: scale(0.45, 0.45);
+
+		border-width: 2;
+		background-color: $purple-light;
+		display: flex;
+		width: 360px;
+		border-radius: 15px;
+
+		box-shadow: 0px 4px 0px $purple-dark;
+	}
+}
+
+
 
 .card_info {
 
