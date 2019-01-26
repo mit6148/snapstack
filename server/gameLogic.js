@@ -270,10 +270,10 @@ class Game {
         this.players.push(this.players.shift()); // rotate the player order
         this.players = this.players.filter(player => player.connected); // do this after rotating so that if judge disconnected, still good
         
-        if(DEVELOPER_MODE && this.players.length >= 2 && this.players[0]._id == LAZY_B_ID) { // make sure lazy b isn't judge
-            const temp = this.players[0];
-            this.players[0] = this.players[1];
-            this.players[1] = temp;
+        while(DEVELOPER_MODE && this.players.length >= 2
+                && (LAZY_B_ID == this.players[0]._id || LETHARGIC_B_ID == this.players[0]._id)) {
+            // make sure dummies aren't judge
+            shuffle(this.players)
         }
         for(let player of this.players) {
             player.resetRoundState();
