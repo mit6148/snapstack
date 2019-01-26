@@ -1,29 +1,59 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
 .card_bin, .pcard_bin, .jcard_bin {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  /* IE */
+  -moz-transform: translateY(-50%);
+  /* Firefox */
+  -webkit-transform: translateY(-50%);
+  /* Safari and Chrome */
+  -o-transform: translateY(-50%);
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
 }
-.card_bin .card_slot, .card_bin .pcard_slot, .pcard_bin .card_slot, .pcard_bin .pcard_slot, .card_bin .jcard_slot, .pcard_bin .jcard_slot, .jcard_bin .card_slot, .jcard_bin .pcard_slot, .jcard_bin .jcard_slot {
-  position: relative;
-  height: 35vh;
-  width: calc(35vh * 1.2 / 1.9);
+.card_bin.game_card_bin .card_slot, .card_bin.game_card_bin .pcard_slot, .game_card_bin.pcard_bin .card_slot, .game_card_bin.pcard_bin .pcard_slot, .card_bin.game_card_bin .jcard_slot, .game_card_bin.pcard_bin .jcard_slot, .game_card_bin.jcard_bin .card_slot, .game_card_bin.jcard_bin .pcard_slot, .game_card_bin.jcard_bin .jcard_slot {
+  height: 37.5vh;
+  width: calc(37.5vh * 1.2 / 1.9);
 }
-.card_bin .card_slot .card_area, .card_bin .pcard_slot .card_area, .pcard_bin .card_slot .card_area, .pcard_bin .pcard_slot .card_area, .card_bin .jcard_slot .card_area, .pcard_bin .jcard_slot .card_area, .jcard_bin .card_slot .card_area, .jcard_bin .pcard_slot .card_area, .jcard_bin .jcard_slot .card_area {
+
+@media (max-aspect-ratio: 63/38) {
+  .card_bin.game_card_bin .card_slot, .card_bin.game_card_bin .pcard_slot, .game_card_bin.pcard_bin .card_slot, .game_card_bin.pcard_bin .pcard_slot, .card_bin.game_card_bin .jcard_slot, .game_card_bin.pcard_bin .jcard_slot, .game_card_bin.jcard_bin .card_slot, .game_card_bin.jcard_bin .pcard_slot, .game_card_bin.jcard_bin .jcard_slot {
+    width: calc(100vw / 7);
+    height: calc((100vw / 7) * 1.9 / 1.2);
+  }
+}
+@media (max-aspect-ratio: 21/19) {
+  .card_bin.game_card_bin .card_slot, .card_bin.game_card_bin .pcard_slot, .game_card_bin.pcard_bin .card_slot, .game_card_bin.pcard_bin .pcard_slot, .card_bin.game_card_bin .jcard_slot, .game_card_bin.pcard_bin .jcard_slot, .game_card_bin.jcard_bin .card_slot, .game_card_bin.jcard_bin .pcard_slot, .game_card_bin.jcard_bin .jcard_slot {
+    height: 25vh;
+    width: calc(25vh * 1.2 / 1.9);
+  }
+}
+.card_slot .card_area, .pcard_slot .card_area, .jcard_slot .card_area {
+  position: relative;
+  height: calc(100% * 1.6 / 1.9);
+  width: 100%;
+}
+.card_slot .card_area:only-child, .pcard_slot .card_area:only-child, .jcard_slot .card_area:only-child {
+  height: 100%;
+}
+.card_slot .card_info_area, .pcard_slot .card_info_area, .jcard_slot .card_info_area {
+  height: calc(100% * 0.3 / 1.9);
+  width: 100%;
+}
+
+.card_area * {
   position: absolute;
   left: calc(100% * 0.1 / 1.2);
   right: calc(100% * 0.1 / 1.2);
-  top: calc(100% * 0.15 / 1.9);
-  bottom: calc(100% * (0.3 + 0.05) / 1.9);
+  top: calc(100% * 0.15 / 1.6);
+  bottom: calc(100% * 0.05 / 1.6);
 }
-.card_bin .card_slot .card_info_area, .card_bin .pcard_slot .card_info_area, .pcard_bin .card_slot .card_info_area, .pcard_bin .pcard_slot .card_info_area, .card_bin .jcard_slot .card_info_area, .pcard_bin .jcard_slot .card_info_area, .jcard_bin .card_slot .card_info_area, .jcard_bin .pcard_slot .card_info_area, .jcard_bin .jcard_slot .card_info_area {
-  position: absolute;
-  width: 100%;
-  height: calc(100% * 0.3 / 1.9);
-  bottom: 0;
-}
-.card_bin .card_slot .card_info_area .player_info, .card_bin .pcard_slot .card_info_area .player_info, .pcard_bin .card_slot .card_info_area .player_info, .pcard_bin .pcard_slot .card_info_area .player_info, .card_bin .jcard_slot .card_info_area .player_info, .pcard_bin .jcard_slot .card_info_area .player_info, .jcard_bin .card_slot .card_info_area .player_info, .jcard_bin .pcard_slot .card_info_area .player_info, .jcard_bin .jcard_slot .card_info_area .player_info {
+
+.card_info_area .player_info {
   transform: scale(0.45, 0.45);
   border-width: 2;
   background-color: #BD9DCC;

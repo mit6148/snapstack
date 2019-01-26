@@ -1,3 +1,12 @@
+@mixin v-align($position: absolute){
+    position: $position;  top: 50%;  
+    transform: translateY(-50%);
+    -ms-transform:translateY(-50%); /* IE */
+    -moz-transform:translateY(-50%); /* Firefox */
+    -webkit-transform:translateY(-50%); /* Safari and Chrome */
+    -o-transform:translateY(-50%);
+}
+
 $black: #3B3B3D; // headers, captions, etc.
 $dark-gray: #636266; // shadows on light-grey background
 $medium-gray: #7E7C82;

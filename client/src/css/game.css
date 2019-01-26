@@ -134,6 +134,8 @@ html, body, #root, .fill_parent {
 .game_page {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .game_page_row1 {
@@ -156,12 +158,13 @@ html, body, #root, .fill_parent {
 
 .game_page_row2 {
   width: 100%;
+  flex: 1;
   justify-content: center;
 }
 
 .game_page_row3 {
   width: 100%;
-  height: 30%;
+  height: 25%;
   display: flex;
 }
 
@@ -179,6 +182,16 @@ html, body, #root, .fill_parent {
 
 .chat_box_section {
   flex: 2 0 20%;
+}
+
+@media (max-aspect-ratio: 21/19) {
+  .game_page_row1 {
+    height: 25%;
+  }
+
+  .game_page_row2 {
+    height: 50%;
+  }
 }
 
 /*# sourceMappingURL=game.css.map */

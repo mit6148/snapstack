@@ -12,7 +12,7 @@ export default class CardBin extends React.Component {
         console.log(this.props.pCards);
         if (this.props.jCards !== undefined) {
             return (
-                <div className="card_bin">
+                <div className="card_bin game_card_bin">
                     {this.props.jCards.map((jCard, index) => (
                         <div key={index} className="card_slot">
                             <div className="card_area">
@@ -36,7 +36,7 @@ export default class CardBin extends React.Component {
             );
         } else { // TODO handle judgeFocusIndex, winnerIndex
             return (
-                <div className="card_bin" onClick={() => {this.props.pCards.push(NO_CARD); this.props.owners.push(this.props.owners[0]); console.log('hi'); this.forceUpdate();}}>
+                <div className="card_bin game_card_bin" onClick={() => {this.props.pCards.push(NO_CARD); this.props.owners.push(this.props.owners[0]); console.log('hi'); this.forceUpdate();}}>
                     {this.props.pCards.map((pCard, index) => (
                         <div key={index} className='card_slot'>
                             <div className="card_area">
