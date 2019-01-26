@@ -6,7 +6,7 @@ const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const connect = require('connect-ensure-login');
 const {downloadImagePromise} = require('./storageTalk');
-const {MEDIA_KEYS} = require('../config');
+const {MEDIA_KEYS, MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH} = require('../config');
 const db = require('./db');
 
 
@@ -119,7 +119,8 @@ router.post('/update/profile', connect.ensureLoggedIn(), async function(req, res
     // WARNING: validate image
     try {
         if(["avatar", "firstName", "lastName", "description"].every(a => typeof(req.body[a]) === 'string') &&
-            req.body.media && Object.keys(req.body.media).every(key => MEDIA_KEYS.has(key))) {
+            req.body.media && Object.keys(req.body.media).every(key => MEDIA_KEYS.has(key)) &&
+            req.body.firstName.length <= MAX_NAME_LENGTH && req.body.lastName.length <= MAX_NAME_LENGTH) {
 
             await UserDetail.updateOne({_id: req.user.detail_id},
                 {$set: {
@@ -130,12 +131,12 @@ router.post('/update/profile', connect.ensureLoggedIn(), async function(req, res
                     media: req.body.media
                 }}).exec();
         } else {
-            console.error("failed to update avatar due to bad input");
+            console.error("failed to update profile due to bad input");
             res.status(400);
-            res.send({status: 400, message: "new avatar must be provided as a string!"});
+            res.send({status: 400, message: "bad input"});
         }
     } catch(err) {
-        console.error("something went wrong while updating avatar");
+        console.error("something went wrong while updating profile");
         res.status(500);
         res.send({status: 500, message: "something went wrong!"});
     }
