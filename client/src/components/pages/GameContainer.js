@@ -3,6 +3,7 @@ import io from "socket.io-client";
 import update from "immutability-helper";
 import Lobby from "./Lobby";
 import Game from "./Game";
+import Chat from "../game/Chat";
 import {gamePhases, saveStates, CARDS_TO_WIN, MIN_PLAYERS} from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 const { UNSAVED, SAVING, SAVED } = saveStates;
@@ -24,7 +25,8 @@ export default class GameContainer extends React.Component {
             pCardsFacedown: 0, // if JUDGE
             endTime: null, // if SUBMIT
             cardsToWin: null,
-            roundSkipped: false // if JCHOOSE, SUBMIT, or JUDGE
+            roundSkipped: false, // if JCHOOSE, SUBMIT, or JUDGE
+            chatMessages: [] // array of pairs of form [message, sender _id]
         };
 
         this.actions = {
@@ -36,7 +38,8 @@ export default class GameContainer extends React.Component {
             selectPCard: this.selectPCard,
             skipRound: this.skipRound,
             savePCard: this.savePCard,
-            quitGame: this.quitGame
+            quitGame: this.quitGame,
+            sendChat: this.sendChat
         }
 
         this.socket = this.createSocket();
@@ -62,6 +65,9 @@ export default class GameContainer extends React.Component {
                             gameState={this.state}
                             actions={this.actions} />
                 )}
+
+                <Chat playerMap={this.state.players} userId={this.props.appState.userId}
+                    chatMessages={this.state.chatMessages} sendChat={this.sendChat} />
             </React.Fragment>
         );
     }
@@ -149,6 +155,12 @@ export default class GameContainer extends React.Component {
         this.socket.disconnect();
         this.props.quitGame(reason);
     }
+
+
+    sendChat = message => {
+        this.socket.emit('chat', message);
+    }
+
 
     onConnect = () => {
         if (this.props.appState.gameCode === '?') {
@@ -300,6 +312,16 @@ export default class GameContainer extends React.Component {
                             ? update(pCard, {saveState: {$set: UNSAVED}})
                             : pCard
                         )
+            });
+        });
+
+        socket.on('chat', (message, userId) => {
+            let chatMessages = this.state.chatMessages.concat([[message, userId]]);
+            if(chatMessages.length > 300) {
+                chatMessages = chatMessages.slice(150);
+            }
+            this.setState({
+                chatMessages: chatMessages
             });
         });
         return socket;

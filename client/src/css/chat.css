@@ -1,0 +1,249 @@
+.chatBox {
+    --chat-message-border-radius-outer: 15px;
+    --chat-message-border-radius-inner: 5px;
+    --chat-message-border-radius-bubble-base: 6px;
+    --chat-message-color-self: #a7f1b0;
+    --chat-message-color-other: #c2c2fd;
+    --chat-message-bg-color: #efefef;
+    --chat-title-bg-color: #f4f4f4;
+    --chat-black-replacement: #060606;
+    --chat-font-size: 1em;
+    --chat-font-weight: 100;
+    --chat-row-max-width-proportion-used: .8;
+    --chat-row-left-proportion: .2;
+    --chat-avatar-proportion: .8;
+    --chat-total-width: 240px;
+    --chat-maximum-total-height: 330px;
+    --chat-total-height: var(--chat-maximum-total-height);
+    --chat-normal-titleBar-proportion: .095;
+    --chat-titleBar-proportion: var(--chat-normal-titleBar-proportion);
+    --chat-history-proportion: .8;
+    --chat-entry-proportion: .105;
+
+    position: fixed;
+    right: 2px;
+    bottom: 0px;
+    border-width: 0;
+    border-radius: 5px 5px 0px 0px;
+    z-index: 1000;
+    height: var(--chat-total-height);
+    width: var(--chat-total-width);
+    color: var(--chat-black-replacement);
+}
+
+.chatBox.chatBox-minimized {
+    --chat-total-height: calc(var(--chat-maximum-total-height) * var(--chat-normal-titleBar-proportion));
+    --chat-titleBar-proportion: 1;
+    --chat-history-proportion: 0;
+    --chat-entry-proportion: 0;
+}
+
+.chatBox-titleBar {
+    position: relative;
+    width: 100%;
+    height: calc(100% * var(--chat-titleBar-proportion));
+    background-color: var(--chat-title-bg-color);
+    border-radius: 5px 5px 0px 0px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--chat-black-replacement);
+    border-bottom-style: solid;
+    text-align: center;
+}
+
+.chatBox-titleBar-text {
+    display: inline-block;
+    position: relative;
+    top: 17%;
+    height: 50%;
+    font-size: 132%; /*100% corresponds to about 50% the height of the titleBar*/
+}
+
+.chatBox-titleBar-minimizeButton {
+    position: absolute;
+    right: 20px;
+    top: 45%;
+    bottom: 45%;
+    width: 20px;
+    display: inline;
+    background-color: var(--chat-black-replacement);
+}
+
+.chatBox-titleBar:hover {
+    cursor: pointer;
+}
+
+.chatBox-history {
+    position: relative;
+    width: 100%;
+    height: calc(100% * var(--chat-history-proportion));
+    background-color: var(--chat-message-bg-color);
+    display: block;
+    overflow-y: scroll;
+}
+
+.messageRow-outer {
+    position: relative;
+    width: 100%;
+    background-color: var(--chat-message-bg-color);
+    margin-bottom: 1px;
+}
+
+.messageRow-tight {
+    position: relative;
+    width: calc(var(--chat-row-max-width-proportion-used) * 100%);
+    border-radius: var(--chat-message-border-radius-outer);
+    background-color: var(--chat-message-color-other);
+}
+
+.messageRow-tight:not(.message-last-in-group) {
+    background-color: var(--chat-message-bg-color);
+}
+
+.messageRow-tight.message-sent-from-self {
+    left: calc(var(--chat-row-left-proportion) * 100% - 2%);
+    background-color: var(--chat-message-bg-color);
+}
+
+.message-sent-from-self .message {
+    text-align: right;
+}
+
+.message-sent-from-other .message {
+    text-align: left;
+}
+
+.messageRow-left {
+    position: absolute;
+    left: 0;
+    width: calc(var(--chat-row-left-proportion) * 100%);
+    height: 100%;
+    background-color: var(--chat-message-bg-color);
+    border-radius: 0 0 var(--chat-message-border-radius-bubble-base) 0;
+}
+
+.message-sent-from-self .messageRow-left {
+    border-radius: 0;
+}
+
+.message-avatar-outer {
+    position: absolute;
+    left: calc(50% - var(--chat-avatar-proportion) * 50%);
+    width: calc(var(--chat-avatar-proportion) * 100%);
+    padding-top: calc(var(--chat-avatar-proportion) * 100%);
+    height: 0;
+    bottom: 0;
+}
+
+.messageRow-tight:not(.message-last-in-group) .message-avatar-outer,
+.messageRow-tight.message-sent-from-self .message-avatar-outer {
+    display: none;
+}
+
+.message-avatar-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 100%;
+}
+
+.messageRow-right {
+    position: relative;
+    left: 20%;
+    width: calc(100% - var(--chat-row-left-proportion) * 100%);
+    height: 100%;
+    background-color: var(--chat-message-bg-color);
+    overflow: hidden;
+}
+
+.messageRow-inner {
+    position: relative;
+    min-height: calc(var(--chat-row-max-width-proportion-used) * var(--chat-row-left-proportion) * var(--chat-avatar-proportion) * var(--chat-total-width));
+    display: inline-block;
+}
+
+.message-sent-from-other .messageRow-inner {
+    background-color: var(--chat-message-color-other);
+    border-radius: var(--chat-message-border-radius-inner) var(--chat-message-border-radius-outer) var(--chat-message-border-radius-outer) var(--chat-message-border-radius-inner);
+    float: left;
+}
+
+.message-sent-from-self .messageRow-inner {
+    background-color: var(--chat-message-color-self);
+    border-radius: var(--chat-message-border-radius-outer) var(--chat-message-border-radius-inner) var(--chat-message-border-radius-inner) var(--chat-message-border-radius-outer);
+    float: right;
+}
+
+.message-sent-from-self.message-first-in-group .messageRow-inner {
+    border-top-right-radius: var(--chat-message-border-radius-outer);
+}
+
+.message-sent-from-self.message-last-in-group .messageRow-inner {
+    border-bottom-right-radius: 0;
+}
+
+.message-sent-from-other.message-first-in-group .messageRow-inner {
+    border-top-left-radius: var(--chat-message-border-radius-outer);
+}
+
+.message-sent-from-other.message-last-in-group .messageRow-inner {
+    border-bottom-left-radius: 0;
+}
+
+.message {
+    margin: 0;
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: var(--chat-font-size);
+    font-weight: var(--chat-font-weight);
+}
+
+.chatBox-entry {
+    position: relative;
+    width: 100%;
+    height: calc(100% * var(--chat-entry-proportion));
+    background-color: var(--chat-message-bg-color);
+    border-top-color: var(--chat-black-replacement);
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+.chatBox-textEntry {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80%;
+    height: 100%;
+    font-size: var(--chat-font-size);
+    font-weight: var(--chat-font-weight);
+}
+
+.chatBox-textEntry:focus {
+    outline-width: 0;
+}
+
+
+.chatBox-sendButton {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 20%;
+}
+
+.chatBox-sendButton-text {
+    position: absolute;
+    right: 0;
+    width: 100%;
+    font-size: 100%;
+    top: 25%;
+    text-align: center;
+    padding: 0;
+}
+
+
+.chatBox-sendButton:hover {
+    cursor: pointer;
+}
+
+
