@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600');
+@import url('https://fonts.googleapis.com/css?family=Orbitron');
 
 @import "./_variables.scss";
 
@@ -11,7 +11,7 @@ html, body, #root, .fill_parent {
 }
 
 .timer {
-	font-size: 40px;
+	font-size: 30px;
 	color: $white;
 	background-color: $purple-light;
 	padding: 10px;
@@ -22,8 +22,10 @@ html, body, #root, .fill_parent {
 
 	position: absolute;
 
-	top: 20px;
-	left: 20px;
+	top: 40px;
+	left: 40px;
+
+	font-family: 'Orbitron', sans-serif;
 }
 
 .clickable:hover {
