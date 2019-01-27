@@ -46,6 +46,7 @@ $card-slot-height: 1.9;
 }
 
 .card_slot {
+	padding: 20px;
 	.card_area {
 		position: relative;
 		height: calc(100% * #{$card-area-height} / #{$card-slot-height});
@@ -57,6 +58,7 @@ $card-slot-height: 1.9;
 	}
 
 	.card_info_area {
+		margin-top: 10px;
 		height: calc(100% * #{$card-info-area-height} / #{$card-slot-height});
 		width: 100%;
 	}
