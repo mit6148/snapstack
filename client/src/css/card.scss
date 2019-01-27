@@ -129,6 +129,10 @@ $jmodal-scale: 1.2;
 
 .jcard {
 	@include card($green-light, $green-dark);
+	justify-content: center;
+	align-items: center;
+	display: flex;
+
 }
 
 .pcard {
@@ -173,6 +177,10 @@ $jmodal-scale: 1.2;
 
 .pcard_empty {
 	@include card_empty($blue-light);
+}
+
+.jcard_prompt {
+	font-size: 16px;
 }
 
 

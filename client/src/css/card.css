@@ -93,6 +93,9 @@
   border-width: 10px;
   border-color: #12B780;
   box-shadow: 1px 3px 0px #0E8C62;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 .pcard {
@@ -148,6 +151,10 @@
   border-style: dashed;
   border-width: 2px;
   border-color: #0683E2;
+}
+
+.jcard_prompt {
+  font-size: 16px;
 }
 
 /*
