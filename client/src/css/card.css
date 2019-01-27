@@ -1,64 +1,75 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
-.card_bin, .pcard_bin, .jcard_bin, .pmodal_card_bin, .jmodal_card_bin, .game_card_bin {
+.game_card_bin {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
 }
-
-.game_card_bin .card_slot, .game_card_bin .pcard_slot, .game_card_bin .jcard_slot {
+.game_card_bin .card_slot {
   height: 37.5vh;
   width: calc(37.5vh * 1.2 / 1.9);
 }
 
-.jmodal_card_bin .card_slot, .jmodal_card_bin .pcard_slot, .jmodal_card_bin .jcard_slot {
+.jmodal_card_bin {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+.jmodal_card_bin .card_slot {
   height: calc(1.2 * 37.5vh * 1.6 / 1.9);
   width: calc(1.2 * 37.5vh * 1.2 / 1.9);
 }
 
-.pmodal_card_bin .card_slot, .pmodal_card_bin .pcard_slot, .pmodal_card_bin .jcard_slot {
+.pmodal_card_bin {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+.pmodal_card_bin .card_slot {
   height: 60vh;
   width: calc(60vh * 1.2 / 1.6);
 }
 
 @media (max-aspect-ratio: 63/38) {
-  .game_card_bin .card_slot, .game_card_bin .pcard_slot, .game_card_bin .jcard_slot {
+  .game_card_bin .card_slot {
     width: calc(100vw / 7);
     height: calc((100vw / 7) * 1.9 / 1.2);
   }
 
-  .jmodal_card_bin .card_slot, .jmodal_card_bin .pcard_slot, .jmodal_card_bin .jcard_slot {
+  .jmodal_card_bin .card_slot {
     width: calc(1.2 * 100vw / 7);
     height: calc(1.2 * (100vw / 7) * 1.6 / 1.2);
   }
 }
 @media (max-aspect-ratio: 21/19) {
-  .game_card_bin .card_slot, .game_card_bin .pcard_slot, .game_card_bin .jcard_slot {
+  .game_card_bin .card_slot {
     height: 25vh;
     width: calc(25vh * 1.2 / 1.9);
   }
 
-  .jmodal_card_bin .card_slot, .jmodal_card_bin .pcard_slot, .jmodal_card_bin .jcard_slot {
+  .jmodal_card_bin .card_slot {
     height: calc(1.2 * 25vh * 1.6 / 1.9);
     width: calc(1.2 * 25vh * 1.2 / 1.9);
   }
 }
-.card_slot .card_area, .pcard_slot .card_area, .jcard_slot .card_area {
+.card_slot .card_area {
   position: relative;
   height: calc(100% * 1.6 / 1.9);
   width: 100%;
 }
-.card_slot .card_area:only-child, .pcard_slot .card_area:only-child, .jcard_slot .card_area:only-child {
+.card_slot .card_area:only-child {
   height: 100%;
 }
-.card_slot .card_area > *, .pcard_slot .card_area > *, .jcard_slot .card_area > * {
+.card_slot .card_area > * {
   position: absolute;
   left: calc(100% * 0.1 / 1.2);
   right: calc(100% * 0.1 / 1.2);
   top: calc(100% * 0.15 / 1.6);
   bottom: calc(100% * 0.05 / 1.6);
 }
-.card_slot .card_info_area, .pcard_slot .card_info_area, .jcard_slot .card_info_area {
+.card_slot .card_info_area {
   margin-top: 10px;
   height: calc(100% * 0.3 / 1.9);
   width: 100%;
@@ -66,9 +77,8 @@
   justify-content: center;
   align-items: center;
 }
-.card_slot .card_info_area .player_info, .pcard_slot .card_info_area .player_info, .jcard_slot .card_info_area .player_info {
+.card_slot .card_info_area .player_info {
   transform: scale(0.5, 0.5);
-  border-width: 2;
   background-color: #BD9DCC;
   display: flex;
   width: 360px;
@@ -77,91 +87,284 @@
 }
 
 .jcard {
+  border-radius: 10px;
   background-color: #F4F4F4;
   border-style: solid;
-  border-radius: 10px;
-  border-color: #12B780;
   border-width: 10px;
+  border-color: #12B780;
   box-shadow: 1px 3px 0px #0E8C62;
 }
 
-.card_general, .card_empty, .pcard_empty, .jcard_empty, .card_back, .pcard_back, .jcard_back, .card_front, .pcard_front, .card_small, .pcard_small, .jcard_small {
-  height: 80%;
-  width: 80%;
-}
-
-.card_empty, .pcard_empty, .jcard_empty {
-  margin: auto;
+.pcard {
   border-radius: 10px;
-  border-style: dashed;
-}
-
-.jcard_bin {
-  height: 100%;
-  width: 100%;
-  justify-content: center;
-}
-
-.jcard_slot {
-  width: 28%;
-}
-
-.jcard_large {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
   background-color: #F4F4F4;
+  border-style: solid;
+  border-width: 10px;
+  border-color: #0683E2;
+  box-shadow: 1px 3px 0px #056BBA;
+}
+
+.jcard_back {
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 10px;
+  border-color: #F4F4F4;
+  display: flex;
   justify-content: center;
   align-items: center;
-  border-style: solid;
-  border-radius: 10px;
-  border-color: #12B780;
-  border-width: 10px;
+  background-color: #12B780;
   box-shadow: 1px 3px 0px #0E8C62;
-  margin: 15px;
+}
+.jcard_back > * {
+  width: 70%;
+  height: auto;
+}
+
+.pcard_back {
+  border-radius: 10px;
+  border-style: solid;
+  border-width: 10px;
+  border-color: #F4F4F4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0683E2;
+  box-shadow: 1px 3px 0px #056BBA;
+}
+.pcard_back > * {
+  width: 70%;
+  height: auto;
 }
 
 .jcard_empty {
+  border-radius: 10px;
+  border-style: dashed;
+  border-width: 2px;
   border-color: #12B780;
 }
 
-.pcard_bin {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-content: center;
-}
-
-.pcard_slot {
-  flex: 0 1 10%;
-  width: 14%;
-}
-
 .pcard_empty {
+  border-radius: 10px;
+  border-style: dashed;
+  border-width: 2px;
   border-color: #0683E2;
 }
 
+/*
+.card_empty {
+	border-radius: 10px;
+	border-style: dashed;
+}
+
+.jcard_empty {
+	@extend .card_empty;
+
+	border-color: $green-light;
+}
+
+.card_info {
+
+}
+.card_object {
+	
+}
+
+.card_general {
+	height: 80%;
+	width: 80%;
+}
+
+.card_small {
+	@extend .card_general;
+}
+
+.card_large {
+
+}
+
+.card_front {
+
+	@extend .card_general;
+
+}
+
+.card_back {
+
+	@extend .card_general;
+}
+
+.card_empty {
+
+	@extend .card_general;	
+
+	margin: auto;
+
+	border-radius: 10px;
+
+	border-style: dashed;
+
+}
+
+
+// START OF JCARD TYPES:
+
+.jcard_bin {
+	@extend .card_bin;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+}
+
+.jcard_slot {
+	@extend .card_slot;
+	width: 28%;
+
+}
+
+.jcard_object {
+	@extend .card_object;
+
+}
+
+
+.jcard_info {
+	@extend .card_info;
+
+
+}
+
+.jcard_small {
+	@extend .card_small;
+
+}
+
+.jcard_large {
+	@extend .card_large;
+
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background-color: $white;
+	justify-content: center;
+	align-items: center;
+	border-style: solid;
+	border-radius: 10px;
+	border-color: $green-light;
+	border-width: 10px;
+	box-shadow: 1px 3px 0px $green-dark;
+
+	margin: 15px;
+
+}
+
+.jcard_front {
+
+
+}
+
+.jcard_back {
+	@extend .card_back;
+
+}
+
+.jcard_empty {
+	@extend .card_empty;
+
+	border-color: $green-light;
+}
+
+
+//START OF PCARD TYPES
+
+.pcard_bin {
+	@extend .card_bin;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+
+	justify-content: center;
+	align-content: center;
+
+
+}
+
+.pcard_slot {
+	@extend .card_slot;
+	flex: 0 1 10%;
+
+	width: 14%;
+
+}
+
+.pcard_object {
+	@extend .card_object;
+
+}
+
+
+.pcard_info {
+	@extend .card_info;
+
+}
+
+.pcard_small {
+	@extend .card_small;
+
+}
+
+.pcard_large {
+	@extend .card_large;
+}
+
+.pcard_front {
+	@extend .card_front;
+
+}
+
+.pcard_back {
+	@extend .card_back;
+
+
+}
+
+.pcard_empty {
+	@extend .card_empty;
+
+	border-color: $blue-light;
+
+
+}
+
+// modified player info!!
+
 .pcard_info .player_info {
-  transform: scale(0.45, 0.45);
-  border-width: 2;
-  background-color: #BD9DCC;
-  display: flex;
-  width: 360px;
-  border-radius: 15px;
-  box-shadow: 0px 4px 0px #8E7599;
+
+	transform: scale(0.45, 0.45);
+
+	border-width: 2;
+	background-color: $purple-light;
+	display: flex;
+	width: 360px;
+	border-radius: 15px;
+
+	box-shadow: 0px 4px 0px $purple-dark;
+
+
 }
 
 .jcard_info .player_info {
-  transform: scale(0.45, 0.45);
-  border-width: 2;
-  background-color: #BD9DCC;
-  display: flex;
-  width: 360px;
-  border-radius: 15px;
-  box-shadow: 0px 4px 0px #8E7599;
+	transform: scale(0.45, 0.45);
+
+	border-width: 2;
+	background-color: $purple-light;
+	display: flex;
+	width: 360px;
+	border-radius: 15px;
+
+	box-shadow: 0px 4px 0px $purple-dark;
 }
+*/
 
 /*# sourceMappingURL=card.css.map */

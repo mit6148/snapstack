@@ -20,9 +20,7 @@ export default class PCard extends Component {
             case FACEDOWN_CARD:
                 return (
                     <div className="pcard_back" onClick={this.props.onClick}>
-                        <div className="card_logo">
-                            <img src="/pancakes.png"/>
-                        </div>
+                        <img src="/pancakes.png"/>
                     </div>
                 );
             case LOADING_CARD: // TODO styling
@@ -34,9 +32,7 @@ export default class PCard extends Component {
                 if (this.props.faceup === false) {
                     return (
                         <div className="pcard_back" onClick={this.props.onClick}>
-                            <div className="card_logo">
-                                <img src="/pancakes.png"/>
-                            </div>  
+                            <img src="/pancakes.png"/>
                         </div>
                     );
                 } else {
