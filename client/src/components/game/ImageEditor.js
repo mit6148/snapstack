@@ -44,6 +44,20 @@ export default class ImageEditor extends React.Component {
         this.image.src = this.props.image;
     }
 
+    zoom = fraction => {
+        this.zoomLevel = 1 + (this.maxZoomLevel - 1) * fraction;
+        const [visibleWidth, visibleHeight] = this.getVisibleDims();
+        this.viewCenterX = Math.min(Math.max(visibleWidth / 2, this.viewCenterX),
+                                    this.hiddenCanvas.width - visibleWidth / 2);
+        this.viewCenterY = Math.min(Math.max(visibleHeight / 2, this.viewCenterY),
+                                    this.hiddenCanvas.height - visibleHeight / 2);
+        this.redraw();
+    };
+
+    getVisibleDims = () => {
+        return [IMAGE_WIDTH * this.zoomLevel, IMAGE_HEIGHT * this.zoomLevel]; // amount of hidden canvas to show
+    };
+
     getImage = () => {
         if(!this.isReady || !this.viewCanvas) {
             throw "image not ready";
@@ -76,8 +90,7 @@ export default class ImageEditor extends React.Component {
         if(!this.isReady || !this.viewCanvas) {
             return; // can't draw yet
         }
-        const visibleWidth = IMAGE_WIDTH * this.zoomLevel; // amount of hidden canvas to show
-        const visibleHeight = IMAGE_HEIGHT * this.zoomLevel;
+        const [visibleWidth, visibleHeight] = this.getVisibleDims();
         this.viewContext.drawImage(this.hiddenCanvas,
             this.viewCenterX - visibleWidth / 2,
             this.viewCenterY - visibleHeight / 2,
