@@ -59,7 +59,9 @@
             });
             form.addEventListener( 'drop', function( e )
             {
-                document.getElementById("output1").src = e.dataTransfer.getData("URL");
+                const url = e.dataTransfer.getData("URL");
+                console.log(url);
+                document.getElementById("output1").src = url;
                 droppedFiles = e.dataTransfer.files; // the files that were dropped
                 console.log(droppedFiles);
                 let r = new FileReader();
