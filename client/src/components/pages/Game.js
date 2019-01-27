@@ -20,8 +20,20 @@ export default class Game extends React.Component {
 
         this.state = {
             cardModal: null,
+            cardModalCreatedDuring: null,
             pCardEditModal: null
         };
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        let derivedState = {};
+        if (nextProps.gameState.gamePhase !== SUBMIT || nextProps.gameState.pCards.length > 0 && nextProps.gameState.pCards[0]._id) {
+            Object.assign(derivedState, {pCardEditModal: null});
+        }
+        if (nextProps.gameState.gamePhase !== prevState.cardModalCreatedDuring) {
+            Object.assign(derivedState, {cardModal: null});
+        }
+        return derivedState;
     }
 
     render() {
@@ -67,7 +79,7 @@ export default class Game extends React.Component {
                         <CardBin    type='game'
                                     pCards={this.gameState.playerIds.slice(1).map(playerId =>
                                             playerId === this.props.appState.userId
-                                            ? (this.gameState.pCards.length === 1 ? this.gameState.pCards[0] : NO_CARD)
+                                            ? (this.gameState.pCards.length === 1 && this.gameState.pCards[0]._id ? this.gameState.pCards[0] : NO_CARD)
                                             : (this.gameState.players[playerId].hasPlayed ? CARDBACK : NO_CARD))}
                                     owners={this.gameState.playerIds.slice(1).map(playerId => this.gameState.players[playerId])}
                                     onClick={this.viewPCard} />
@@ -116,6 +128,11 @@ export default class Game extends React.Component {
                 ) : null}
                 {this.state.cardModal}
                 {this.state.pCardEditModal}
+                {this.gameState.submitFailed === null ? null : (
+                    <Modal withBox={true} onClose={this.actions.closeSubmitFailedModal} disableCloseByWindow={true}>
+                        Failed to submit because {this.gameState.submitFailed}.
+                    </Modal>
+                )}
             </div>
         );
     }
@@ -124,7 +141,7 @@ export default class Game extends React.Component {
         this.setState({
             pCardEditModal: (
                 <Modal onClose={() => this.setState({pCardEditModal: null})} disableCloseByWindow={true}>
-                    <PCardEditor image={image} submit={this.actions.submitPCard} onClose={() => this.setState({pCardEditModal: null})} />
+                    <PCardEditor image={image} submit={this.actions.submitPCard} />
                 </Modal>
             )
         });
@@ -141,7 +158,8 @@ export default class Game extends React.Component {
                                     pCards={[pCard]}
                                     save={this.actions.savePCard} />
                     </Modal>
-                )
+                ),
+                cardModalCreatedDuring: this.gameState.gamePhase
             });
         }
         if (this.isJudge()) {
@@ -154,7 +172,7 @@ export default class Game extends React.Component {
     }
 
     canUploadImage = () => {
-        return this.gameState.gamePhase === SUBMIT && !this.isJudge() && this.gameStates.pCards.length === 0;
+        return this.gameState.gamePhase === SUBMIT && !this.isJudge() && (this.gameState.pCards.length === 0 || !this.gameState.pCards[0]._id);
     }
 
     canFlipAllPCards = () => {
