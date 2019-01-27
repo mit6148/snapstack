@@ -26,7 +26,8 @@ export default class GameContainer extends React.Component {
             endTime: null, // if SUBMIT
             cardsToWin: null,
             roundSkipped: false, // if JCHOOSE, SUBMIT, or JUDGE
-            chatMessages: [] // array of pairs of form [message, sender _id]
+            chatMessages: [], // array of pairs of form [message, sender _id]
+            submitFailed: null // null or reason if SUBMIT
         };
 
         this.actions = {
@@ -39,7 +40,8 @@ export default class GameContainer extends React.Component {
             skipRound: this.skipRound,
             savePCard: this.savePCard,
             quitGame: this.quitGame,
-            sendChat: this.sendChat
+            sendChat: this.sendChat,
+            closeSubmitFailedModal: this.closeSubmitFailedModal
         }
 
         this.socket = this.createSocket();
@@ -159,6 +161,12 @@ export default class GameContainer extends React.Component {
 
     sendChat = message => {
         this.socket.emit('chat', message);
+    }
+
+    closeSubmitFailedModal = () => {
+        this.setState({
+            submitFailed: null
+        });
     }
 
 
@@ -322,6 +330,11 @@ export default class GameContainer extends React.Component {
             }
             this.setState({
                 chatMessages: chatMessages
+            });
+        });
+        socket.on('submitCardFailed', reason => {
+            this.setState({
+                submitFailed: reason
             });
         });
         return socket;
