@@ -3,6 +3,8 @@ import React from "react";
 // WIDTH and HEIGHT are dimensions of final image produced and of the view canvas
 import {IMAGE_WIDTH, IMAGE_HEIGHT, drawingMode, MAX_OVERZOOM} from "../../../../config";
 
+import "../../css/imageEditor.css";
+
 //NOTE: this component doesn't follow normal react styles due to efficiency concerns with setting state
 // when the state is already taken care of by mutable canvas objects
 
@@ -40,6 +42,15 @@ export default class ImageEditor extends React.Component {
             this.redraw();
         }
         this.image.src = this.props.image;
+    }
+
+    render() {
+        return (
+            <canvas className="canvas-image-editor"
+                    width={IMAGE_WIDTH}
+                    height={IMAGE_HEIGHT}
+                    ref={this.saveViewCanvas} />
+            );
     }
 
     saveViewCanvas = (viewCanvas) => {
