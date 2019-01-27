@@ -1,6 +1,9 @@
 import React from "react";
+import Modal from "../univ/Modal";
 
 import "../../css/uploader.css";
+
+const URL_FAIL_STRING = "Sorry, we couldn't find your image.\nIf you're using facebook, make sure to click all the way into the image before dragging it.\nOtherwise, try dragging it to your desktop and then into the game";
 
 export default class Uploader extends React.Component {
     constructor (props) {
@@ -8,7 +11,8 @@ export default class Uploader extends React.Component {
 
         this.state = {
             formDragOver: false,
-            inputHasFocus: false
+            inputHasFocus: false,
+            modalMessage: null
         };
 
     }
@@ -20,11 +24,23 @@ export default class Uploader extends React.Component {
                 <input type="file" name="files[]" id="dragndrop_file_input" accept="image/*" className={this.state.inputHasFocus ? "has-focus" : ""}
                     onChange={this.clickUpload} onFocus={this.focusInput} onBlur={this.unfocusInput}/>
                 <label htmlFor="dragndrop_file_input"><strong>Choose</strong> or drag an image.</label>
+                {
+                    (this.state.modalMessage !== null) ? (
+                            <Modal onClose={this.closeModal} modalType="join_game">
+                                {this.state.modalMessage}
+                            </Modal>
+                        ) : null
+                }
             </div>
         );
     }
 
-    mute = (e) => {
+
+    closeModal = () => {
+        this.setState({modalMessage: null});
+    };
+
+    mute = (e) => { // mutes actions from traveling further
         e.preventDefault();
         e.stopPropagation();
     };
@@ -50,6 +66,7 @@ export default class Uploader extends React.Component {
                     const blob = await preblob.blob();
                     if(typeof(blob) !== "object") {
                         console.log("blob failed in uploader");
+                        this.setState({modalMessage: URL_FAIL_STRING});
                         return;
                     }
                     const image = await this.loadImage(blob);
@@ -62,6 +79,7 @@ export default class Uploader extends React.Component {
                 if(response.image) {
                     return this.props.upload(response.image);
                 } else {
+                    this.setState({modalMessage: URL_FAIL_STRING});
                     console.error("uploader failed with known reason: " + response.message);
                 }
             } else {
@@ -71,6 +89,7 @@ export default class Uploader extends React.Component {
                 this.props.upload(image);
             }
         } catch(err) {
+            this.setState({modalMessage: "Oops! Either that wasn't an image, or we messed up!"});
             console.error("uploader failed with unknown reason: " + err + "\n" + (err.stack || ""));
         }
     };
