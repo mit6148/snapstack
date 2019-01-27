@@ -2,6 +2,14 @@
 
 @import "./_variables.scss";
 
+body, .fill_parent, .home_page, .game_page {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
 .about {
 	text-align: center;
 	font-size: 60px;

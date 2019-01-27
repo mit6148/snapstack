@@ -81,6 +81,9 @@ $jmodal-scale: 1.2;
 }
 
 .card_slot {
+
+	margin: 0px 10px;
+
 	> .card_area {
 		position: relative;
 		height: calc(100% * #{$card-area-height} / #{$card-slot-height});
@@ -137,12 +140,18 @@ $content_border_radius: 5px;
 .jcard {
 	@include card($green-light, $green-dark);
 
+
 	> .content {
 		position: absolute;
 		width: calc(100% - 2 * 7%);
 		height: 90%;
 		left: calc(7% - #{$content_border_width});
 		top: calc(5% - #{$content_border_width});
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+
 	}
 }
 

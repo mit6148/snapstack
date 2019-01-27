@@ -25,7 +25,7 @@ export default class Lobby extends React.Component {
                 <div className="non_start_btn">
                     <div className="game_info">
                         <h2>
-                            Game Code: 
+                            Game Code:
                         </h2>
                         <div className="game_code"> {this.props.appState.gameCode}
                         </div>
@@ -47,7 +47,7 @@ export default class Lobby extends React.Component {
                             # players:
                         </h2>
                         <div className="game_settings">
-                            3 - 7
+                            3 - 8
                         </div>
 
 
