@@ -55,6 +55,7 @@ function deleteImagePromise(name) { // returns true if succeeded
 
 
 function fetchImagePromise(url) {
+    // WARNING: validate!
     return new Promise(function(resolve, reject) {
         request.defaults({encoding: null}).get(url, function(err, response, body) {
             if(err || response.statusCode != 200) {

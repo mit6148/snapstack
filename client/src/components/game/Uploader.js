@@ -40,31 +40,65 @@ export default class Uploader extends React.Component {
     };
 
     drop = async (e) => {
+        console.log("start drop");
         this.endDrag(e);
         const url = e.dataTransfer.getData("URL");
-        console.log(url);
-        let fileOrBlob;
-        if(url) {
-            fileOrBlob = await (await fetch(url, {
-                mode: "no-cors"
-            })).blob();
-        } else {
-            fileOrBlob = e.dataTransfer.files[0];
+        try {
+            if(url) {
+                try {
+                    const preblob = await fetch(url, {mode: "no-cors"});
+                    const blob = await preblob.blob();
+                    if(typeof(blob) !== "object") {
+                        console.log("blob failed in uploader");
+                        return;
+                    }
+                    const image = await this.loadImage(blob);
+                    this.props.upload(image);
+                    return;
+                } catch(err) {
+                    console.log("initial uploader attempt failed with error: " + err + "\n trying secondary load");
+                }
+                const response = await fetch("/api/download/" + encodeURIComponent(url)).then(res => res.json());
+                if(response.image) {
+                    return this.props.upload(response.image);
+                } else {
+                    console.error("uploader failed with known reason: " + response.message);
+                }
+            } else {
+                console.log("dragged file");
+                const file = e.dataTransfer.files[0];
+                const image = await this.loadImage(file);
+                this.props.upload(image);
+            }
+        } catch(err) {
+            console.error("uploader failed with unknown reason: " + err + "\n" + (err.stack || ""));
         }
-        this.upload(fileOrBlob);
     };
 
-    clickUpload = (e) => {
-        this.upload(document.getElementById("dragndrop_file_input").files[0]);
+    loadImage = async blob => {
+        return new Promise(function(resolve, reject) {
+            const r = new FileReader();
+            r.onloadend = () => {
+                if(r.error) {
+                    reject(r.error.message);
+                    return;
+                } else if(r.result.length < 50) { // too short, failed read or just obnoxious image
+                    reject("truncated response");
+                    return;
+                } else if(!r.result.startsWith("data:image/")) {
+                    reject("incorrect format");
+                    return;
+                } else {
+                    resolve(r.result);
+                }
+            }
+            r.readAsDataURL(blob);
+        });
     };
 
-    upload = async (fileOrBlob) => {
-        const r = new FileReader();
-        r.onloadend = () => {
-            console.log(r.result.length);
-            this.props.upload(r.result);
-        }
-        r.readAsDataURL(fileOrBlob);
+    clickUpload = async e => {
+        const image = this.loadImage(document.getElementById("dragndrop_file_input").files[0]);
+        this.props.upload(image);
     };
 
     focusInput = (e) => {
