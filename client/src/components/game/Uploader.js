@@ -46,14 +46,17 @@ export default class Uploader extends React.Component {
         try {
             if(url) {
                 try {
-                    const blob = await (await fetch(url, {
-                        mode: "no-cors"
-                    })).blob();
+                    const preblob = await fetch(url, {mode: "no-cors"});
+                    const blob = await preblob.blob();
+                    if(typeof(blob) !== "object") {
+                        console.log("blob failed in uploader");
+                        return;
+                    }
                     const image = await this.loadImage(blob);
                     this.props.upload(image);
                     return;
                 } catch(err) {
-                    console.log("initial uploader attempt failed with error: " + err + "\n trying proxy load");
+                    console.log("initial uploader attempt failed with error: " + err + "\n trying secondary load");
                 }
                 const response = await fetch("/api/download/" + encodeURIComponent(url)).then(res => res.json());
                 if(response.image) {
@@ -62,12 +65,13 @@ export default class Uploader extends React.Component {
                     console.error("uploader failed with known reason: " + response.message);
                 }
             } else {
+                console.log("dragged file");
                 const file = e.dataTransfer.files[0];
                 const image = await this.loadImage(file);
                 this.props.upload(image);
             }
         } catch(err) {
-            console.error("uploader failed with unknown reason: " + (err.stack || err));
+            console.error("uploader failed with unknown reason: " + err + "\n" + (err.stack || ""));
         }
     };
 
@@ -78,8 +82,11 @@ export default class Uploader extends React.Component {
                 if(r.error) {
                     reject(r.error.message);
                     return;
-                } else if(r.result.length < 10) { // result length 5="data:" --> failed read
+                } else if(r.result.length < 50) { // too short, failed read or just obnoxious image
                     reject("truncated response");
+                    return;
+                } else if(!r.result.startsWith("data:image/")) {
+                    reject("incorrect format");
                     return;
                 } else {
                     resolve(r.result);
