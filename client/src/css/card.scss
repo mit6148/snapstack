@@ -14,7 +14,7 @@ $card-slot-height: 1.9;
 
 $jmodal-scale: 1.2;
 
-.card_bin {
+@mixin card_bin() {
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
@@ -22,7 +22,7 @@ $jmodal-scale: 1.2;
 }
 
 .game_card_bin {
-	@extend .card_bin;
+	@include card_bin;
 
 	.card_slot {
 		height: 37.5vh;
@@ -31,7 +31,7 @@ $jmodal-scale: 1.2;
 }
 
 .jmodal_card_bin {
-	@extend .card_bin;
+	@include card_bin;
 	
 	.card_slot {
 		height: calc(#{$jmodal-scale} * 37.5vh * #{$card-area-height} / #{$card-slot-height});
@@ -40,7 +40,7 @@ $jmodal-scale: 1.2;
 }
 
 .pmodal_card_bin {
-	@extend .card_bin;
+	@include card_bin;
 
 	.card_slot {
 		height: 60vh;
@@ -118,17 +118,83 @@ $jmodal-scale: 1.2;
 	}
 }
 
-.jcard {
+@mixin card($primary, $shadow) {
+	border-radius: 10px;
 	background-color: $white;
 	border-style: solid;
-	border-radius: 10px;
-	border-color: $green-light;
 	border-width: 10px;
-	box-shadow: 1px 3px 0px $green-dark;
+	border-color: $primary;
+	box-shadow: 1px 3px 0px $shadow;
+}
+
+.jcard {
+	@include card($green-light, $green-dark);
+	justify-content: center;
+	align-items: center;
+	display: flex;
+
+}
+
+.pcard {
+	@include card($blue-light, $blue-dark);
+}
+
+@mixin card_back($primary, $shadow) {
+	border-radius: 10px;
+	border-style: solid;
+	border-width: 10px;
+	border-color: $white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: $primary;
+	box-shadow: 1px 3px 0px $shadow;
+
+	> * {
+		width: 70%;
+		height: auto;
+	}
+}
+
+.jcard_back {
+	@include card_back($green-light, $green-dark);
+}
+
+.pcard_back {
+	@include card_back($blue-light, $blue-dark);
+}
+
+@mixin card_empty($primary) {
+	border-radius: 10px;
+	border-style: dashed;
+	border-width: 2px;
+	border-color: $primary;
+}
+
+.jcard_empty {
+	@include card_empty($green-light);
+}
+
+.pcard_empty {
+	@include card_empty($blue-light);
+}
+
+.jcard_prompt {
+	font-size: 16px;
 }
 
 
+/*
+.card_empty {
+	border-radius: 10px;
+	border-style: dashed;
+}
 
+.jcard_empty {
+	@extend .card_empty;
+
+	border-color: $green-light;
+}
 
 .card_info {
 
@@ -333,3 +399,4 @@ $jmodal-scale: 1.2;
 
 	box-shadow: 0px 4px 0px $purple-dark;
 }
+*/
