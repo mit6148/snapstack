@@ -3,12 +3,34 @@
   position: fixed;
   top: 0%;
   left: 0%;
-  background-color: rgba(0, 0, 0, 0.6);
   height: 100%;
   width: 100%;
   z-index: 500;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal_window > .modal {
+  position: relative;
+  height: auto;
+  width: auto;
+  z-index: 600;
+}
+
+.modal_close_btn {
+  position: absolute;
+  right: -13px;
+  top: -16px;
+  color: #F4F4F4;
+  font-size: 100%;
   text-align: center;
-  align-contents: center;
+  text-decoration: none;
+  pointer-events: auto;
+}
+.modal_close_btn:hover {
+  color: #CCCCCC;
+  cursor: pointer;
 }
 
 .modal_command {
@@ -47,7 +69,7 @@
   width: 400px;
 }
 
-.modal_contents, .modal_contents_card, .modal_contents_jcard_selector, .modal_contents_join {
+.modal_contents, .modal_contents_card, .modal_contents_jcard_selector {
   position: fixed;
   margin: auto;
   top: 50%;
@@ -68,10 +90,25 @@
   overflow: hidden;
 }
 
+/*
 .modal_contents_join {
-  background-color: #C6C3DB;
+  @extend .modal_contents;
+  background-color: $background-v1;
   height: 200px;
   width: 300px;
+}
+*/
+.modal_contents_join {
+  height: 200px;
+  width: 300px;
+  background-color: #C6C3DB;
+  border-radius: 15px;
+  box-shadow: 0px 5px 0px 0px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal_contents_jcard_selector {
@@ -86,21 +123,24 @@
   width: 360px;
 }
 
+/*
 .modal_close_btn {
   position: fixed;
-  color: #F4F4F4;
+  color: $white;
   font-size: 100%;
   right: 5px;
   text-align: center;
   top: 5px;
   text-decoration: none;
+
+  &:hover {
+    color: $light-gray;
+    cursor: pointer;
+  }
+
   pointer-events: auto;
 }
-.modal_close_btn:hover {
-  color: #CCCCCC;
-  cursor: pointer;
-}
-
+*/
 h3 {
   color: #3B3B3D;
 }
@@ -115,7 +155,7 @@ h3 {
 .modal_btn {
   color: #F4F4F4;
   background-color: #0683E2;
-  padding: 5px;
+  padding: 10px 50px;
   margin: 1em auto;
   max-width: 50%;
   border-radius: 5px;

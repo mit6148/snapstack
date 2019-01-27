@@ -1,3 +1,12 @@
+@mixin h-align($position: absolute){
+    position: $position;  left: 50%;  
+    transform: translateX(-50%);
+    -ms-transform:translateX(-50%); /* IE */
+    -moz-transform:translateX(-50%); /* Firefox */
+    -webkit-transform:translateX(-50%); /* Safari and Chrome */
+    -o-transform:translateX(-50%);
+}
+
 @mixin v-align($position: absolute){
     position: $position;  top: 50%;  
     transform: translateY(-50%);

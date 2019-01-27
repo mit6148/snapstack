@@ -106,7 +106,7 @@ export default class Game extends React.Component {
                 </div>
 
                 {this.gameState.gamePhase === JCHOOSE ? (
-                    <Modal modalType="jcard_selector">
+                    <Modal>
                         <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
                         <CardBin    type='jmodal'
                                     jCards={this.gameState.jCards}
@@ -123,7 +123,7 @@ export default class Game extends React.Component {
     uploadImage = image => {
         this.setState({
             pCardEditModal: (
-                <Modal modalType="zoom_card" onClose={() => this.setState({pCardEditModal: null})} persistOnWindowClick={true}>
+                <Modal onClose={() => this.setState({pCardEditModal: null})} disableCloseByWindow={true}>
                     <PCardEditor image={image} submit={this.actions.submitPCard} onClose={() => this.setState({pCardEditModal: null})} />
                 </Modal>
             )
@@ -136,12 +136,10 @@ export default class Game extends React.Component {
         if (pCard.faceup !== false) {
             this.setState({
                 cardModal: (
-                    <Modal modalType='zoom_card' onClose={() => this.setState({cardModal: null})}>
-                        <PCard  image={pCard.image}
-                                text={pCard.text}
-                                saveState={pCard.saveState}
-                                save={this.props.save}
-                                enlarged={true} />
+                    <Modal onClose={() => this.setState({cardModal: null})}>
+                        <CardBin    type='pmodal'
+                                    pCards={[pCard]}
+                                    save={this.actions.savePCard} />
                     </Modal>
                 )
             });

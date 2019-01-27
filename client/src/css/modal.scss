@@ -6,15 +6,42 @@
   position: fixed;
   top: 0%;
   left: 0%;
-
-  background-color: rgba(0, 0, 0, 0.6);
   height: 100%;
   width: 100%;
   z-index: 500;
-  text-align: center;
+  background-color: rgba(0, 0, 0, 0.6);
 
-  align-contents: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > .modal {
+    position: relative;
+    height: auto;
+    width: auto;
+    z-index: 600;
+  }
 }
+
+.modal_close_btn {
+  position: absolute;
+  right: -13px;
+  top: -16px;
+  color: $white;
+  font-size: 100%;
+  text-align: center;
+  text-decoration: none;
+
+  &:hover {
+    color: $light-gray;
+    cursor: pointer;
+  }
+
+  pointer-events: auto;
+}
+
+
+// NON-MODAL-SPECIFIC STYLES
 
 .modal_command {
   font-size: 40px;
@@ -88,12 +115,25 @@
   overflow: hidden;
 
 }
-
+/*
 .modal_contents_join {
   @extend .modal_contents;
   background-color: $background-v1;
   height: 200px;
   width: 300px;
+}
+*/
+.modal_contents_join {
+  height: 200px;
+  width: 300px;
+  background-color: $background-v1;
+  border-radius: 15px;
+  box-shadow: 0px 5px 0px 0px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal_contents_jcard_selector {
@@ -111,7 +151,7 @@
   height: 540px;
   width: 360px;
 }
-
+/*
 .modal_close_btn {
   position: fixed;
   color: $white;
@@ -128,7 +168,7 @@
 
   pointer-events: auto;
 }
-
+*/
 h3 {
   color: $black;
 }
@@ -143,7 +183,7 @@ h3 {
 .modal_btn {
   color: $white;
   background-color: $blue-light;
-  padding: 5px;
+  padding: 10px 50px;
   margin: 1em auto;
   max-width: 50%;
 

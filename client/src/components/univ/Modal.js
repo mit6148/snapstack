@@ -1,62 +1,20 @@
 import React from "react";
+import ModalCloseButton from "./ModalCloseButton";
 import "../../css/modal.css";
 import "../../css/card.css";
 
 export default class Modal extends React.Component {
 
     render () {
-        switch(this.props.modalType) {
-            case 'join_game':
-                return (
-                    <div>
-                        <div className="modal_window" onClick={this.props.onClose}>
-                        </div>
-                        <div className="modal_container_join">
-                            <div className="modal_contents_join">
-                                {this.props.children}
-                            </div>
-                            <div className="modal_close_btn fas fa-times" onClick={this.props.onClose} />
-                        </div>
-                    </div>
-                );
-            case 'zoom_card':
-                return (
-                    <div>
-                        <div className="modal_window" onClick={this.props.onClose}>
-                        </div>
-                        <div className="modal_container_card">
-                            <div className="modal_contents_card">
-                                {this.props.children}
-                            </div>
-                            <div className="modal_close_btn fas fa-times" onClick={this.props.onClose} />
-                        </div>
-                    </div>
-                );
-            case 'jcard_selector':
-                return (
-                    <div>
-                        <div className="modal_window">
-                        </div>
-                        <div className="modal_container_jcard_selector">
-                            <div className="modal_contents_jcard_selector">
-                                {this.props.children}
-                            </div>
-                        </div>
-                    </div>
-                );
-            default:
-                return (
-                    <div>
-                        <div className="modal_window" onClick={this.props.persistOnWindowClick ? null : this.props.onClose}>
-                        </div>
-                        <div>
-                            <div>
-                                {this.props.children}
-                            </div>
-                            <div className="modal_close_btn fas fa-times" onClick={this.props.onClose} />
-                        </div>
-                    </div>
-                );
-        }
+        return (
+            <div className='modal_window' onClick={this.props.disableCloseByWindow ? null : this.props.onClose}>
+                <div className='modal'>
+                    {this.props.children}
+                    {this.props.disableCloseByButton || !this.props.onClose ? null : (
+                        <ModalCloseButton onClose={this.props.onClose} />
+                    )}
+                </div>
+            </div>
+        );
     }
 }
