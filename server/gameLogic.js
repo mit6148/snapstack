@@ -534,6 +534,10 @@ class Game {
 Game.codeToGameMap = {};
 
 Game.gameWithCode = gameCode => {
+    if(DEVELOPER_MODE && !gameCode) { // developer shortcut cuz laziness
+        gameCode = "XYZ";
+    }
+
     gameCode = gameCode.toUpperCase();
     if(!gameCode.match("^[A-Z]{3}$")) {
         throw "Game code must consist only of letters";
