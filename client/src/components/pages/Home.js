@@ -10,6 +10,8 @@ import "../../css/card.css";
 
 import "../../css/modal.css";
 
+import "../../css/about.css";
+
 export default class Home extends React.Component {
     constructor(props) {
         super(props);

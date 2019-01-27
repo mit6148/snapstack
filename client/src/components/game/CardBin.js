@@ -10,7 +10,7 @@ import "../../css/card.css";
 export default class CardBin extends React.Component {
     render() {
         return (
-            <div className={this.props.type+'_card_bin'} onClick={() => {if (this.props.pCards) {this.props.pCards.push(NO_CARD); this.props.owners.push(this.props.owners[0]); this.forceUpdate();}}}>
+            <div className={this.props.type+'_card_bin'} onClick={() => {if (this.props.pCards && this.props.owners) {this.props.pCards.push(NO_CARD); this.props.owners.push(this.props.owners[0]); this.forceUpdate();}}}>
                 {this.props.jCards ? this.props.jCards.map((jCard, index) => (
                     <div key={index} className="card_slot">
                         <div className="card_area">
