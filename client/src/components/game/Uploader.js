@@ -42,9 +42,12 @@ export default class Uploader extends React.Component {
     drop = async (e) => {
         this.endDrag(e);
         const url = e.dataTransfer.getData("URL");
+        console.log(url);
         let fileOrBlob;
         if(url) {
-            fileOrBlob = await (await fetch(url)).blob();
+            fileOrBlob = await (await fetch(url, {
+                mode: "no-cors"
+            })).blob();
         } else {
             fileOrBlob = e.dataTransfer.files[0];
         }
@@ -58,6 +61,7 @@ export default class Uploader extends React.Component {
     upload = async (fileOrBlob) => {
         const r = new FileReader();
         r.onloadend = () => {
+            console.log(r.result.length);
             this.props.upload(r.result);
         }
         r.readAsDataURL(fileOrBlob);
