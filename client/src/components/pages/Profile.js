@@ -68,24 +68,27 @@ export default class Profile extends React.Component {
 
         return ( //Todo, work on modals for Edit and Cards!
             <div className="profile_text profile_page">
-	            <NavButtons appState={this.props.appState} page='Profile' profileId={this.props.id} logout={this.props.logout} />
+                <NavButtons appState={this.props.appState} page='Profile' profileId={this.props.id} logout={this.props.logout} />
 
-	            <div className="profile_container">
-	            	<div className="my_profile">
+                <div className="profile_container">
+                    <div className="my_profile">
 
-	            		<div className="photo_section">
-            			  	<div className="circle_picture_container">
-                				<img className="profile_picture" src={this.state.avatar} />
-                			</div>
-            			</div>
+                        <div className="photo_section">
+                            <div className="circle_picture_container">
+                                <img className="profile_picture" src={this.state.avatar} />
+                            </div>
+                        </div>
 
-	                	<div className="info_section">
-	            		    <div className="profile_name">
-                				<h2> {this.state.firstName+' '+this.state.lastName} </h2>
-                			</div>
-                			<div className="profile_description">
+                        <div className="info_section">
+                            <div className="profile_name">
+                                <h2> {(this.state.firstName && this.state.lastName) ? // handle people having one name
+                                    (this.state.firstName + " " + this.state.lastName) :
+                                    (this.state.firstName || this.state.lastName || "No Name")}
+                                </h2>
+                            </div>
+                            <div className="profile_description">
                                 {this.state.description}
-                			</div>
+                            </div>
                             <div>
                                 <div>
                                     <div className="fab fa-facebook-square fb_btn"></div>
@@ -96,15 +99,15 @@ export default class Profile extends React.Component {
                                     {this.state.media.insta}
                                 </div>
                             </div>
-	            			<div className='edit_btn'>
-	            				Edit
-	            			</div>
-	            		</div>
-	            	</div>
+                            <div className='edit_btn'>
+                                Edit
+                            </div>
+                        </div>
+                    </div>
 
-	            	<div className="my_snapstack">
-	            		<h2> My SnapStack </h2>
-	            		<div className="saved_cards">
+                    <div className="my_snapstack">
+                        <h2> My SnapStack </h2>
+                        <div className="saved_cards">
                             {this.state.pCardIds.map((pCardId, index) => (
                                 <div key={index}>
                                     {index < this.state.pCards.length ? (
@@ -116,10 +119,10 @@ export default class Profile extends React.Component {
                                     )}
                                 </div>
                             ))}
-	            		</div>
-	            	</div>
-	            </div>
-           	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         );
     }
 
