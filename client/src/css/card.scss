@@ -140,7 +140,6 @@ $content_border_radius: 5px;
 .jcard {
 	@include card($green-light, $green-dark);
 
-
 	> .content {
 		position: absolute;
 		width: calc(100% - 2 * 7%);
