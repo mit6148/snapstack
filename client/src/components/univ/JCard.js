@@ -35,7 +35,7 @@ export default class JCard extends Component {
                     );
                 } else {
                     return (
-                        <div className={this.props.enlarged ? 'jcard_enlarged' : 'jcard'} onClick={this.props.onClick}>
+                        <div className='jcard' onClick={this.props.onClick}>
                             <div className="jcard_prompt">
                                 {this.props.text}
                             </div>

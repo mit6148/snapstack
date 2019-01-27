@@ -9,59 +9,54 @@ import "../../css/card.css";
 
 export default class CardBin extends React.Component {
     render() {
-        console.log(this.props.pCards);
-        if (this.props.jCards !== undefined) {
-            return (
-                <div className="card_bin game_card_bin">
-                    {this.props.jCards.map((jCard, index) => (
-                        <div key={index} className="card_slot">
-                            <div className="card_area">
-                                <JCard  src={jCard}
-                                        text={jCard}
-                                        onClick={this.props.onClick ? (() => this.props.onClick(index, jCard)) : null}
-                                        enlarged={this.props.enlarged} />
-                            </div>
+        return (
+            <div className={this.props.type+'_card_bin'} onClick={() => {if (this.props.pCards) {this.props.pCards.push(NO_CARD); this.props.owners.push(this.props.owners[0]); this.forceUpdate();}}}>
+                {this.props.jCards ? this.props.jCards.map((jCard, index) => (
+                    <div key={index} className="card_slot">
+                        <div className="card_area">
+                            <JCard  src={jCard}
+                                    text={jCard}
+                                    onClick={this.props.onClick ? (() => this.props.onClick(index, jCard)) : null}
+                                    enlarged={this.props.enlarged} />
+                        </div>
+                        {this.props.type === 'game' ? (
                             <div className="card_info_area">
-                                    {!this.props.owners || !this.props.owners[index] ? null : (
-                                        <PlayerInfo name={this.props.owners[index].name}
-                                                    avatar={this.props.owners[index].avatar}
-                                                    media={this.props.owners[index].media}
-                                                    score={this.props.owners[index].score}
-                                                    connected={this.props.owners[index].connected} />
-                                    )}
+                                {!this.props.owners || !this.props.owners[index] ? null : (
+                                    <PlayerInfo name={this.props.owners[index].name}
+                                                avatar={this.props.owners[index].avatar}
+                                                media={this.props.owners[index].media}
+                                                score={this.props.owners[index].score}
+                                                connected={this.props.owners[index].connected} />
+                                )}
                             </div>
+                        ) : null}
+                    </div>
+                )) : null}
+                {this.props.pCards ? this.props.pCards.map((pCard, index) => (
+                    <div key={index} className='card_slot'>
+                        <div className="card_area">
+                            <PCard  src={pCard}
+                                    image={pCard.image}
+                                    text={pCard.text}
+                                    faceup={pCard.faceup}
+                                    onClick={this.props.onClick ? (() => this.props.onClick(index, pCard)) : null}
+                                    saveState={pCard.saveState}
+                                    save={() => this.props.save(index)} />
                         </div>
-                    ))}
-                </div>
-            );
-        } else { // TODO handle judgeFocusIndex, winnerIndex
-            return (
-                <div className="card_bin game_card_bin" onClick={() => {this.props.pCards.push(NO_CARD); this.props.owners.push(this.props.owners[0]); console.log('hi'); this.forceUpdate();}}>
-                    {this.props.pCards.map((pCard, index) => (
-                        <div key={index} className='card_slot'>
-                            <div className="card_area">
-                                <PCard  src={pCard}
-                                        image={pCard.image}
-                                        text={pCard.text}
-                                        faceup={pCard.faceup}
-                                        onClick={this.props.onClick ? (() => this.props.onClick(index, pCard)) : null}
-                                        saveState={pCard.saveState}
-                                        save={() => this.props.save(index)} />
-                            </div>
+                        {this.props.type === 'game' ? (
                             <div className='card_info_area'>
-                                    {!this.props.owners || !this.props.owners[index] ? null : (
-                                        <PlayerInfo name={this.props.owners[index].name}
-                                                    avatar={this.props.owners[index].avatar}
-                                                    media={this.props.owners[index].media}
-                                                    score={this.props.owners[index].score}
-                                                    connected={this.props.owners[index].connected} />
-                                    )}
-
+                                {!this.props.owners || !this.props.owners[index] ? null : (
+                                    <PlayerInfo name={this.props.owners[index].name}
+                                                avatar={this.props.owners[index].avatar}
+                                                media={this.props.owners[index].media}
+                                                score={this.props.owners[index].score}
+                                                connected={this.props.owners[index].connected} />
+                                )}
                             </div>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
+                        ) : null}
+                    </div>
+                )) : null}
+            </div>
+        );
     }
 }

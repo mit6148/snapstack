@@ -38,7 +38,8 @@ export default class Game extends React.Component {
                     </div>
 
                     <div className='judge_section'>
-                        <CardBin    jCards={[this.gameState.gamePhase === JCHOOSE ? NO_CARD : this.gameState.jCards[this.gameState.jCardIndex]]}
+                        <CardBin    type='game'
+                                    jCards={[this.gameState.gamePhase === JCHOOSE ? NO_CARD : this.gameState.jCards[this.gameState.jCardIndex]]}
                                     owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
                     </div>
 
@@ -63,19 +64,22 @@ export default class Game extends React.Component {
 
                 <div className="game_page_row2">
                     {[JCHOOSE, SUBMIT].includes(this.gameState.gamePhase) ? (
-                        <CardBin    pCards={this.gameState.playerIds.slice(1).map(playerId =>
+                        <CardBin    type='game'
+                                    pCards={this.gameState.playerIds.slice(1).map(playerId =>
                                             playerId === this.props.appState.userId
                                             ? (this.gameState.pCards.length === 1 ? this.gameState.pCards[0] : NO_CARD)
                                             : (this.gameState.players[playerId].hasPlayed ? CARDBACK : NO_CARD))}
                                     owners={this.gameState.playerIds.slice(1).map(playerId => this.gameState.players[playerId])}
                                     onClick={this.viewPCard} />
                     ) : this.gameState.gamePhase === JUDGE ? (
-                        <CardBin    pCards={this.gameState.pCards}
+                        <CardBin    type='game'
+                                    pCards={this.gameState.pCards}
                                     onClick={this.viewPCard}
                                     save={this.actions.savePCard}
                                     judgeFocusIndex={this.gameState.pCardIndex} />
                     ) : (
-                        <CardBin    pCards={this.gameState.pCards}
+                        <CardBin    type='game'
+                                    pCards={this.gameState.pCards}
                                     owners={this.gameState.pCards.map(pCard => pCard.creator_id ? this.gameState.players[pCard.creator_id] : null)}
                                     onClick={this.viewPCard}
                                     save={this.actions.savePCard}
@@ -104,7 +108,8 @@ export default class Game extends React.Component {
                 {this.gameState.gamePhase === JCHOOSE ? (
                     <Modal modalType="jcard_selector">
                         <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
-                        <CardBin    jCards={this.gameState.jCards}
+                        <CardBin    type='jmodal'
+                                    jCards={this.gameState.jCards}
                                     onClick={this.isJudge() ? this.actions.selectJCard : null}
                                     enlarged={true} />
                     </Modal>

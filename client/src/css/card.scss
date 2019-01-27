@@ -12,41 +12,75 @@ $card-area-height: 1.6;
 $card-info-area-height: 0.3;
 $card-slot-height: 1.9;
 
+$jmodal-scale: 1.2;
+
 .card_bin {
-	@include v-align(relative);
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
 	align-items: center;
+}
 
-	&.game_card_bin {
-		.card_slot {
-			height: 37.5vh;
-			width: calc(37.5vh * #{$card-slot-width} / #{$card-slot-height});
-		}
+.game_card_bin {
+	@extend .card_bin;
+
+	.card_slot {
+		height: 37.5vh;
+		width: calc(37.5vh * #{$card-slot-width} / #{$card-slot-height});
 	}
 }
 
-@media (max-aspect-ratio: 63/38) {
-	.card_bin.game_card_bin {
+.jmodal_card_bin {
+	@extend .card_bin;
+	
+	.card_slot {
+		height: calc(#{$jmodal-scale} * 37.5vh * #{$card-area-height} / #{$card-slot-height});
+		width: calc(#{$jmodal-scale} * 37.5vh * #{$card-slot-width} / #{$card-slot-height});
+	}
+}
+
+.pmodal_card_bin {
+	@extend .card_bin;
+
+	.card_slot {
+		height: 60vh;
+		width: calc(60vh * #{$card-slot-width} / #{$card-area-height});
+	}
+}
+
+@media (max-aspect-ratio: 63/38) { // optimal is 63/38
+	.game_card_bin {
 		.card_slot {
 			width: calc(100vw / 7);
 			height: calc((100vw / 7) * #{$card-slot-height} / #{$card-slot-width});
 		}
 	}
+
+	.jmodal_card_bin {
+		.card_slot {
+			width: calc(#{$jmodal-scale} * 100vw / 7);
+			height: calc(#{$jmodal-scale} * (100vw / 7) * #{$card-area-height} / #{$card-slot-width});
+		}
+	}
 }
 
-@media (max-aspect-ratio: 21/19) {
-	.card_bin.game_card_bin {
+@media (max-aspect-ratio: 21/19) { // optimal is 21/19
+	.game_card_bin {
 		.card_slot {
 			height: 25vh;
 			width: calc(25vh * #{$card-slot-width} / #{$card-slot-height});
 		}
 	}
+
+	.jmodal_card_bin {
+		.card_slot {
+			height: calc(#{$jmodal-scale} * 25vh * #{$card-area-height} / #{$card-slot-height});
+			width: calc(#{$jmodal-scale} * 25vh * #{$card-slot-width} / #{$card-slot-height});
+		}
+	}
 }
 
 .card_slot {
-	padding: 20px;
 	.card_area {
 		position: relative;
 		height: calc(100% * #{$card-area-height} / #{$card-slot-height});
@@ -55,40 +89,44 @@ $card-slot-height: 1.9;
 		&:only-child {
 			height: 100%;
 		}
+
+		> * {
+			position: absolute;
+			left: calc(100% * #{$card-margin-side} / #{$card-slot-width});
+			right: calc(100% * #{$card-margin-side} / #{$card-slot-width});
+			top: calc(100% * #{$card-margin-top} / #{$card-area-height});
+			bottom: calc(100% * #{$card-margin-bottom} / #{$card-area-height});
+		}
 	}
 
 	.card_info_area {
-		margin-top: 10px;
+		margin-top: 10px; // migrate to $card-margin-bottom?
 		height: calc(100% * #{$card-info-area-height} / #{$card-slot-height});
 		width: 100%;
-	}
-}
-
-.card_area {
-	* {
-		position: absolute;
-		left: calc(100% * #{$card-margin-side} / #{$card-slot-width});
-		right: calc(100% * #{$card-margin-side} / #{$card-slot-width});
-		top: calc(100% * #{$card-margin-top} / #{$card-area-height});
-		bottom: calc(100% * #{$card-margin-bottom} / #{$card-area-height});
-	}
-}
-
-.card_info_area {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	.player_info {
-		transform: scale(0.50, 0.50);
-
-		background-color: $purple-light;
 		display: flex;
-		width: 360px;
-		border-radius: 15px;
+		justify-content: center;
+		align-items: center;
 
-		box-shadow: 0px 4px 0px $purple-dark;
+		.player_info {
+			transform: scale(0.50, 0.50);
+			background-color: $purple-light;
+			display: flex;
+			width: 360px;
+			border-radius: 15px;
+			box-shadow: 0px 4px 0px $purple-dark;
+		}
 	}
 }
+
+.jcard {
+	background-color: $white;
+	border-style: solid;
+	border-radius: 10px;
+	border-color: $green-light;
+	border-width: 10px;
+	box-shadow: 1px 3px 0px $green-dark;
+}
+
 
 
 
@@ -186,11 +224,6 @@ $card-slot-height: 1.9;
 
 	margin: 15px;
 
-}
-
-.jcard {
-
-	
 }
 
 .jcard_front {
