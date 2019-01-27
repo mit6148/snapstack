@@ -9,35 +9,26 @@ import "../../css/card.css";
 
 export default class JCard extends Component {
     render() {
-        switch (this.props.src) {
-            case NO_CARD:
-                return (
-                    <div className="jcard_empty" onClick={this.props.onClick}>
+        if (this.props.src === NO_CARD) {
+            return (
+                <div className='jcard_empty' onClick={this.props.onClick}></div>
+            );
+        } else if ([CARDBACK, FACEDOWN_CARD].includes(this.props.src) || this.props.faceup === false) {
+            return (
+                <div className='jcard_back' onClick={this.props.onClick}>
+                    <div className='content'>
+                        <img src='/pancakes.png' />
                     </div>
-                );
-            case CARDBACK:
-            case FACEDOWN_CARD:
-                return (
-                    <div className="jcard_back" onClick={this.props.onClick}>
-                        <img src="/pancakes.png"/>
+                </div>
+            );
+        } else { // TODO loading card
+            return (
+                <div className='jcard' onClick={this.props.onClick}>
+                    <div className='content'>
+                        {this.props.text}
                     </div>
-                );
-            default:
-                if (this.props.faceup === false) {
-                    return (
-                        <div className="jcard_back" onClick={this.props.onClick}>
-                            <img src="/pancakes.png"/>
-                        </div>
-                    );
-                } else {
-                    return (
-                        <div className='jcard' onClick={this.props.onClick}>
-                            <div className="jcard_prompt">
-                                {this.props.text}
-                            </div>
-                        </div>
-                    );
-                }
+                </div>
+            );
         }
     }
 }

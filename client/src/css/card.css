@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
 }
-.game_card_bin .card_slot {
+.game_card_bin > .card_slot {
   height: 37.5vh;
   width: calc(37.5vh * 1.2 / 1.9);
 }
@@ -16,7 +16,7 @@
   justify-content: center;
   align-items: center;
 }
-.jmodal_card_bin .card_slot {
+.jmodal_card_bin > .card_slot {
   height: calc(1.2 * 37.5vh * 1.6 / 1.9);
   width: calc(1.2 * 37.5vh * 1.2 / 1.9);
 }
@@ -27,49 +27,49 @@
   justify-content: center;
   align-items: center;
 }
-.pmodal_card_bin .card_slot {
+.pmodal_card_bin > .card_slot {
   height: 60vh;
   width: calc(60vh * 1.2 / 1.6);
 }
 
 @media (max-aspect-ratio: 63/38) {
-  .game_card_bin .card_slot {
+  .game_card_bin > .card_slot {
     width: calc(100vw / 7);
     height: calc((100vw / 7) * 1.9 / 1.2);
   }
 
-  .jmodal_card_bin .card_slot {
+  .jmodal_card_bin > .card_slot {
     width: calc(1.2 * 100vw / 7);
     height: calc(1.2 * (100vw / 7) * 1.6 / 1.2);
   }
 }
 @media (max-aspect-ratio: 21/19) {
-  .game_card_bin .card_slot {
+  .game_card_bin > .card_slot {
     height: 25vh;
     width: calc(25vh * 1.2 / 1.9);
   }
 
-  .jmodal_card_bin .card_slot {
+  .jmodal_card_bin > .card_slot {
     height: calc(1.2 * 25vh * 1.6 / 1.9);
     width: calc(1.2 * 25vh * 1.2 / 1.9);
   }
 }
-.card_slot .card_area {
+.card_slot > .card_area {
   position: relative;
   height: calc(100% * 1.6 / 1.9);
   width: 100%;
 }
-.card_slot .card_area:only-child {
+.card_slot > .card_area:only-child {
   height: 100%;
 }
-.card_slot .card_area > * {
+.card_slot > .card_area > * {
   position: absolute;
   left: calc(100% * 0.1 / 1.2);
   right: calc(100% * 0.1 / 1.2);
   top: calc(100% * 0.15 / 1.6);
   bottom: calc(100% * 0.05 / 1.6);
 }
-.card_slot .card_info_area {
+.card_slot > .card_info_area {
   margin-top: 10px;
   height: calc(100% * 0.3 / 1.9);
   width: 100%;
@@ -77,7 +77,7 @@
   justify-content: center;
   align-items: center;
 }
-.card_slot .card_info_area .player_info {
+.card_slot > .card_info_area > .player_info {
   transform: scale(0.5, 0.5);
   background-color: #BD9DCC;
   display: flex;
@@ -87,64 +87,117 @@
 }
 
 .jcard {
-  border-radius: 10px;
-  background-color: #F4F4F4;
-  border-style: solid;
-  border-width: 10px;
-  border-color: #12B780;
-  box-shadow: 1px 3px 0px #0E8C62;
-}
-
-.pcard {
-  border-radius: 10px;
-  background-color: #F4F4F4;
-  border-style: solid;
-  border-width: 10px;
-  border-color: #0683E2;
-  box-shadow: 1px 3px 0px #056BBA;
-}
-
-.jcard_back {
-  border-radius: 10px;
-  border-style: solid;
-  border-width: 10px;
-  border-color: #F4F4F4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border-radius: 7%/5%;
   background-color: #12B780;
   box-shadow: 1px 3px 0px #0E8C62;
 }
-.jcard_back > * {
-  width: 70%;
+.jcard > * {
+  background-color: #F4F4F4;
+  border-style: solid;
+  border-color: #0E8C62;
+  border-width: 2px;
+  border-radius: 5px;
+}
+.jcard > .content {
+  position: absolute;
+  width: calc(100% - 2 * 7%);
+  height: 90%;
+  left: calc(7% - 2px);
+  top: 5%;
+}
+
+.pcard {
+  border-radius: 7%/5%;
+  background-color: #0683E2;
+  box-shadow: 1px 3px 0px #056BBA;
+}
+.pcard > * {
+  background-color: #F4F4F4;
+  border-style: solid;
+  border-color: #056BBA;
+  border-width: 2px;
+  border-radius: 5px;
+}
+.pcard > .image_content {
+  position: absolute;
+  width: calc(100% - 2 * 7%);
+  height: 70%;
+  left: calc(7% - 2px);
+  top: 3%;
+  overflow: hidden;
+}
+.pcard > .image_content > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.pcard > .caption_content {
+  position: absolute;
+  width: calc(100% - 2 * 7%);
+  height: 18%;
+  left: calc(7% - 2px);
+  bottom: 3%;
+}
+
+.jcard_back {
+  border-radius: 7%/5%;
+  background-color: #F4F4F4;
+  box-shadow: 1px 3px 0px #0E8C62;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.jcard_back > .content {
+  width: calc(100% - 2 * 7%);
+  height: calc(100% - 2 * 5%);
+  background-color: #12B780;
+  border-style: solid;
+  border-color: #0E8C62;
+  border-width: 2px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.jcard_back > .content > img {
+  width: 80%;
   height: auto;
 }
 
 .pcard_back {
-  border-radius: 10px;
-  border-style: solid;
-  border-width: 10px;
-  border-color: #F4F4F4;
+  border-radius: 7%/5%;
+  background-color: #F4F4F4;
+  box-shadow: 1px 3px 0px #056BBA;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0683E2;
-  box-shadow: 1px 3px 0px #056BBA;
 }
-.pcard_back > * {
-  width: 70%;
+.pcard_back > .content {
+  width: calc(100% - 2 * 7%);
+  height: calc(100% - 2 * 5%);
+  background-color: #0683E2;
+  border-style: solid;
+  border-color: #056BBA;
+  border-width: 2px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pcard_back > .content > img {
+  width: 80%;
   height: auto;
 }
 
 .jcard_empty {
-  border-radius: 10px;
+  border-radius: 7%/5%;
   border-style: dashed;
   border-width: 2px;
   border-color: #12B780;
 }
 
 .pcard_empty {
-  border-radius: 10px;
+  border-radius: 7%/5%;
   border-style: dashed;
   border-width: 2px;
   border-color: #0683E2;
