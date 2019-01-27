@@ -24,7 +24,7 @@ $jmodal-scale: 1.2;
 .game_card_bin {
 	@include card_bin;
 
-	.card_slot {
+	> .card_slot {
 		height: 37.5vh;
 		width: calc(37.5vh * #{$card-slot-width} / #{$card-slot-height});
 	}
@@ -33,7 +33,7 @@ $jmodal-scale: 1.2;
 .jmodal_card_bin {
 	@include card_bin;
 	
-	.card_slot {
+	> .card_slot {
 		height: calc(#{$jmodal-scale} * 37.5vh * #{$card-area-height} / #{$card-slot-height});
 		width: calc(#{$jmodal-scale} * 37.5vh * #{$card-slot-width} / #{$card-slot-height});
 	}
@@ -42,7 +42,7 @@ $jmodal-scale: 1.2;
 .pmodal_card_bin {
 	@include card_bin;
 
-	.card_slot {
+	> .card_slot {
 		height: 60vh;
 		width: calc(60vh * #{$card-slot-width} / #{$card-area-height});
 	}
@@ -50,14 +50,14 @@ $jmodal-scale: 1.2;
 
 @media (max-aspect-ratio: 63/38) { // optimal is 63/38
 	.game_card_bin {
-		.card_slot {
+		> .card_slot {
 			width: calc(100vw / 7);
 			height: calc((100vw / 7) * #{$card-slot-height} / #{$card-slot-width});
 		}
 	}
 
 	.jmodal_card_bin {
-		.card_slot {
+		> .card_slot {
 			width: calc(#{$jmodal-scale} * 100vw / 7);
 			height: calc(#{$jmodal-scale} * (100vw / 7) * #{$card-area-height} / #{$card-slot-width});
 		}
@@ -66,14 +66,14 @@ $jmodal-scale: 1.2;
 
 @media (max-aspect-ratio: 21/19) { // optimal is 21/19
 	.game_card_bin {
-		.card_slot {
+		> .card_slot {
 			height: 25vh;
 			width: calc(25vh * #{$card-slot-width} / #{$card-slot-height});
 		}
 	}
 
 	.jmodal_card_bin {
-		.card_slot {
+		> .card_slot {
 			height: calc(#{$jmodal-scale} * 25vh * #{$card-area-height} / #{$card-slot-height});
 			width: calc(#{$jmodal-scale} * 25vh * #{$card-slot-width} / #{$card-slot-height});
 		}
@@ -81,7 +81,7 @@ $jmodal-scale: 1.2;
 }
 
 .card_slot {
-	.card_area {
+	> .card_area {
 		position: relative;
 		height: calc(100% * #{$card-area-height} / #{$card-slot-height});
 		width: 100%;
@@ -99,7 +99,7 @@ $jmodal-scale: 1.2;
 		}
 	}
 
-	.card_info_area {
+	> .card_info_area {
 		margin-top: 10px; // migrate to $card-margin-bottom?
 		height: calc(100% * #{$card-info-area-height} / #{$card-slot-height});
 		width: 100%;
@@ -107,7 +107,7 @@ $jmodal-scale: 1.2;
 		justify-content: center;
 		align-items: center;
 
-		.player_info {
+		> .player_info {
 			transform: scale(0.50, 0.50);
 			background-color: $purple-light;
 			display: flex;
@@ -118,41 +118,86 @@ $jmodal-scale: 1.2;
 	}
 }
 
+$content_border_width: 2px;
+$content_border_radius: 5px;
+
 @mixin card($primary, $shadow) {
-	border-radius: 10px;
-	background-color: $white;
-	border-style: solid;
-	border-width: 10px;
-	border-color: $primary;
-	box-shadow: 1px 3px 0px $shadow;
-}
-
-.jcard {
-	@include card($green-light, $green-dark);
-	justify-content: center;
-	align-items: center;
-	display: flex;
-
-}
-
-.pcard {
-	@include card($blue-light, $blue-dark);
-}
-
-@mixin card_back($primary, $shadow) {
-	border-radius: 10px;
-	border-style: solid;
-	border-width: 10px;
-	border-color: $white;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	border-radius: 7%/5%;
 	background-color: $primary;
 	box-shadow: 1px 3px 0px $shadow;
 
 	> * {
-		width: 70%;
-		height: auto;
+		background-color: $white;
+		border-style: solid;
+		border-color: $shadow;
+		border-width: #{$content_border_width};
+		border-radius: #{$content_border_radius};
+	}
+}
+
+.jcard {
+	@include card($green-light, $green-dark);
+
+	> .content {
+		position: absolute;
+		width: calc(100% - 2 * 7%);
+		height: 90%;
+		left: calc(7% - #{$content_border_width});
+		top: calc(5% - #{$content_border_width});
+	}
+}
+
+.pcard {
+	@include card($blue-light, $blue-dark);
+
+	> .image_content {
+		position: absolute;
+		width: calc(100% - 2 * 7%);
+		height: 70%;
+		left: calc(7% - #{$content_border_width});
+		top: calc(4% - #{$content_border_width});
+		overflow: hidden;
+
+		> img {
+			height: 100%;
+			width: 100%;
+			object-fit: cover;
+		}
+	}
+
+	> .caption_content {
+		position: absolute;
+		width: calc(100% - 2 * 7%);
+		height: 19%;
+		left: calc(7% - #{$content_border_width});
+		bottom: calc(3% - #{$content_border_width});
+	}
+}
+
+@mixin card_back($primary, $shadow) {
+	border-radius: 7%/5%;
+	background-color: $white;
+	box-shadow: 1px 3px 0px $shadow;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	> .content {
+		width: calc(100% - 2 * 7%);
+		height: calc(100% - 2 * 5%);
+		background-color: $primary;
+		border-style: solid;
+		border-color: $shadow;
+		border-width: #{$content_border_width};
+		border-radius: #{$content_border_radius};
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		> img {
+			width: 80%;
+			height: auto;
+		}
 	}
 }
 
@@ -165,7 +210,7 @@ $jmodal-scale: 1.2;
 }
 
 @mixin card_empty($primary) {
-	border-radius: 10px;
+	border-radius: 7%/5%;
 	border-style: dashed;
 	border-width: 2px;
 	border-color: $primary;
