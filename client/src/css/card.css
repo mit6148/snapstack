@@ -103,7 +103,7 @@
   width: calc(100% - 2 * 7%);
   height: 90%;
   left: calc(7% - 2px);
-  top: 5%;
+  top: calc(5% - 2px);
 }
 
 .pcard {
@@ -123,7 +123,7 @@
   width: calc(100% - 2 * 7%);
   height: 70%;
   left: calc(7% - 2px);
-  top: 3%;
+  top: calc(4% - 2px);
   overflow: hidden;
 }
 .pcard > .image_content > img {
@@ -134,9 +134,9 @@
 .pcard > .caption_content {
   position: absolute;
   width: calc(100% - 2 * 7%);
-  height: 18%;
+  height: 20%;
   left: calc(7% - 2px);
-  bottom: 3%;
+  bottom: calc(3% - 2px);
 }
 
 .jcard_back {
@@ -201,6 +201,10 @@
   border-style: dashed;
   border-width: 2px;
   border-color: #0683E2;
+}
+
+.jcard_prompt {
+  font-size: 16px;
 }
 
 /*
