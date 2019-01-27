@@ -746,13 +746,22 @@ async function onConnection(socket) {
     });
 
     createLockedListener(socket, 'submitCard', gameGetter, true, async (image, text) => {
-        const pCardRef = await generatePCardRef(user, image, text);
-        game.submitCard(pCardRef);
-        socket.emit('turnedIn', user._id, pCardRef._id);
-        socket.to(game.getGameCode()).emit('turnedIn', user._id);
+        // TODO validate image
+        try {
+            if(typeof(text) !== "string" || text.length > MAX_CAPTION_LENGTH) {
+                socket.emit('submitCardFailed', 'Caption is too long!');
+                return;
+            }
+            const pCardRef = await generatePCardRef(user, image, text);
+            game.submitCard(pCardRef);
+            socket.emit('turnedIn', user._id, pCardRef._id);
+            socket.to(game.getGameCode()).emit('turnedIn', user._id);
 
-        if(game.allCardsSubmitted()) {
-            await endSubmitPhaseDelayedSendout(game, WAIT_TIME);
+            if(game.allCardsSubmitted()) {
+                await endSubmitPhaseDelayedSendout(game, WAIT_TIME);
+            }
+        } catch(err) {
+            socket.emit('submitCardFailed', "Something went wrong!");
         }
     });
 
