@@ -68,7 +68,6 @@
 }
 .card_slot .card_info_area .player_info, .pcard_slot .card_info_area .player_info, .jcard_slot .card_info_area .player_info {
   transform: scale(0.5, 0.5);
-  border-width: 2;
   background-color: #BD9DCC;
   display: flex;
   width: 360px;
