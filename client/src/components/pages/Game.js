@@ -154,7 +154,7 @@ export default class Game extends React.Component {
     }
 
     canUploadImage = () => {
-        return this.gameState.gamePhase === SUBMIT && !this.isJudge();
+        return this.gameState.gamePhase === SUBMIT && !this.isJudge() && this.gameStates.pCards.length === 0;
     }
 
     canFlipAllPCards = () => {
