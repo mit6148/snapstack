@@ -1,10 +1,14 @@
 import React from "react";
 
+import ImageEditor from "./ImageEditor";
+
 export default class PCardEditor extends React.Component {
     render() {
         return (
             <div>
-                <img src={this.props.image} />
+                <div style="width: 86px; height: 98px">
+                    <ImageEditor image={this.props.image} />
+                </div>
                 <input id="caption-input" type="text" />
                 <div onClick={() => this.submit(this.props.image, document.getElementById('caption-input').value)}>Submit</div>
             </div>
