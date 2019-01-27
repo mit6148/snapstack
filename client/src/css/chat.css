@@ -91,8 +91,7 @@
     position: relative;
     width: 100%;
     background-color: var(--chat-white-replacement);
-    margin-bottom: 0px;
-
+    margin: 4px 0px;
 }
 
 .messageRow-tight {
@@ -100,16 +99,15 @@
     width: calc(var(--chat-row-max-width-proportion-used) * 100%);
     border-radius: var(--chat-message-border-radius-outer);
     background-color: var(--chat-white-replacement);
-    padding: 5px 0px 0px 0px;
+    padding: 0px;
 }
 
-.messageRow-tight:not(.message-last-in-group) {
-    background-color: var(--chat-white-replacement);
+.messageRow-tight.message-last-in-group.message-sent-from-other {
+    background-color: var(--chat-message-color-other);
 }
 
 .messageRow-tight.message-sent-from-self {
     left: calc(var(--chat-row-left-proportion) * 100% - 2%);
-    background-color: var(--chat-white-replacement);
 }
 
 .message-sent-from-self .message {
