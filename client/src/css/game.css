@@ -140,6 +140,7 @@ html, body, #root, .fill_parent {
 
 .game_page_row1 {
   width: 100%;
+  flex: none;
   display: flex;
   flex-direction: row;
 }
@@ -158,13 +159,26 @@ html, body, #root, .fill_parent {
 
 .game_page_row2 {
   width: 100%;
-  flex: 1;
+  flex: 1 0;
   justify-content: center;
+}
+.game_page_row2 .game_card_bin {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  /* IE */
+  -moz-transform: translateY(-50%);
+  /* Firefox */
+  -webkit-transform: translateY(-50%);
+  /* Safari and Chrome */
+  -o-transform: translateY(-50%);
 }
 
 .game_page_row3 {
   width: 100%;
   height: 25%;
+  flex: none;
   display: flex;
 }
 

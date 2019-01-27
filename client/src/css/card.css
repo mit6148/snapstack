@@ -1,35 +1,46 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
-.card_bin, .pcard_bin, .jcard_bin {
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  /* IE */
-  -moz-transform: translateY(-50%);
-  /* Firefox */
-  -webkit-transform: translateY(-50%);
-  /* Safari and Chrome */
-  -o-transform: translateY(-50%);
+.card_bin, .pcard_bin, .jcard_bin, .pmodal_card_bin, .jmodal_card_bin, .game_card_bin {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   align-items: center;
 }
-.card_bin.game_card_bin .card_slot, .card_bin.game_card_bin .pcard_slot, .game_card_bin.pcard_bin .card_slot, .game_card_bin.pcard_bin .pcard_slot, .card_bin.game_card_bin .jcard_slot, .game_card_bin.pcard_bin .jcard_slot, .game_card_bin.jcard_bin .card_slot, .game_card_bin.jcard_bin .pcard_slot, .game_card_bin.jcard_bin .jcard_slot {
+
+.game_card_bin .card_slot, .game_card_bin .pcard_slot, .game_card_bin .jcard_slot {
   height: 37.5vh;
   width: calc(37.5vh * 1.2 / 1.9);
 }
 
+.jmodal_card_bin .card_slot, .jmodal_card_bin .pcard_slot, .jmodal_card_bin .jcard_slot {
+  height: calc(1.2 * 37.5vh * 1.6 / 1.9);
+  width: calc(1.2 * 37.5vh * 1.2 / 1.9);
+}
+
+.pmodal_card_bin .card_slot, .pmodal_card_bin .pcard_slot, .pmodal_card_bin .jcard_slot {
+  height: 60vh;
+  width: calc(60vh * 1.2 / 1.6);
+}
+
 @media (max-aspect-ratio: 63/38) {
-  .card_bin.game_card_bin .card_slot, .card_bin.game_card_bin .pcard_slot, .game_card_bin.pcard_bin .card_slot, .game_card_bin.pcard_bin .pcard_slot, .card_bin.game_card_bin .jcard_slot, .game_card_bin.pcard_bin .jcard_slot, .game_card_bin.jcard_bin .card_slot, .game_card_bin.jcard_bin .pcard_slot, .game_card_bin.jcard_bin .jcard_slot {
+  .game_card_bin .card_slot, .game_card_bin .pcard_slot, .game_card_bin .jcard_slot {
     width: calc(100vw / 7);
     height: calc((100vw / 7) * 1.9 / 1.2);
   }
+
+  .jmodal_card_bin .card_slot, .jmodal_card_bin .pcard_slot, .jmodal_card_bin .jcard_slot {
+    width: calc(1.2 * 100vw / 7);
+    height: calc(1.2 * (100vw / 7) * 1.6 / 1.2);
+  }
 }
 @media (max-aspect-ratio: 21/19) {
-  .card_bin.game_card_bin .card_slot, .card_bin.game_card_bin .pcard_slot, .game_card_bin.pcard_bin .card_slot, .game_card_bin.pcard_bin .pcard_slot, .card_bin.game_card_bin .jcard_slot, .game_card_bin.pcard_bin .jcard_slot, .game_card_bin.jcard_bin .card_slot, .game_card_bin.jcard_bin .pcard_slot, .game_card_bin.jcard_bin .jcard_slot {
+  .game_card_bin .card_slot, .game_card_bin .pcard_slot, .game_card_bin .jcard_slot {
     height: 25vh;
     width: calc(25vh * 1.2 / 1.9);
+  }
+
+  .jmodal_card_bin .card_slot, .jmodal_card_bin .pcard_slot, .jmodal_card_bin .jcard_slot {
+    height: calc(1.2 * 25vh * 1.6 / 1.9);
+    width: calc(1.2 * 25vh * 1.2 / 1.9);
   }
 }
 .card_slot .card_area, .pcard_slot .card_area, .jcard_slot .card_area {
@@ -40,20 +51,18 @@
 .card_slot .card_area:only-child, .pcard_slot .card_area:only-child, .jcard_slot .card_area:only-child {
   height: 100%;
 }
-.card_slot .card_info_area, .pcard_slot .card_info_area, .jcard_slot .card_info_area {
-  height: calc(100% * 0.3 / 1.9);
-  width: 100%;
-}
-
-.card_area * {
+.card_slot .card_area > *, .pcard_slot .card_area > *, .jcard_slot .card_area > * {
   position: absolute;
   left: calc(100% * 0.1 / 1.2);
   right: calc(100% * 0.1 / 1.2);
   top: calc(100% * 0.15 / 1.6);
   bottom: calc(100% * 0.05 / 1.6);
 }
-
-.card_info_area .player_info {
+.card_slot .card_info_area, .pcard_slot .card_info_area, .jcard_slot .card_info_area {
+  height: calc(100% * 0.3 / 1.9);
+  width: 100%;
+}
+.card_slot .card_info_area .player_info, .pcard_slot .card_info_area .player_info, .jcard_slot .card_info_area .player_info {
   transform: scale(0.45, 0.45);
   border-width: 2;
   background-color: #BD9DCC;
@@ -61,6 +70,15 @@
   width: 360px;
   border-radius: 15px;
   box-shadow: 0px 4px 0px #8E7599;
+}
+
+.jcard {
+  background-color: #F4F4F4;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: #12B780;
+  border-width: 10px;
+  box-shadow: 1px 3px 0px #0E8C62;
 }
 
 .card_general, .card_empty, .pcard_empty, .jcard_empty, .card_back, .pcard_back, .jcard_back, .card_front, .pcard_front, .card_small, .pcard_small, .jcard_small {

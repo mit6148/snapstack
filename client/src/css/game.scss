@@ -31,6 +31,7 @@ html, body, #root, .fill_parent {
 // ROW 1 OF THE GAME CONTAINER:
 .game_page_row1 {
 	width: 100%;
+	flex: none;
 	display: flex;
 	flex-direction: row;
 }
@@ -52,14 +53,19 @@ html, body, #root, .fill_parent {
 // ROW 2 OF THE GAME CONTAINER:
 .game_page_row2 {
 	width: 100%;
-	flex: 1;
+	flex: 1 0;
 	justify-content: center;
+
+	.game_card_bin {
+		@include v-align(relative);
+	}
 }
 
 // ROW 3 OF THE GAME CONTAINER:
 .game_page_row3 {
 	width: 100%;
 	height: 25%;
+	flex: none;
 	display: flex;
 }
 
