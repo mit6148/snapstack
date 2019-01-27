@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+@import url("https://fonts.googleapis.com/css?family=Orbitron");
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
 .player_list {
   justify-content: center;
@@ -125,7 +125,7 @@ html, body, #root, .fill_parent {
 }
 
 .timer {
-  font-size: 40px;
+  font-size: 30px;
   color: #F4F4F4;
   background-color: #BD9DCC;
   padding: 10px;
@@ -133,8 +133,9 @@ html, body, #root, .fill_parent {
   box-shadow: 0px 3px 0px 0px #9C81A8;
   width: 150px;
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 40px;
+  left: 40px;
+  font-family: "Orbitron", sans-serif;
 }
 
 .clickable:hover {
