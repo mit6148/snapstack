@@ -4,14 +4,30 @@ import ImageEditor from "./ImageEditor";
 
 export default class PCardEditor extends React.Component {
     render() {
+        this.imageEditor = (
+            <ImageEditor image={this.props.image} />
+            );
+
+
         return (
             <div>
-                <div style="width: 86px; height: 98px">
-                    <ImageEditor image={this.props.image} />
+                <div style={{width: "200px", height: "200px"}}>
+                    {this.imageEditor}
                 </div>
                 <input id="caption-input" type="text" />
-                <div onClick={() => this.props.submit(this.props.image, document.getElementById('caption-input').value)}>Submit</div>
+                <div onClick={this.submit}>Submit</div>
             </div>
         );
     }
+
+
+    submit = () => {
+        try {
+            this.props.submit(this.imageEditor.getImage(), document.getElementById('caption-input').value);
+        } catch(err) {
+            console.log("submit failed: " + err);
+        }
+    }
+
+
 }

@@ -1,7 +1,7 @@
 import React from "react";
 
 // WIDTH and HEIGHT are dimensions of final image produced and of the view canvas
-import {IMAGE_WIDTH, IMAGE_HEIGHT, drawingMode, MAX_OVERZOOM} from "../../../../config";
+import {IMAGE_WIDTH, IMAGE_HEIGHT, drawingMode, MAX_OVERZOOM, IMAGE_COMPRESSION_OPTION} from "../../../../config";
 
 import "../../css/imageEditor.css";
 
@@ -37,12 +37,20 @@ export default class ImageEditor extends React.Component {
             this.viewCenterX = width / 2;
             this.viewCenterY = height / 2;
             this.maxZoomLevel = Math.min(width / IMAGE_WIDTH, height / IMAGE_HEIGHT);
-            this.zoomLevel = maxZoomLevel; // most zoomed out
+            this.zoomLevel = this.maxZoomLevel; // most zoomed out
             this.isReady = true;
             this.redraw();
         }
         this.image.src = this.props.image;
     }
+
+    getImage = () => {
+        if(!this.isReady || !this.viewCanvas) {
+            throw "image not ready";
+        } else {
+            return this.viewCanvas.toDataURL("image/jpg", IMAGE_COMPRESSION_OPTION);
+        }
+    };
 
     render() {
         return (
@@ -54,6 +62,11 @@ export default class ImageEditor extends React.Component {
     }
 
     saveViewCanvas = (viewCanvas) => {
+        console.log("save view canvas");
+        if(!viewCanvas) {
+            console.log("no canvas");
+            return;
+        }
         this.viewCanvas = viewCanvas;
         this.viewContext = this.viewCanvas.getContext("2d");
         this.redraw();
