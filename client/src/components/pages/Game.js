@@ -91,12 +91,12 @@ export default class Game extends React.Component {
                 <div className="game_page_row3">
                     <div className="game_code_section">
                         Game Code: 
-                        {this.props.appState.gameCode}
+                        {' ' + this.props.appState.gameCode}
                     </div>
                     
                     <div className='user_actionables'>
                         {this.canUploadImage() ? <Uploader upload={this.uploadImage} /> : null}
-                        {this.canFlipAllPCards() ? <div onClick={this.actions.flipAllPCards}>Flip All</div> : null}
+                        {this.canFlipAllPCards() ? <div className='home_btn' onClick={this.actions.flipAllPCards}>Flip All</div> : null}
                         {this.canSelectPCard() ? <div onClick={this.actions.selectPCard}>Select</div> : null}
                     </div>
 

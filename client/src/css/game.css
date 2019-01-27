@@ -131,7 +131,8 @@ html, body, #root, .fill_parent {
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0px 3px 0px 0px #9C81A8;
-  padding: 13px 23px;
+  width: 120px;
+  height: 40px;
   position: absolute;
   top: 40px;
   left: 40px;
