@@ -5,12 +5,18 @@ const User = require('./models/user');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const connect = require('connect-ensure-login');
-const {downloadImagePromise} = require('./storageTalk');
+const {downloadImagePromise, fetchImagePromise} = require('./storageTalk');
 const {MEDIA_KEYS, MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH, MAX_MEDIA_LENGTH} = require('../config');
 const db = require('./db');
 
 
 const router = express.Router();
+
+
+const downloadLockout = {}; // add user._id as key to prevent multiple requests at once
+
+
+
 
 router.get('/whoami', function(req, res) {
     if(req.isAuthenticated()) {
@@ -143,6 +149,26 @@ router.post('/update/profile', connect.ensureLoggedIn(), async function(req, res
         res.send({status: 500, message: "something went wrong!"});
     }
 });
+
+
+router.get('/download/:url', connect.ensureLoggedIn(), async function(req, res) {
+    // WARNING: validate url
+    if(downloadLockout[req.user._id]) {
+        console.log("user requested too many downloads");
+        res.send({message: "be patient"});
+        return;
+    }
+
+    try {
+        downloadLockout[req.user._id] = true;
+        const url = decodeURIComponent(req.params.url);
+        res.send({image: await fetchImagePromise(url)})
+    } catch(err) {
+        res.send({message: "Hm... we can't download this image"});
+    } finally {
+        delete downloadLockout[req.user._id];
+    }
+})
 
 
 
