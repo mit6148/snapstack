@@ -3,7 +3,7 @@ const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN,
-    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID} = require("../config");
+    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID, MAX_CAPTION_LENGTH} = require("../config");
 const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 const db = require('./db');
@@ -749,6 +749,7 @@ async function onConnection(socket) {
         // TODO validate image
         try {
             if(typeof(text) !== "string" || text.length > MAX_CAPTION_LENGTH) {
+                console.log("submit card failed for content reasons");
                 socket.emit('submitCardFailed', 'Caption is too long!');
                 return;
             }
@@ -761,6 +762,7 @@ async function onConnection(socket) {
                 await endSubmitPhaseDelayedSendout(game, WAIT_TIME);
             }
         } catch(err) {
+            console.error("there's a problem in submit card: " + err.stack);
             socket.emit('submitCardFailed', "Something went wrong!");
         }
     });
