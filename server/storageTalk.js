@@ -60,6 +60,8 @@ function fetchImagePromise(url) {
         request.defaults({encoding: null}).get(url, function(err, response, body) {
             if(err || response.statusCode != 200) {
                 reject(err || "Unsuccessful fetch for unknown reason");
+            } else if (!response.headers["content-type"].startsWith("image/")) {
+                reject("Image not accessible");
             } else {
                 resolve("data:" + response.headers["content-type"] + ";base64," + Buffer.from(body).toString('base64'));
             }
