@@ -293,7 +293,7 @@ class Game {
     }
 
     async trySave(user, pCardId) { // good if there is 1 jCard and the given pCard is currently in play, and updated the database with ref
-        const index = this.pCardRefPairs.map(pair => pair[0]._id).indexOf(pCardId);
+        const index = this.pCardRefPairs.map(pair => pair[0]._id.toString()).indexOf(pCardId);
 
         if(this.jCards.length === 1 && index >= 0 && pCardId.match(/^[a-zA-Z0-9]+$/)) {
             if(this.userToPlayerMap[user._id].checkSaved([pCardId])[0]) {
@@ -307,7 +307,7 @@ class Game {
             await detailUpdatePromise;
             await session.commitTransaction();
         } else {
-            throw new Error("invalid save request, or maybe saved right as the round changed");
+            throw new Error("invalid save request, or maybe saved right as the round changed. index: " + index + " pCardId: " + pCardId);
         }
     }
 
@@ -826,7 +826,7 @@ async function onConnection(socket) {
             await game.trySave(user, pCardId);
             socket.emit('cardSaved', pCardId);
         } catch(err) {
-            console.error("save card had error: " + error + "\n" + error.stack);
+            console.error("save card had error: " + err + "\n" + err.stack);
             socket.emit('cardSaveFailed', pCardId);
         }
     });
