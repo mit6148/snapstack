@@ -66,11 +66,10 @@
   position: absolute;
   left: calc(100% * 0.1 / 1.2);
   right: calc(100% * 0.1 / 1.2);
-  top: calc(100% * 0.15 / 1.6);
-  bottom: calc(100% * 0.05 / 1.6);
+  top: calc(100% * 0.1 / 1.6);
+  bottom: calc(100% * 0.1 / 1.6);
 }
 .card_slot > .card_info_area {
-  margin-top: 10px;
   height: calc(100% * 0.3 / 1.9);
   width: 100%;
   display: flex;
@@ -91,7 +90,7 @@
   background-color: #12B780;
   box-shadow: 1px 3px 0px #0E8C62;
 }
-.jcard > * {
+.jcard > [class$=content] {
   background-color: #F4F4F4;
   border-style: solid;
   border-color: #0E8C62;
@@ -111,7 +110,7 @@
   background-color: #0683E2;
   box-shadow: 1px 3px 0px #056BBA;
 }
-.pcard > * {
+.pcard > [class$=content] {
   background-color: #F4F4F4;
   border-style: solid;
   border-color: #056BBA;
@@ -134,7 +133,7 @@
 .pcard > .caption_content {
   position: absolute;
   width: calc(100% - 2 * 7%);
-  height: 20%;
+  height: 19%;
   left: calc(7% - 2px);
   bottom: calc(3% - 2px);
 }

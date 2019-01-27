@@ -4,8 +4,8 @@
 
 $card-width: 1;
 $card-height: 1.4;
-$card-margin-top: 0.15;
-$card-margin-bottom: 0.05;
+$card-margin-top: 0.1;
+$card-margin-bottom: 0.1;
 $card-margin-side: 0.1;
 $card-slot-width: 1.2;
 $card-area-height: 1.6;
@@ -100,7 +100,6 @@ $jmodal-scale: 1.2;
 	}
 
 	> .card_info_area {
-		margin-top: 10px; // migrate to $card-margin-bottom?
 		height: calc(100% * #{$card-info-area-height} / #{$card-slot-height});
 		width: 100%;
 		display: flex;
@@ -126,7 +125,7 @@ $content_border_radius: 5px;
 	background-color: $primary;
 	box-shadow: 1px 3px 0px $shadow;
 
-	> * {
+	> [class$='content'] {
 		background-color: $white;
 		border-style: solid;
 		border-color: $shadow;
