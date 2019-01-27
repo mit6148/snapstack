@@ -32,8 +32,8 @@ export default class Home extends React.Component {
                 {this.state.joinGameModal ? // TODO
                     <Modal modalType="join_game" onClose={() => this.setState({joinGameModal: false})}>
                         <h3> Enter game code: </h3>
-                        <input id="game-code-input" autoComplete="off" className="modal_text_input" type="text" />
-                        <div className="modal_btn" onClick={() => this.props.enterGame(document.getElementById("game-code-input").value)}>Play!</div>
+                        <input id="game-code-input" onKeyUp={this.enterGame} autoComplete="off" className="modal_text_input" type="text" />
+                        <div className="modal_btn" onClick={this.enterGame}>Play!</div>
                     </Modal>
                 : null}
 
@@ -41,17 +41,21 @@ export default class Home extends React.Component {
             </div>
 
         );
-    }
+    };
+
+    enterGame = () => {
+        this.props.enterGame(document.getElementById("game-code-input").value);
+    };
 
     onNewGame = () => {
         this.props.enterGame('?');
-    }
+    };
 
     onJoinGame = () => {
         this.setState({
             joinGameModal: true
         });
-    }
+    };
 
 
 }
