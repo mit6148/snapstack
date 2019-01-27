@@ -77,7 +77,7 @@ export default class Chat extends React.Component {
                     }
                 </div>
                 <div className="chatBox-entry">
-                    <input type="text" autocomplete="off" className="chatBox-textEntry" ref={this.saveInput}
+                    <input type="text" autoComplete="off" className="chatBox-textEntry" ref={this.saveInput}
                             placeholder="Type to chat..." onKeyUp={this.onPressEnter}/>
                     <div className="chatBox-sendButton" onClick={this.trySendChat}>
                         <div className="chatBox-sendButton-text"> Send </div>
