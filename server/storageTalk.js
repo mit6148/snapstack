@@ -1,10 +1,11 @@
 const {Storage} = require('@google-cloud/storage');
-const path = require('path');
+const request = require('request');
 
 const storageInfo = {projectId: "snapstack"};
 if(process.env.GCP_PRIVATE_KEY && process.env.GCP_CLIENT_EMAIL) {
     storageInfo.credentials = {private_key: process.env.GCP_PRIVATE_KEY, client_email: process.env.GCP_CLIENT_EMAIL};
 } else {
+    const path = require('path'); // only need here
     storageInfo.keyFilename = path.join(__dirname, 'storage-secret.json'); // for developer ease on localhost only
 }
 const storage = new Storage(storageInfo);
@@ -53,4 +54,17 @@ function deleteImagePromise(name) { // returns true if succeeded
 }
 
 
-module.exports = {uploadImagePromise, downloadImagePromise, deleteImagePromise};
+function fetchImagePromise(url) {
+    return new Promise(function(resolve, reject) {
+        request.defaults({encoding: null}).get(url, function(err, response, body) {
+            if(err || response.statusCode != 200) {
+                reject(err || "Unsuccessful fetch for unknown reason");
+            } else {
+                resolve("data:" + response.headers["content-type"] + ";base64," + Buffer.from(body).toString('base64'));
+            }
+        });
+    });
+}
+
+
+module.exports = {uploadImagePromise, downloadImagePromise, deleteImagePromise, fetchImagePromise};
