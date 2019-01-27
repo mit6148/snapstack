@@ -70,6 +70,7 @@ div {
 .score_icon {
   height: 35px;
   width: 35px;
+  margin-top: 2px;
 }
 
 .score {
@@ -80,9 +81,10 @@ div {
 }
 
 .player_score {
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
-  margin-left: 2px;
+  margin-left: 5px;
+  margin-top: 4px;
 }
 
 .fb_btn {
@@ -94,7 +96,7 @@ div {
   padding: 4px;
   box-shadow: 0px 2px 0px #636266;
   border-radius: 6px;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .fb_btn:hover {
   cursor: pointer;
