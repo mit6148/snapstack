@@ -53,9 +53,13 @@
   bottom: calc(100% * 0.05 / 1.6);
 }
 
+.card_info_area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .card_info_area .player_info {
-  transform: scale(0.45, 0.45);
-  border-width: 2;
+  transform: scale(0.5, 0.5);
   background-color: #BD9DCC;
   display: flex;
   width: 360px;

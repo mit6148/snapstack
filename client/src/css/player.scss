@@ -86,8 +86,9 @@ div {
 .player_score {
 	font-size: 25px;
 	font-weight: bold;
-	margin-left: 5px;
+	margin-left: 10px;
 	margin-top: 4px;
+	margin-right: 10px;
 }
 
 .fb_btn {
@@ -101,7 +102,7 @@ div {
 	box-shadow: 0px 2px 0px $dark-gray;
 	border-radius: 6px;
 
-	margin-right: 20px;
+	margin-right: 16px;
 
 	&:hover {
 	cursor: pointer;
@@ -117,6 +118,8 @@ div {
 	padding: 4px;
 	width: 25px;
 	height: 25px;
+
+	margin: 0px 0px;
 
 	background: 
 		radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%),
