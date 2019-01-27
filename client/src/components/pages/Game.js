@@ -91,8 +91,7 @@ export default class Game extends React.Component {
                 <div className="game_page_row3">
                     <div className="game_code_section">
                         Game Code: 
-                        <h2> {this.props.appState.gameCode}
-                        </h2>
+                        {this.props.appState.gameCode}
                     </div>
                     
                     <div className='user_actionables'>

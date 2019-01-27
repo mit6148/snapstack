@@ -59,11 +59,15 @@
   bottom: calc(100% * 0.05 / 1.6);
 }
 .card_slot .card_info_area, .pcard_slot .card_info_area, .jcard_slot .card_info_area {
+  margin-top: 10px;
   height: calc(100% * 0.3 / 1.9);
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .card_slot .card_info_area .player_info, .pcard_slot .card_info_area .player_info, .jcard_slot .card_info_area .player_info {
-  transform: scale(0.45, 0.45);
+  transform: scale(0.5, 0.5);
   border-width: 2;
   background-color: #BD9DCC;
   display: flex;

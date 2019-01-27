@@ -3,7 +3,7 @@ const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN,
-    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID} = require("../config");
+    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID, MAX_CAPTION_LENGTH} = require("../config");
 const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 const db = require('./db');
@@ -628,6 +628,7 @@ async function handleSkipRound(game, userTriggered) {
     game.skipRound(userTriggered);
     console.log('about to wait to skip round');
     io.to(game.getGameCode()).emit('skipped');
+    // NOTE: don't need a game_persist since game must be a valid reference by the time it gets here
     setTimeout(async () => {
         try {
             console.log('about to actually skip round');
@@ -646,6 +647,7 @@ async function tryStartNewRound(game) {
 
 function endSubmitPhaseDelayedSendout(game, delay) {
     game.endSubmitPhase();
+    // NOTE: don't need a game_persist since game must be a valid reference by the time it gets here
     setTimeout(async () => {
         try {
             await game.withLock(async () => {
@@ -716,20 +718,21 @@ async function onConnection(socket) {
         const endTime = game.getEndTime();
         io.to(game.getGameCode()).emit('roundStart', jCardIndex, endTime);
         const round = game.getRound();
+        const game_persist = game; // make game persist for timer in case of disconnect
         setTimeout(async () => {
             try {
                 console.log("about to handle timeout event");
-                await game.withLock(async () => {
-                    switch(game.getEndSubmitPhaseStatus(round)) {
+                await game_persist.withLock(async () => {
+                    switch(game_persist.getEndSubmitPhaseStatus(round)) {
                         case endSubmitPhaseStatus.CAN_END:
                             // submit phase ended in a timeout
                             console.log("ending submit phase");
-                            await endSubmitPhaseDelayedSendout(game, WAIT_TIME - TIME_LIMIT_FORGIVE_MILLIS); // same total delay as usual
+                            await endSubmitPhaseDelayedSendout(game_persist, WAIT_TIME - TIME_LIMIT_FORGIVE_MILLIS); // same total delay as usual
                             break;
                         case endSubmitPhaseStatus.SKIP_INSTEAD:
                             // no one submitted, so trigger skip event not caused by any particular user
                             console.log('skipping due to no submission');
-                            await handleSkipRound(game, false);
+                            await handleSkipRound(game_persist, false);
                             break;
                         case endSubmitPhaseStatus.ALREADY_ENDED:
                             // timer is irrelevant since submit phase already ended, so do nothing
@@ -743,13 +746,24 @@ async function onConnection(socket) {
     });
 
     createLockedListener(socket, 'submitCard', gameGetter, true, async (image, text) => {
-        const pCardRef = await generatePCardRef(user, image, text);
-        game.submitCard(pCardRef);
-        socket.emit('turnedIn', user._id, pCardRef._id);
-        socket.to(game.getGameCode()).emit('turnedIn', user._id);
+        // TODO validate image
+        try {
+            if(typeof(text) !== "string" || text.length > MAX_CAPTION_LENGTH) {
+                console.log("submit card failed for content reasons");
+                socket.emit('submitCardFailed', 'Caption is too long!');
+                return;
+            }
+            const pCardRef = await generatePCardRef(user, image, text);
+            game.submitCard(pCardRef);
+            socket.emit('turnedIn', user._id, pCardRef._id);
+            socket.to(game.getGameCode()).emit('turnedIn', user._id);
 
-        if(game.allCardsSubmitted()) {
-            await endSubmitPhaseDelayedSendout(game, WAIT_TIME);
+            if(game.allCardsSubmitted()) {
+                await endSubmitPhaseDelayedSendout(game, WAIT_TIME);
+            }
+        } catch(err) {
+            console.error("there's a problem in submit card: " + err.stack);
+            socket.emit('submitCardFailed', "Something went wrong!");
         }
     });
 
@@ -772,17 +786,18 @@ async function onConnection(socket) {
     createLockedListener(socket, 'select', gameGetter, true, async index => {
         game.select(user, index);
         io.to(game.getGameCode()).emit('select', index, game.getCreators());
+        const game_persist = game; // game persist in case of disconnect
         setTimeout(async () => {
             try {
                 console.log("about to move from round over to new round");
-                await game.withLock( async () => {
-                    if(game.hasSomeoneWon()) {
+                await game_persist.withLock( async () => {
+                    if(game_persist.hasSomeoneWon()) {
                         console.log("game over!");
-                        await game.endGame();
-                        io.to(game.getGameCode()).emit('gameOver');
+                        await game_persist.endGame();
+                        io.to(game_persist.getGameCode()).emit('gameOver');
                     } else {
                         console.log("trying to start a new round");
-                        await tryStartNewRound(game);
+                        await tryStartNewRound(game_persist);
                     }
                 });
                 console.log("finished starting new round/game over-ifying");

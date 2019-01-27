@@ -100,18 +100,19 @@ $jmodal-scale: 1.2;
 	}
 
 	.card_info_area {
+		margin-top: 10px; // migrate to $card-margin-bottom?
 		height: calc(100% * #{$card-info-area-height} / #{$card-slot-height});
 		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
 		.player_info {
-			transform: scale(0.45, 0.45);
-
-			border-width: 2;
+			transform: scale(0.50, 0.50);
 			background-color: $purple-light;
 			display: flex;
 			width: 360px;
 			border-radius: 15px;
-
 			box-shadow: 0px 4px 0px $purple-dark;
 		}
 	}

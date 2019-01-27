@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
+@import url("https://fonts.googleapis.com/css?family=Orbitron");
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
 .player_list {
   justify-content: center;
@@ -70,6 +70,7 @@ div {
 .score_icon {
   height: 35px;
   width: 35px;
+  margin-top: 2px;
 }
 
 .score {
@@ -80,9 +81,11 @@ div {
 }
 
 .player_score {
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
-  margin-left: 2px;
+  margin-left: 10px;
+  margin-top: 4px;
+  margin-right: 10px;
 }
 
 .fb_btn {
@@ -94,7 +97,7 @@ div {
   padding: 4px;
   box-shadow: 0px 2px 0px #636266;
   border-radius: 6px;
-  margin-right: 10px;
+  margin-right: 16px;
 }
 .fb_btn:hover {
   cursor: pointer;
@@ -107,6 +110,7 @@ div {
   padding: 4px;
   width: 25px;
   height: 25px;
+  margin: 0px 0px;
   background: radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%), radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%), radial-gradient(ellipse farthest-corner at 0 -25%, #5258cf, transparent 50%), radial-gradient(ellipse farthest-corner at 20% -50%, #5258cf, transparent 50%), radial-gradient(ellipse farthest-corner at 100% 0, #893dc2, transparent 50%), radial-gradient(ellipse farthest-corner at 60% -20%, #893dc2, transparent 50%), radial-gradient(ellipse farthest-corner at 100% 100%, #d9317a, transparent), linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);
   border-radius: 10px;
 }
@@ -121,10 +125,17 @@ html, body, #root, .fill_parent {
 }
 
 .timer {
-  font-size: 40px;
-  background: -webkit-linear-gradient(#0683E2, #12B780);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 30px;
+  color: #F4F4F4;
+  background-color: #BD9DCC;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 3px 0px 0px #9C81A8;
+  width: 150px;
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  font-family: "Orbitron", sans-serif;
 }
 
 .clickable:hover {
@@ -180,6 +191,8 @@ html, body, #root, .fill_parent {
   height: 25%;
   flex: none;
   display: flex;
+  justify-contents: center;
+  align-items: center;
 }
 
 .game_code_section {
@@ -188,6 +201,9 @@ html, body, #root, .fill_parent {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: 30px;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
 }
 
 .user_actionables {
@@ -195,7 +211,7 @@ html, body, #root, .fill_parent {
 }
 
 .chat_box_section {
-  flex: 2 0 20%;
+  flex: 2 0 25%;
 }
 
 @media (max-aspect-ratio: 21/19) {
@@ -204,7 +220,7 @@ html, body, #root, .fill_parent {
   }
 
   .game_page_row2 {
-    height: 50%;
+    height: 70%;
   }
 }
 
