@@ -46,7 +46,7 @@ export default class Uploader extends React.Component {
         try {
             if(url) {
                 try {
-                    const preblob = await fetch(url, {mode: "no-cors"});
+                    const preblob = await fetch(url);
                     const blob = await preblob.blob();
                     if(typeof(blob) !== "object") {
                         console.log("blob failed in uploader");
