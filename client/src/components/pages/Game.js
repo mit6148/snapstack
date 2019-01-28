@@ -57,7 +57,7 @@ export default class Game extends React.Component {
 
                     <div className="notification_section">
                         {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
-                            <div className="round_skip">
+                            <div className="round_skip notification">
                                 The judge has disconnected. Skip round?
                                 <div className="home_btn" onClick={this.actions.skipRound}> 
                                 Sure </div>
@@ -65,7 +65,7 @@ export default class Game extends React.Component {
                         ) : null}
                         
                         {this.gameState.roundSkipped ? (
-                            <div>
+                            <div className="notification">
                                 Skipping to next round...
                             </div>
                         ) : null}

@@ -30,6 +30,9 @@ export default class PCard extends Component {
                     </div>
                     <div className='caption_content'>
                         <Caption text={this.props.text} creator={this.props.creator} creatorId={this.props.creatorId} />
+                        
+                    </div>
+                    <div className='save_btn_container'>
                         <SaveButton saveState={this.props.saveState} save={this.props.save} />
                     </div>
                 </div>

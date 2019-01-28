@@ -149,6 +149,12 @@ $content_border_radius: 5px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		overflow-wrap: break-word;
+
+		> * {
+			padding: 5%;
+			width: 100%;
+		}
 
 
 	}
@@ -178,6 +184,16 @@ $content_border_radius: 5px;
 		height: 19%;
 		left: calc(7% - #{$content_border_width});
 		bottom: calc(3% - #{$content_border_width});
+		
+		align-items: center;
+		justify-content: center;
+		overflow-wrap: break-word;
+
+
+		> * {
+			padding: 5%;
+			width: 100%;
+		}
 	}
 }
 
@@ -235,220 +251,81 @@ $content_border_radius: 5px;
 	font-size: 16px;
 }
 
-
-/*
-.card_empty {
-	border-radius: 10px;
-	border-style: dashed;
+.lds-spinner {
+  color: official;
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
 }
-
-.jcard_empty {
-	@extend .card_empty;
-
-	border-color: $green-light;
+.lds-spinner div {
+  transform-origin: 32px 32px;
+  animation: lds-spinner 1.2s linear infinite;
 }
-
-.card_info {
-
+.lds-spinner div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 3px;
+  left: 29px;
+  width: 5px;
+  height: 14px;
+  border-radius: 20%;
+  background: #fff;
 }
-.card_object {
-	
+.lds-spinner div:nth-child(1) {
+  transform: rotate(0deg);
+  animation-delay: -1.1s;
 }
-
-.card_general {
-	height: 80%;
-	width: 80%;
+.lds-spinner div:nth-child(2) {
+  transform: rotate(30deg);
+  animation-delay: -1s;
 }
-
-.card_small {
-	@extend .card_general;
+.lds-spinner div:nth-child(3) {
+  transform: rotate(60deg);
+  animation-delay: -0.9s;
 }
-
-.card_large {
-
+.lds-spinner div:nth-child(4) {
+  transform: rotate(90deg);
+  animation-delay: -0.8s;
 }
-
-.card_front {
-
-	@extend .card_general;
-
+.lds-spinner div:nth-child(5) {
+  transform: rotate(120deg);
+  animation-delay: -0.7s;
 }
-
-.card_back {
-
-	@extend .card_general;
+.lds-spinner div:nth-child(6) {
+  transform: rotate(150deg);
+  animation-delay: -0.6s;
 }
-
-.card_empty {
-
-	@extend .card_general;	
-
-	margin: auto;
-
-	border-radius: 10px;
-
-	border-style: dashed;
-
+.lds-spinner div:nth-child(7) {
+  transform: rotate(180deg);
+  animation-delay: -0.5s;
 }
-
-
-// START OF JCARD TYPES:
-
-.jcard_bin {
-	@extend .card_bin;
-	height: 100%;
-	width: 100%;
-	justify-content: center;
+.lds-spinner div:nth-child(8) {
+  transform: rotate(210deg);
+  animation-delay: -0.4s;
 }
-
-.jcard_slot {
-	@extend .card_slot;
-	width: 28%;
-
+.lds-spinner div:nth-child(9) {
+  transform: rotate(240deg);
+  animation-delay: -0.3s;
 }
-
-.jcard_object {
-	@extend .card_object;
-
+.lds-spinner div:nth-child(10) {
+  transform: rotate(270deg);
+  animation-delay: -0.2s;
 }
-
-
-.jcard_info {
-	@extend .card_info;
-
-
+.lds-spinner div:nth-child(11) {
+  transform: rotate(300deg);
+  animation-delay: -0.1s;
 }
-
-.jcard_small {
-	@extend .card_small;
-
+.lds-spinner div:nth-child(12) {
+  transform: rotate(330deg);
+  animation-delay: 0s;
 }
-
-.jcard_large {
-	@extend .card_large;
-
-	height: 100%;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	background-color: $white;
-	justify-content: center;
-	align-items: center;
-	border-style: solid;
-	border-radius: 10px;
-	border-color: $green-light;
-	border-width: 10px;
-	box-shadow: 1px 3px 0px $green-dark;
-
-	margin: 15px;
-
+@keyframes lds-spinner {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
-
-.jcard_front {
-
-
-}
-
-.jcard_back {
-	@extend .card_back;
-
-}
-
-.jcard_empty {
-	@extend .card_empty;
-
-	border-color: $green-light;
-}
-
-
-//START OF PCARD TYPES
-
-.pcard_bin {
-	@extend .card_bin;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: row;
-
-	justify-content: center;
-	align-content: center;
-
-
-}
-
-.pcard_slot {
-	@extend .card_slot;
-	flex: 0 1 10%;
-
-	width: 14%;
-
-}
-
-.pcard_object {
-	@extend .card_object;
-
-}
-
-
-.pcard_info {
-	@extend .card_info;
-
-}
-
-.pcard_small {
-	@extend .card_small;
-
-}
-
-.pcard_large {
-	@extend .card_large;
-}
-
-.pcard_front {
-	@extend .card_front;
-
-}
-
-.pcard_back {
-	@extend .card_back;
-
-
-}
-
-.pcard_empty {
-	@extend .card_empty;
-
-	border-color: $blue-light;
-
-
-}
-
-// modified player info!!
-
-.pcard_info .player_info {
-
-	transform: scale(0.45, 0.45);
-
-	border-width: 2;
-	background-color: $purple-light;
-	display: flex;
-	width: 360px;
-	border-radius: 15px;
-
-	box-shadow: 0px 4px 0px $purple-dark;
-
-
-}
-
-.jcard_info .player_info {
-	transform: scale(0.45, 0.45);
-
-	border-width: 2;
-	background-color: $purple-light;
-	display: flex;
-	width: 360px;
-	border-radius: 15px;
-
-	box-shadow: 0px 4px 0px $purple-dark;
-}
-*/

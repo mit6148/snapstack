@@ -25,7 +25,9 @@ export default class JCard extends Component {
             return (
                 <div className='jcard' onClick={this.props.onClick}>
                     <div className='content'>
-                        {this.props.text}
+                        <div>
+                            {this.props.text}
+                        </div>
                     </div>
                 </div>
             );
