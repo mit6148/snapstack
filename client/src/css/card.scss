@@ -143,6 +143,7 @@ $content_border_radius: 5px;
 @mixin card($primary, $shadow) {
 	border-radius: 7%/5%;
 	background-color: $primary;
+	background-image: linear-gradient(to bottom right, lighten($primary, 5%), $primary);
 	box-shadow: 1px 3px 0px $shadow;
 
 	> [class$='content'] {
@@ -210,6 +211,7 @@ $content_border_radius: 5px;
 		width: calc(100% - 2 * 7%);
 		height: calc(100% - 2 * 5%);
 		background-color: $primary;
+		background-image: linear-gradient(to bottom right, lighten($primary, 5%), $primary);
 		border-style: solid;
 		border-color: $shadow;
 		border-width: #{$content_border_width};

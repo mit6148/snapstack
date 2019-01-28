@@ -111,6 +111,7 @@
 .jcard {
   border-radius: 7%/5%;
   background-color: #12B780;
+  background-image: linear-gradient(to bottom right, #14ce90, #12B780);
   box-shadow: 1px 3px 0px #0E8C62;
 }
 .jcard > [class$=content] {
@@ -134,6 +135,7 @@
 .pcard {
   border-radius: 7%/5%;
   background-color: #0683E2;
+  background-image: linear-gradient(to bottom right, #0991f8, #0683E2);
   box-shadow: 1px 3px 0px #056BBA;
 }
 .pcard > [class$=content] {
@@ -176,6 +178,7 @@
   width: calc(100% - 2 * 7%);
   height: calc(100% - 2 * 5%);
   background-color: #12B780;
+  background-image: linear-gradient(to bottom right, #14ce90, #12B780);
   border-style: solid;
   border-color: #0E8C62;
   border-width: 2px;
@@ -201,6 +204,7 @@
   width: calc(100% - 2 * 7%);
   height: calc(100% - 2 * 5%);
   background-color: #0683E2;
+  background-image: linear-gradient(to bottom right, #0991f8, #0683E2);
   border-style: solid;
   border-color: #056BBA;
   border-width: 2px;
