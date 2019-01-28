@@ -237,8 +237,8 @@ class Game {
         }
 
         const imagesPromise = Promise.all(pCardRefPairs.map(pair => downloadImagePromise(pair[0].image_ref)));
-        const pCardSaved = await (player ? player.checkSaved(pCardRefPairs.map(pair => pair[0]._id)) : {});
-        const images = await imagesPromise;
+        const pCardSavedPromise = (player ? player.checkSaved(pCardRefPairs.map(pair => pair[0]._id)) : {});
+        const [images, pCardSaved] = await Promise.all(imagesPromise, pCardSavedPromise);
 
         const output = [];
 
@@ -301,11 +301,13 @@ class Game {
             }
             const session = await db.startSession();
             session.startTransaction();
-            const detailUpdatePromise = UserDetail.updateOne({_id: user.detail_id},
-                                            {$push: {saved_pairs: {jcard: this.jCards[0]._id, pcard: pCardId}}}).session(session).exec();
-            await PCardRef.updateOne({_id: pCardId}, {$inc: {ref_count: 1}}).session(session);
-            await detailUpdatePromise;
+            await Promise.all([
+                    UserDetail.updateOne({_id: user.detail_id},
+                        {$push: {saved_pairs: {jcard: this.jCards[0]._id, pcard: pCardId}}}).session(session).exec(),
+                    PCardRef.updateOne({_id: pCardId}, {$inc: {ref_count: 1}}).session(session)
+                ]);
             await session.commitTransaction();
+            session.endSession();
         } else {
             throw new Error("invalid save request, or maybe saved right as the round changed. index: " + index + " pCardId: " + pCardId);
         }
