@@ -21,12 +21,12 @@ export default class CardBin extends React.Component {
                         </div>
                         {this.props.type === 'game' ? (
                             <div className="card_info_area">
-                                {!this.props.owners || !this.props.owners[index] ? null : (
-                                    <PlayerInfo name={this.props.owners[index].name}
-                                                avatar={this.props.owners[index].avatar}
-                                                media={this.props.owners[index].media}
-                                                score={this.props.owners[index].score}
-                                                connected={this.props.owners[index].connected} />
+                                {!this.props.creators || !this.props.creators[index] ? null : (
+                                    <PlayerInfo name={this.props.creators[index].name}
+                                                avatar={this.props.creators[index].avatar}
+                                                media={this.props.creators[index].media}
+                                                score={this.props.creators[index].score}
+                                                connected={this.props.creators[index].connected} />
                                 )}
                             </div>
                         ) : null}
@@ -41,16 +41,19 @@ export default class CardBin extends React.Component {
                                     faceup={pCard.faceup}
                                     onClick={this.props.onClick ? (() => this.props.onClick(index, pCard)) : null}
                                     saveState={pCard.saveState}
-                                    save={() => this.props.save(index)} />
+                                    save={() => this.props.save(index)}
+                                    creator={['profile', 'jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index].name : null}
+                                    creatorId={['profile', 'jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index]._id : null}
+                                    userId={this.props.userId} />
                         </div>
                         {this.props.type === 'game' ? (
                             <div className='card_info_area'>
-                                {!this.props.owners || !this.props.owners[index] ? null : (
-                                    <PlayerInfo name={this.props.owners[index].name}
-                                                avatar={this.props.owners[index].avatar}
-                                                media={this.props.owners[index].media}
-                                                score={this.props.owners[index].score}
-                                                connected={this.props.owners[index].connected} />
+                                {!this.props.creators || !this.props.creators[index] ? null : (
+                                    <PlayerInfo name={this.props.creators[index].name}
+                                                avatar={this.props.creators[index].avatar}
+                                                media={this.props.creators[index].media}
+                                                score={this.props.creators[index].score}
+                                                connected={this.props.creators[index].connected} />
                                 )}
                             </div>
                         ) : null}

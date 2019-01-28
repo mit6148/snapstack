@@ -29,8 +29,10 @@ export default class PCard extends Component {
                         <img src={this.props.image} />
                     </div>
                     <div className='caption_content'>
-                        <Caption text={this.props.text} creator={this.props.creator} creatorId={this.props.creatorId} />
-                        <SaveButton saveState={this.props.saveState} save={this.props.save} />
+                        <Caption text={this.props.text} creator={this.props.creator} creatorId={this.props.creatorId} userId={this.props.userId} />
+                        {this.props.saveState !== undefined ? (
+                            <SaveButton saveState={this.props.saveState} save={this.props.save} />
+                        ) : null}
                     </div>
                 </div>
             );

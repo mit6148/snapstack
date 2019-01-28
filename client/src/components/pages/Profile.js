@@ -17,6 +17,7 @@ export default class Profile extends React.Component {
         super(props);
 
         this.state = {
+            userId: null,
             shouldRender: false,
             firstName: null,
             lastName: null,
@@ -28,8 +29,10 @@ export default class Profile extends React.Component {
             pCards: [],
             cardModal: null
         };
+    }
 
-        fetch('/api/profile/'+this.props.id).then(res => res.json()).then(async profileObj => {
+    getData = userId => {
+        fetch('/api/profile/'+userId).then(res => res.json()).then(async profileObj => {
             this.setState({
                 firstName: profileObj.firstName,
                 lastName: profileObj.lastName,
@@ -61,7 +64,32 @@ export default class Profile extends React.Component {
         });
     }
 
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.id !== prevState.userId) {
+            return {
+                userId: null,
+                shouldRender: false,
+                firstName: null,
+                lastName: null,
+                avatar: null,
+                description: null,
+                media: null,
+                jCards: null,
+                pCardIds: null,
+                pCards: [],
+                cardModal: null
+            };
+        } else {
+            return null;
+        }
+    }
+
     render() {
+        if (this.state.userId === null) {
+            this.state.userId = this.props.id;
+            this.getData(this.props.id);
+        }
+
         if (!this.state.shouldRender) {
             return (
                 <div className="profile_text profile_page">
@@ -114,6 +142,8 @@ export default class Profile extends React.Component {
                         <div className="saved_cards">
                             <CardBin    type='profile'
                                         pCards={this.state.pCardIds.map((pCardId, index) => index < this.state.pCards.length ? this.state.pCards[index] : LOADING_CARD)}
+                                        creators={this.state.pCards.map(pCard => ({_id: pCard.creator_id, name: pCard.creator_name}))}
+                                        userId={this.props.id}
                                         onClick={this.viewSaved} />
                         </div>
                     </div>
@@ -131,37 +161,11 @@ export default class Profile extends React.Component {
                 <Modal onClose={() => this.setState({cardModal: null})}>
                     <CardBin    type='jpmodal'
                                 jCards={[this.state.jCards[index]]}
-                                pCards={[this.state.pCards[index]]} />
+                                pCards={[this.state.pCards[index]]}
+                                creators={[{_id: this.state.pCards[index].creator_id, name: this.state.pCards[index].creator_name}]}
+                                userId={this.props.id} />
                 </Modal>
             )
         });
     }
 }
-
-// <div className="square_picture_container">
-//     <img src="/chris.jpg"/>
-// </div>
-// <div className="square_picture_container">
-//     <img src="/melody.jpg"/>
-// </div>
-// <div className="square_picture_container">
-//     <img src="/nikhil.jpg"/>
-// </div>
-// <div className="square_picture_container">
-//     <img src="/chris.jpg"/>
-// </div>
-// <div className="square_picture_container">
-//     <img src="/melody.jpg"/>
-// </div>
-// <div className="square_picture_container">
-//     <img src="/nikhil.jpg"/>
-// </div>
-// <div className="square_picture_container">
-//     <img src="/chris.jpg"/>
-// </div>
-// <div className="square_picture_container">
-//     <img src="/melody.jpg"/>
-// </div>
-// <div className="square_picture_container">
-//     <img src="/nikhil.jpg"/>
-// </div>
