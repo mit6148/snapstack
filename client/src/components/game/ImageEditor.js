@@ -121,7 +121,8 @@ export default class ImageEditor extends React.Component {
 
     render() {
         return (
-            <canvas className="canvas-image-editor"
+            <canvas className={"canvas-image-editor "
+                                + (this.props.mode === drawingMode.MOVE ? "canvas-move" : "canvas-draw")}
                     width={IMAGE_WIDTH}
                     height={IMAGE_HEIGHT}
                     ref={this.saveViewCanvas}
