@@ -238,7 +238,7 @@ class Game {
 
         const imagesPromise = Promise.all(pCardRefPairs.map(pair => downloadImagePromise(pair[0].image_ref)));
         const pCardSavedPromise = (player ? player.checkSaved(pCardRefPairs.map(pair => pair[0]._id)) : {});
-        const [images, pCardSaved] = await Promise.all(imagesPromise, pCardSavedPromise);
+        const [images, pCardSaved] = await Promise.all([imagesPromise, pCardSavedPromise]);
 
         const output = [];
 
