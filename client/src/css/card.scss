@@ -53,8 +53,8 @@ $jmodal-scale: 1.2;
 	justify-content: flex-start;
 
 	> .card_slot {
-		width: calc((100vw - 17px) / 4);
-		height: calc((100vw - 17px) / 4 * #{$card-area-height} / #{$card-slot-width});
+		width: calc((100vw - 17px - 2 * 50px) / 4);
+		height: calc((100vw - 17px - 2 * 50px) / 4 * #{$card-area-height} / #{$card-slot-width});
 	}
 }
 

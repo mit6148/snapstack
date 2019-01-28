@@ -40,7 +40,7 @@ export default class Profile extends React.Component {
                 pCardIds: profileObj.saved_pairs.map(pair => pair.pCardId)
             });
 
-            await this.loadPCards(4);
+            await this.loadPCards(8);
             this.setState({
                 shouldRender: true
             });

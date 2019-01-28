@@ -40,8 +40,8 @@
   justify-content: flex-start;
 }
 .profile_card_bin > .card_slot {
-  width: calc((100vw - 17px) / 4);
-  height: calc((100vw - 17px) / 4 * 1.6 / 1.2);
+  width: calc((100vw - 17px - 2 * 50px) / 4);
+  height: calc((100vw - 17px - 2 * 50px) / 4 * 1.6 / 1.2);
 }
 
 .jpmodal_card_bin {

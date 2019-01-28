@@ -127,6 +127,10 @@ h1:hover {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  left: 50px;
+  right: 50px;
+  z-index: -1;
 }
 
 /*# sourceMappingURL=profile.css.map */
