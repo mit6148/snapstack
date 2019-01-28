@@ -300,14 +300,21 @@ class Game {
                 return; // already saved
             }
             const session = await db.startSession();
-            session.startTransaction();
-            await Promise.all([
-                    UserDetail.updateOne({_id: user.detail_id},
-                        {$push: {saved_pairs: {jcard: this.jCards[0]._id, pcard: pCardId}}}).session(session).exec(),
-                    PCardRef.updateOne({_id: pCardId}, {$inc: {ref_count: 1}}).session(session)
-                ]);
-            await session.commitTransaction();
-            session.endSession();
+            await session.startTransaction();
+            console.log(session.transaction);
+            try {
+                await UserDetail.updateOne({_id: user.detail_id},
+                        {$push: {saved_pairs: {jcard: this.jCards[0]._id, pcard: pCardId}}}).session(session).exec();
+                console.log("finished user detail update in save card transaction");
+                await PCardRef.updateOne({_id: pCardId}, {$inc: {ref_count: 1}}).session(session).exec();
+                await session.commitTransaction();
+                console.log("finished transaction");
+            } catch(err) {
+                console.error("save card transaction failed with error: " + err.stack)
+                throw new Error("failed for above reason");
+            } finally {
+                session.endSession();
+            }
         } else {
             throw new Error("invalid save request, or maybe saved right as the round changed. index: " + index + " pCardId: " + pCardId);
         }

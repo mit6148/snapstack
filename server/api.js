@@ -115,10 +115,11 @@ router.get('/unsave/:_id', connect.ensureLoggedIn(), async function(req, res) {
             res.send({status: 404, message: "no such card saved, so can't unsave"});
         }
     } catch(err) {
-        session.abortTransaction();
         console.error("failed to unsave with error: " + err.stack);
         res.status(500);
         res.send({status: 500, message: "something went wrong!"});
+    } finally {
+        session.endSession();
     }
 });
 
