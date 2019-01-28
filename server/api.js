@@ -30,6 +30,7 @@ router.get('/whoami', function(req, res) {
 router.get('/profile/:_id', connect.ensureLoggedIn(), async function(req, res) {
     const _id = req.params._id;
     if(typeof(_id) !== 'string') {
+        console.log("failed to get profile with bad id");
         res.status(400);
         res.send({status: 400, message: "badly formatted id"}); // reject
     } else {
@@ -38,7 +39,11 @@ router.get('/profile/:_id', connect.ensureLoggedIn(), async function(req, res) {
             const detail = await UserDetail.findById(user.detail_id);
             const jCardIds = detail.saved_pairs.map(pair => pair.jcard);
             const jCards = await JCard.find({_id: {$in: jCardIds}}).exec();
-            const saved_pairs = detail.saved_pairs.map((pair, index) => ({jCardText: jCards[index].text, pCardId: pair.pcard}));
+            const jCardMap = {};
+            for(let jCard of jCards) {
+                jCardMap[jCard._id] = jCard;
+            }
+            const saved_pairs = detail.saved_pairs.map((pair, index) => ({jCardText: jCardMap[pair.jcard].text, pCardId: pair.pcard}));
             res.send({
                 _id: user._id,
                 firstName: detail.firstName,
@@ -49,6 +54,7 @@ router.get('/profile/:_id', connect.ensureLoggedIn(), async function(req, res) {
                 media: detail.media,
             });
         } catch(err) {
+            console.log("failed to get profile for unknown reason: " + err.stack);
             res.status(404);
             res.send({status: 404, message: "user not found"});
         }
