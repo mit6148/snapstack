@@ -4,6 +4,8 @@ import ImageEditor from "./ImageEditor";
 
 import {MAX_CAPTION_LENGTH, drawingMode} from "../../../../config";
 
+import "../../css/card.css";
+
 export default class PCardEditor extends React.Component {
     constructor(props) {
         super(props);
@@ -36,6 +38,42 @@ export default class PCardEditor extends React.Component {
                         onChange={this.pickColor} onInput={this.pickColor} ref={this.colorPicker}/>
                 <input type="button" value="Move mode" onClick={this.moveMode} />
                 <input type="button" value="Draw mode" onClick={this.drawMode} />
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            <div>
+                <input type="button" value="Pan" onClick={this.moveMode} />
+                <input type="button" value="Draw" onClick={this.drawMode} />
+                <div>
+                    {this.state.isDrawing ? (
+                        <input type="color" defaultValue="#000000"
+                            onChange={this.pickColor} onInput={this.pickColor} ref={this.colorPicker} />
+                    ) : (
+                        <input type="range" min="0" max="1" defaultValue="1" step="any"
+                            onChange={this.zoom} onInput={this.zoom} ref={this.zoomSlider} />
+                    )}
+                    <div className='pmodal_card_bin'>
+                        <div className='card_slot'>
+                            <div className='card_area'>
+                                <div className='pcard_editor'>
+                                    <div className='image_content'>
+                                        <ImageEditor    image={this.props.image}
+                                                        ref={this.imageEditor}
+                                                        mode={this.state.isDrawing ? drawingMode.DRAW : drawingMode.MOVE}
+                                                        color={this.state.color} />
+                                    </div>
+                                    <div className='caption_content'>
+                                        <textarea id="caption-input" maxLength={MAX_CAPTION_LENGTH} autoComplete="off" wrap="soft"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div onClick={this.submit}>Submit</div>
             </div>
         );
     }

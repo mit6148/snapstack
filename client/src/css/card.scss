@@ -183,7 +183,7 @@ $content_border_radius: 5px;
 		top: calc(4% - #{$content_border_width});
 		overflow: hidden;
 
-		> img {
+		> * {
 			height: 100%;
 			width: 100%;
 			object-fit: cover;
@@ -196,6 +196,27 @@ $content_border_radius: 5px;
 		height: 19%;
 		left: calc(7% - #{$content_border_width});
 		bottom: calc(3% - #{$content_border_width});
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+}
+
+.pcard_editor {
+	@extend .pcard;
+
+	> .caption_content {
+		> textarea {
+			width: 90%;
+			height: 80%;
+			background-color: $white;
+			border: none;
+			resize: none;
+
+			&:focus {
+				outline: none;
+			};
+		}
 	}
 }
 
