@@ -125,8 +125,6 @@ h1:hover {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  position: relative;
-  left: 17px;
   align-items: center;
   justify-content: center;
 }
