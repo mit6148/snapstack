@@ -19,8 +19,13 @@ div {
 	width: 160px;
 	border-radius: 80px;
 	overflow: hidden;
-
 	box-shadow: 0px 5px 0px $medium-gray;
+
+
+}
+
+.logo {
+	
 }
 
 body {
@@ -30,6 +35,8 @@ body {
 .logo:hover {
 	height: 100%;
 	width: 100%;
+
+
 
     // -webkit-animation:spin 1s linear ;
     // -moz-animation:spin 1s linear ;

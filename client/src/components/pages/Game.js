@@ -119,7 +119,14 @@ export default class Game extends React.Component {
 
                 {this.gameState.gamePhase === JCHOOSE ? (
                     <Modal>
-                        <h2 className='modal_command'> {this.gameState.players[this.gameState.playerIds[0]].name}, select your judge card: </h2>
+                        <h2 className='modal_command'>
+                            {this.isJudge() ? 
+                                this.gameState.players[this.gameState.playerIds[0]].name + ', choose a theme:'
+                             : 
+                                this.gameState.players[this.gameState.playerIds[0]].name + ". is determining your fate..."
+                            }
+
+                        </h2>
                         <CardBin    type='jmodal'
                                     jCards={this.gameState.jCards}
                                     onClick={this.isJudge() ? this.actions.selectJCard : null}
