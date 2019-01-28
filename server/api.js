@@ -64,7 +64,11 @@ router.get('/pcards/:_ids', connect.ensureLoggedIn(), async function(req, res) {
         }
         const _ids = req.params._ids.split(",");
         const pCardRefs = await PCardRef.find({_id: {$in: _ids}});
-        const imagesPromise = Promise.all(pCardRefs.map(pCardRef => downloadImagePromise(pCardRef.image_ref)));
+        const imagesPromise = Promise.all(pCardRefs.map(
+            pCardRef => downloadImagePromise(pCardRef.image_ref).catch(err => {
+                console.error("/api/pcards failed to get image for pcard " + pCardRef._id + " at ref: " + pCardRef.image_ref);
+                return null;
+            }))); // always resolves
         const creators = await User.find({_id: {$in: pCardRefs.map(pCardRef => pCardRef.creator_id)}}).exec();
         const details = await UserDetail.find({_id: {$in: creators.map(creator => creator.detail_id)}}).exec();
         const detailIdToName = {};
@@ -76,7 +80,7 @@ router.get('/pcards/:_ids', connect.ensureLoggedIn(), async function(req, res) {
         for(let creator of creators) {
             creatorIdToName[creator._id] = detailIdToName[creator.detail_id];
         }
-        const images = await imagesPromise;
+        const images = await imagesPromise; // always resolves, with null in place of failed images
         const pcardIdToInfo = {};
         for(let i = 0; i < pCardRefs.length; i++) {
             pcardIdToInfo[pCardRefs[i]._id] = {_id: pCardRefs[i]._id, image: images[i], text: pCardRefs[i].text,
@@ -111,10 +115,11 @@ router.get('/unsave/:_id', connect.ensureLoggedIn(), async function(req, res) {
             res.send({status: 404, message: "no such card saved, so can't unsave"});
         }
     } catch(err) {
-        session.abortTransaction();
         console.error("failed to unsave with error: " + err.stack);
         res.status(500);
         res.send({status: 500, message: "something went wrong!"});
+    } finally {
+        session.endSession();
     }
 });
 

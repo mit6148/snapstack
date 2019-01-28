@@ -202,7 +202,7 @@ export default class GameContainer extends React.Component {
             });
         });
         socket.on('nuj', player => {
-            let playerIds = player._id in this.state.players
+            let playerIds = this.state.playerIds.includes(player._id)
                             ? this.state.playerIds
                             : update(this.state.playerIds, {$push: [player._id]});
             this.setState({

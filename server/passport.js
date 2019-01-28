@@ -30,7 +30,7 @@ passport.use(new FacebookStrategy({
             let user;
 
             try {
-                const avatarPromise = getAvatarImagePromise(profile);
+                const avatarPromise = getAvatarImagePromise(profile); // always resolves
 
                 const userDetail = new UserDetail({
                     firstName: profile.name.givenName,
@@ -45,9 +45,12 @@ passport.use(new FacebookStrategy({
                     detail_id: userDetail._id,
                 });
 
-                const userSavePromise = user.save();
+                const userSavePromise = user.save().catch(err => {
+                    console.error("error in login: failed to save user " + user._id);
+                    return;
+                });
 
-                userDetail.avatar = await avatarPromise;
+                userDetail.avatar = await avatarPromise; // always resolves
 
                 await userDetail.save();
 
@@ -55,7 +58,7 @@ passport.use(new FacebookStrategy({
 
                 return done(null, user)
             } catch(err) {
-                console.log("error in login: " + err);
+                console.error("error in login: " + err);
                 return done(err, user);
             }
 

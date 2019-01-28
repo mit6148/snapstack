@@ -26,6 +26,21 @@ const specialCards = {
     LOADING_CARD: 3,
 };
 
+const drawingMode = {
+    DRAW: 0,
+    MOVE: 1
+}
+
+const _image_resolution_factor = 6;
+
+const IMAGE_WIDTH = 86 * _image_resolution_factor;
+
+const IMAGE_HEIGHT = 98 * _image_resolution_factor;
+
+const MAX_OVERZOOM = 2;
+
+const IMAGE_COMPRESSION_OPTION = .85; // default .92
+
 const MIN_PLAYERS = 3;
 
 const MAX_PLAYERS = 8;
@@ -58,4 +73,5 @@ const MAX_CAPTION_LENGTH = 100;
 module.exports = {gamePhases, saveStates, endSubmitPhaseStatus, specialCards, MAX_PLAYERS, TIME_LIMIT_MILLIS,
     TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN, GAME_CODE_LENGTH, WAIT_TIME, MIN_PLAYERS,
     DEVELOPER_MODE, LAZY_B_ID, LETHARGIC_B_ID, MEDIA_KEYS, MAX_DESCRIPTION_LENGTH, MAX_NAME_LENGTH,
-    MAX_CAPTION_LENGTH, MAX_MEDIA_LENGTH};
+    MAX_CAPTION_LENGTH, MAX_MEDIA_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT, drawingMode, MAX_OVERZOOM,
+    IMAGE_COMPRESSION_OPTION};

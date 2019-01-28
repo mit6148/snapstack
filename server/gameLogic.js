@@ -237,8 +237,8 @@ class Game {
         }
 
         const imagesPromise = Promise.all(pCardRefPairs.map(pair => downloadImagePromise(pair[0].image_ref)));
-        const pCardSaved = await (player ? player.checkSaved(pCardRefPairs.map(pair => pair[0]._id)) : {});
-        const images = await imagesPromise;
+        const pCardSavedPromise = (player ? player.checkSaved(pCardRefPairs.map(pair => pair[0]._id)) : {});
+        const [images, pCardSaved] = await Promise.all([imagesPromise, pCardSavedPromise]);
 
         const output = [];
 
@@ -293,21 +293,30 @@ class Game {
     }
 
     async trySave(user, pCardId) { // good if there is 1 jCard and the given pCard is currently in play, and updated the database with ref
-        const index = this.pCardRefPairs.map(pair => pair[0]._id).indexOf(pCardId);
+        const index = this.pCardRefPairs.map(pair => pair[0]._id.toString()).indexOf(pCardId);
 
         if(this.jCards.length === 1 && index >= 0 && pCardId.match(/^[a-zA-Z0-9]+$/)) {
             if(this.userToPlayerMap[user._id].checkSaved([pCardId])[0]) {
                 return; // already saved
             }
             const session = await db.startSession();
-            session.startTransaction();
-            const detailUpdatePromise = UserDetail.updateOne({_id: user.detail_id},
-                                            {$push: {saved_pairs: {jcard: this.jCards[0]._id, pcard: pCardId}}}).session(session).exec();
-            await PCardRef.updateOne({_id: pCardId}, {$inc: {ref_count: 1}}).session(session);
-            await detailUpdatePromise;
-            await session.commitTransaction();
+            await session.startTransaction();
+            console.log(session.transaction);
+            try {
+                await UserDetail.updateOne({_id: user.detail_id},
+                        {$push: {saved_pairs: {jcard: this.jCards[0]._id, pcard: pCardId}}}).session(session).exec();
+                console.log("finished user detail update in save card transaction");
+                await PCardRef.updateOne({_id: pCardId}, {$inc: {ref_count: 1}}).session(session).exec();
+                await session.commitTransaction();
+                console.log("finished transaction");
+            } catch(err) {
+                console.error("save card transaction failed with error: " + err.stack)
+                throw new Error("failed for above reason");
+            } finally {
+                session.endSession();
+            }
         } else {
-            throw new Error("invalid save request, or maybe saved right as the round changed");
+            throw new Error("invalid save request, or maybe saved right as the round changed. index: " + index + " pCardId: " + pCardId);
         }
     }
 
@@ -826,7 +835,7 @@ async function onConnection(socket) {
             await game.trySave(user, pCardId);
             socket.emit('cardSaved', pCardId);
         } catch(err) {
-            console.error("save card had error: " + error + "\n" + error.stack);
+            console.error("save card had error: " + err + "\n" + err.stack);
             socket.emit('cardSaveFailed', pCardId);
         }
     });
