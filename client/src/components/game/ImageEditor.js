@@ -8,7 +8,7 @@ import "../../css/imageEditor.css";
 //NOTE: this component doesn't follow normal react styles due to efficiency concerns with setting state
 // when the state is already taken care of by mutable canvas objects
 
-// expects props: image, color, mode
+// expects props: image, color, mode, lineWidth
 export default class ImageEditor extends React.Component {
 
     constructor(props) {
@@ -101,7 +101,7 @@ export default class ImageEditor extends React.Component {
         const newLoc = this.clientToHiddenCoords(e.clientX, e.clientY);
 
         this.hiddenContext.strokeStyle = this.props.color;
-        this.hiddenContext.lineWidth = 5 * this.zoomLevel;
+        this.hiddenContext.lineWidth = this.props.lineWidth * this.zoomLevel;
         this.hiddenContext.lineTo(newLoc[0], newLoc[1]);
         this.hiddenContext.stroke();
         this.redraw();
