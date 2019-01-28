@@ -249,7 +249,7 @@ class Game {
                 text: pCardRefPairs[i][0].text,
                 faceup: pCardRefPairs[i][1],
                 creator_id: show_creator ? pCardRefPairs[i][0].creator_id : undefined,
-                saveState: pCardSaved[i] || false, // make sure undefined turns into false
+                saveState: pCardSaved[i] ? saveStates.SAVED : saveStates.UNSAVED,
             });
         }
         return output;
