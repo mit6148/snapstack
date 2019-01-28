@@ -37,7 +37,7 @@ const IMAGE_WIDTH = 86 * _image_resolution_factor;
 
 const IMAGE_HEIGHT = 98 * _image_resolution_factor;
 
-const MAX_OVERZOOM = 1.3;
+const MAX_OVERZOOM = 2;
 
 const IMAGE_COMPRESSION_OPTION = .85; // default .92
 
