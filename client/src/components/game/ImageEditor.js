@@ -40,7 +40,7 @@ export default class ImageEditor extends React.Component {
             this.zoomLevel = this.maxZoomLevel; // most zoomed out
             this.isReady = true;
             this.redraw();
-            this.mouseDownMousePosition = null;
+            this.startPosition = null; // screen coords for move, hidden canvas coords for draw, draw is last position
             this.mouseDownCenter = null;
         }
         this.image.src = this.props.image;
@@ -63,27 +63,60 @@ export default class ImageEditor extends React.Component {
         }
     };
 
-    onMouseDown = e => {
-        this.mouseDownMousePosition = [e.screenX, e.screenY];
+
+    clientToHiddenCoords = (x, y) => {
+        const rect = this.viewCanvas.getBoundingClientRect();
+        const viewXProp = Math.min(Math.max(0, x - rect.left), rect.width) / rect.width;
+        const viewYProp = Math.min(Math.max(0, y - rect.top), rect.height) / rect.height;
+
+        const [visibleWidth, visibleHeight] = this.getVisibleDims();
+        const hiddenX = this.viewCenterX + visibleWidth * (viewXProp - 0.5);
+        const hiddenY = this.viewCenterY + visibleHeight * (viewYProp - 0.5);
+        console.log(hiddenX, hiddenY);
+        return [hiddenX, hiddenY];
+    };
+
+    localMouseDown = e => {
+        if(this.props.mode === drawingMode.MOVE) {
+            this.startPosition = [e.screenX, e.screenY];
+        } else {
+            this.startPosition = this.clientToHiddenCoords(e.clientX, e.clientY);
+            this.hiddenContext.moveTo(this.startPosition[0], this.startPosition[1]);
+        }
         this.mouseDownCenter = [this.viewCenterX, this.viewCenterY];
         e.stopPropagation();
     };
 
-    onMouseUp = e => {
-        this.mouseDownMousePosition = null;
+    globalMouseUp = e => {
+        this.startPosition = null;
         this.mouseDownCenter = null;
     };
 
-    onMouseMove = e => {
-        if(!this.mouseDownCenter || !this.mouseDownMousePosition) {
+    localMouseMove = e => {
+        if(!this.mouseDownCenter || !this.startPosition || this.props.mode !== drawingMode.DRAW) {
+            return; // not drawing
+        }
+        e.stopPropagation();
+
+        const newLoc = this.clientToHiddenCoords(e.clientX, e.clientY);
+
+        this.hiddenContext.strokeStyle = this.props.color;
+        this.hiddenContext.lineWidth = 5 * this.zoomLevel;
+        this.hiddenContext.lineTo(newLoc[0], newLoc[1]);
+        this.hiddenContext.stroke();
+        this.redraw();
+    };
+
+    globalMouseMove = e => {
+        if(!this.mouseDownCenter || !this.startPosition || this.props.mode !== drawingMode.MOVE) {
             return; // not dragging
         }
-        const mouseDisplacement = [e.screenX - this.mouseDownMousePosition[0],
-                                    e.screenY - this.mouseDownMousePosition[1]];
+        e.stopPropagation();
+        const mouseDisplacement = [e.screenX - this.startPosition[0],
+                                    e.screenY - this.startPosition[1]];
         this.viewCenterX = this.mouseDownCenter[0] - mouseDisplacement[0] * this.zoomLevel;
         this.viewCenterY = this.mouseDownCenter[1] - mouseDisplacement[1] * this.zoomLevel;
         this.redraw();
-        e.stopPropagation();
     };
 
     render() {
@@ -92,19 +125,20 @@ export default class ImageEditor extends React.Component {
                     width={IMAGE_WIDTH}
                     height={IMAGE_HEIGHT}
                     ref={this.saveViewCanvas}
-                    onMouseDown={this.onMouseDown}
+                    onMouseDown={this.localMouseDown}
+                    onMouseMove={this.localMouseMove}
                      />
             );
     }
 
     componentDidMount() {
-        document.addEventListener('mousemove', this.onMouseMove);
-        document.addEventListener('mouseup', this.onMouseUp);
+        document.addEventListener('mousemove', this.globalMouseMove);
+        document.addEventListener('mouseup', this.globalMouseUp);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('mousemove', this.onMouseMove);
-        document.removeEventListener('mouseup', this.onMouseUp);
+        document.removeEventListener('mousemove', this.globalMouseMove);
+        document.removeEventListener('mouseup', this.globalMouseUp);
     }
 
     saveViewCanvas = (viewCanvas) => {
