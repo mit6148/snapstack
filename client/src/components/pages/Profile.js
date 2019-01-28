@@ -1,9 +1,11 @@
 import React from "react";
 import update from "immutability-helper";
 import NavButtons from "../nav/NavButtons";
-import Card from "../univ/Card.js";
+import Card from "../univ/Card";
 import PCard from "../univ/PCard";
-import PlayerMedia from "../univ/PlayerMedia.js";
+import PlayerMedia from "../univ/PlayerMedia";
+import Modal from "../univ/Modal";
+import CardBin from "../game/CardBin";
 import { specialCards } from "../../../../config.js";
 const { NO_CARD, CARDBACK, FACEDOWN_CARD, LOADING_CARD } = specialCards;
 
@@ -38,11 +40,13 @@ export default class Profile extends React.Component {
                 pCardIds: profileObj.saved_pairs.map(pair => pair.pCardId)
             });
 
-            await this.loadPCards(6);
+            await this.loadPCards(4);
             this.setState({
                 shouldRender: true
             });
-            this.loadPCards();
+            while (this.state.pCards.length < this.state.pCardIds.length) {
+                await this.loadPCards(4);
+            }
         });
     }
 
@@ -108,33 +112,26 @@ export default class Profile extends React.Component {
                     <div className="my_snapstack">
                         <h2> My SnapStack </h2>
                         <div className="saved_cards">
-                            {this.state.pCardIds.map((pCardId, index) => (
-                                <div key={index}>
-                                    {index < this.state.pCards.length ? (
-                                        <PCard  image={this.state.pCards[index].image}
-                                                text={this.state.pCards[index].text}
-                                                onClick={() => this.viewPCard(this.state.pCards[index])} />
-                                    ) : (
-                                        <PCard  src={LOADING_CARD} />
-                                    )}
-                                </div>
-                            ))}
+                            <CardBin    type='profile'
+                                        pCards={this.state.pCardIds.map((pCardId, index) => index < this.state.pCards.length ? this.state.pCards[index] : LOADING_CARD)}
+                                        onClick={this.viewSaved} />
                         </div>
                     </div>
                 </div>
+                {this.state.cardModal}
             </div>
         );
     }
 
-    viewPCard = (pCard) => {
+    viewSaved = index => {
+        if (index >= this.state.pCards.length) return;
+
         this.setState({
             cardModal: (
-                <Modal modalType='zoom_card' onClose={() => this.setState({cardModal: null})}>
-                    <PCard  image={pCard.image}
-                            text={pCard.text}
-                            creator={pCard.creator_name}
-                            creatorId={pCard.creator_id}
-                            enlarged={true} />
+                <Modal onClose={() => this.setState({cardModal: null})}>
+                    <CardBin    type='jpmodal'
+                                jCards={[this.state.jCards[index]]}
+                                pCards={[this.state.pCards[index]]} />
                 </Modal>
             )
         });

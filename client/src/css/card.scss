@@ -17,7 +17,7 @@ $jmodal-scale: 1.2;
 @mixin card_bin() {
 	display: flex;
 	flex-flow: row wrap;
-	justify-content: center;
+	justify-content: space-evenly;
 	align-items: center;
 }
 
@@ -45,6 +45,25 @@ $jmodal-scale: 1.2;
 	> .card_slot {
 		height: 60vh;
 		width: calc(60vh * #{$card-slot-width} / #{$card-area-height});
+	}
+}
+
+.profile_card_bin {
+	@include card_bin;
+	justify-content: flex-start;
+
+	> .card_slot {
+		width: calc((100vw - 17px) / 4);
+		height: calc((100vw - 17px) / 4 * #{$card-area-height} / #{$card-slot-width});
+	}
+}
+
+.jpmodal_card_bin {
+	@include card_bin;
+
+	> .card_slot {
+		height: 80vh;
+		width: calc(80vh * #{$card-slot-width} / #{$card-area-height});
 	}
 }
 
@@ -81,8 +100,6 @@ $jmodal-scale: 1.2;
 }
 
 .card_slot {
-
-	margin: 0px 10px;
 
 	> .card_area {
 		position: relative;

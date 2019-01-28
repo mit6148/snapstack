@@ -2,7 +2,7 @@
 .game_card_bin {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }
 .game_card_bin > .card_slot {
@@ -13,7 +13,7 @@
 .jmodal_card_bin {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }
 .jmodal_card_bin > .card_slot {
@@ -24,12 +24,35 @@
 .pmodal_card_bin {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }
 .pmodal_card_bin > .card_slot {
   height: 60vh;
   width: calc(60vh * 1.2 / 1.6);
+}
+
+.profile_card_bin {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  justify-content: flex-start;
+}
+.profile_card_bin > .card_slot {
+  width: calc((100vw - 17px) / 4);
+  height: calc((100vw - 17px) / 4 * 1.6 / 1.2);
+}
+
+.jpmodal_card_bin {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.jpmodal_card_bin > .card_slot {
+  height: 80vh;
+  width: calc(80vh * 1.2 / 1.6);
 }
 
 @media (max-aspect-ratio: 63/38) {
@@ -53,9 +76,6 @@
     height: calc(1.2 * 25vh * 1.6 / 1.9);
     width: calc(1.2 * 25vh * 1.2 / 1.9);
   }
-}
-.card_slot {
-  margin: 0px 10px;
 }
 .card_slot > .card_area {
   position: relative;
