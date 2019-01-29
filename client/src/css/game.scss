@@ -43,13 +43,13 @@ html, body, #root, .fill_parent {
 .green_home_btn {
 
 	color: $white;
-	font-size: 25px;
+	font-size: 20px;
 	background-color: $green-light;
 	box-shadow: 0px 5px 0px $green-medium;
 	margin: 1em auto;
 	padding: 10px;
 	text-align: center;
-	width: 120px;
+	width: 80px;
 
 
 	border-radius: 0.4em;
@@ -126,6 +126,16 @@ html, body, #root, .fill_parent {
 
 }
 
+#alert {
+	background-color: $orange-alert;
+	box-shadow: 0px 3px 0px 0px $orange-alert-dark;
+
+	color: $white;
+
+	width: 280px;
+
+}
+
 .notification_section {
 	flex: 1 0 25%;
 
@@ -136,25 +146,26 @@ html, body, #root, .fill_parent {
 
 	> .notification{
 
-		padding: 10px;
-		background-color: $orange-alert;
+		padding: 10px 10px 5px;
+		background-color: $purple-light;
 		position: absolute;
 		top: 20px;
 		right: 20px;
-		color: $white;
+		color: $black;
 
-		width: 280px;
+		width: 200px;
 
 		font-size: 20px;
 
 		border-radius: 10px;
-		box-shadow: 0px 3px 0px 0px $orange-alert-dark;
+		box-shadow: 0px 3px 0px 0px $purple-medium;
 
 		> .home_btn {
 			font-size: 18px;
 
-			width: 50px;
-			padding: 5px;
+			width: 80px;
+
+			display: block;
 
 		}
 
@@ -258,7 +269,7 @@ html, body, #root, .fill_parent {
 }
 
 
-@media (max-aspect-ratio: 23/19) {
+@media (max-aspect-ratio: 22/19) {
 	.notification_section {
 	flex: 1 0 25%;
 
@@ -272,13 +283,21 @@ html, body, #root, .fill_parent {
 			font-size: 18px;
 			top: 20px;
 			right: 20px;
-			color: $white;
 
-			width: 130px;
+			width: 120px;
+
+			
 
 
 		}
 
+
+
+	}
+
+	#alert {
+		width: 120px;
+		padding: 8px;
 	}
 
 }
