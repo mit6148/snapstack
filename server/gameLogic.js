@@ -3,7 +3,8 @@ const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN,
-    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID, MAX_CAPTION_LENGTH} = require("../config");
+    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID, MAX_CAPTION_LENGTH,
+    TIME_ROUND_OVER_MILLIS} = require("../config");
 const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 const db = require('./db');
@@ -817,7 +818,7 @@ async function onConnection(socket) {
             } catch(err) {
                 console.error("post-select-phase timeout in select had an error: " + err);
             }
-        }, WAIT_TIME);
+        }, TIME_ROUND_OVER_MILLIS);
     });
 
     createLockedListener(socket, 'disconnect', gameGetter, true, async () => {
