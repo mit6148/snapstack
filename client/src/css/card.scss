@@ -43,9 +43,18 @@ $jmodal-scale: 1.2;
 	@include card_bin;
 
 	> .card_slot {
-		height: 60vh;
-		width: calc(60vh * #{$card-slot-width} / #{$card-area-height});
+		height: 80vh;
+		width: calc(80vh * #{$card-slot-width} / #{$card-area-height});
 	}
+}
+
+.pmodal_edit_card_bin {
+    @include card_bin;
+
+    > .card_slot {
+        height: 60vh;
+        width: calc(60vh * #{$card-slot-width} / #{$card-area-height});
+    }
 }
 
 .profile_card_bin {
@@ -243,7 +252,7 @@ $content_border_radius: 5px;
 	}
 }
 
-.pcard_editor {
+.pcard_editing {
 	@extend .pcard;
 
 	> .caption_content {
@@ -260,7 +269,7 @@ $content_border_radius: 5px;
 
 			&:focus {
 				outline: none;
-			};
+			}
 		}
 	}
 }

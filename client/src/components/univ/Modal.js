@@ -12,6 +12,10 @@ export default class Modal extends React.Component {
                         <div className='modal_box'>
                             {this.props.children}
                         </div>
+                    ) : this.props.withUnpaddedBox ? (
+                        <div className='modal_box_unpadded'>
+                            {this.props.children}
+                        </div>
                     ) : this.props.children}
                     {this.props.disableCloseByButton || !this.props.onClose ? null : (
                         <ModalCloseButton onClose={this.props.onClose} />

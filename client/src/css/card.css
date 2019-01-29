@@ -28,6 +28,17 @@
   align-items: center;
 }
 .pmodal_card_bin > .card_slot {
+  height: 80vh;
+  width: calc(80vh * 1.2 / 1.6);
+}
+
+.pmodal_edit_card_bin {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.pmodal_edit_card_bin > .card_slot {
   height: 60vh;
   width: calc(60vh * 1.2 / 1.6);
 }
@@ -158,20 +169,20 @@
   overflow: ellipsis;
 }
 
-.pcard, .pcard_editor {
+.pcard, .pcard_editing {
   border-radius: 7%/5%;
   background-color: #0683E2;
   background-image: linear-gradient(to bottom right, #0991f8, #0683E2);
   box-shadow: 1px 3px 0px #056BBA;
 }
-.pcard > [class$=content], .pcard_editor > [class$=content] {
+.pcard > [class$=content], .pcard_editing > [class$=content] {
   background-color: #F4F4F4;
   border-style: solid;
   border-color: #056BBA;
   border-width: 2px;
   border-radius: 5px;
 }
-.pcard > .image_content, .pcard_editor > .image_content {
+.pcard > .image_content, .pcard_editing > .image_content {
   position: absolute;
   width: calc(100% - 2 * 7%);
   height: 70%;
@@ -179,12 +190,12 @@
   top: calc(4% - 2px);
   overflow: hidden;
 }
-.pcard > .image_content > *, .pcard_editor > .image_content > * {
+.pcard > .image_content > *, .pcard_editing > .image_content > * {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
-.pcard > .caption_content, .pcard_editor > .caption_content {
+.pcard > .caption_content, .pcard_editing > .caption_content {
   position: absolute;
   width: calc(100% - 2 * 7%);
   height: 19%;
@@ -195,13 +206,13 @@
   overflow-wrap: break-word;
   display: flex;
 }
-.pcard > .caption_content > *, .pcard_editor > .caption_content > * {
+.pcard > .caption_content > *, .pcard_editing > .caption_content > * {
   width: 90%;
   height: 80%;
   overflow: ellipsis;
 }
 
-.pcard_editor > .caption_content > textarea {
+.pcard_editing > .caption_content > textarea {
   width: 90%;
   height: 80%;
   background-color: #F4F4F4;
@@ -212,7 +223,7 @@
   font-size: 1em;
   color: #3B3B3D;
 }
-.pcard_editor > .caption_content > textarea:focus {
+.pcard_editing > .caption_content > textarea:focus {
   outline: none;
 }
 

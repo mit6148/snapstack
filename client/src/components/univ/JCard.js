@@ -20,7 +20,7 @@ export default class JCard extends Component {
     }
 
     componentDidUpdate() {
-        textFit(document.getElementsByClassName('fit'+this.key), {alignHoriz: true, alignVert: true, minFontSize: 8, maxFontSize: 16});
+        textFit(document.getElementsByClassName('fit'+this.key), {alignHoriz: true, alignVert: true, minFontSize: 8, maxFontSize: 16, multiLine: true});
     }
 
     render() {
