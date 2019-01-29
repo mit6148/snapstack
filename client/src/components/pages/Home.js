@@ -68,17 +68,23 @@ export default class Home extends React.Component {
                                     <div className="tutorial_caption">
                                         At the start of each round, the judge will choose The Theme which the players follow.
                                     </div>
+                                    <img className="tutorial_image" src="/1.PNG"/>
                                     
                                     <div className="tutorial_caption">
                                         When the timer starts, all players will have 2 minutes to make a customized Meme to fit the prompt. Exploit your friends’ social media accounts to find the perfect, (just slightly) embarrassing photo of them!
                                     </div>
+                                    <img className="tutorial_image" src="/2.PNG"/>
                                     
                                     <div className="tutorial_caption">
                                         Once you upload a photo, you can also go crazy with the caption and drawing editor. Make sure to submit your Meme before time runs out!
                                     </div>
                                     
                                     <div className="tutorial_caption">
-                                        After all Memes are submitted, the lucky judge will flip and view the cards (anonymously of course), and narrow them down until you have a winner. This is the perfect time for everyone to squabble and totally not influence the judge’s decision!
+                                        After all Memes are submitted, the lucky judge will flip and view the cards (anonymously of course), and narrow them down until you have a winner. 
+                                    </div>
+                                    
+                                    <div className="tutorial_caption">
+                                        This is the perfect time for everyone to squabble and totally not influence the judge’s decision!
                                     </div>
                                     
                                     <div className="tutorial_caption">
