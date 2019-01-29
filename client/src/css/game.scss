@@ -269,3 +269,9 @@ html, body, #root, .fill_parent {
 	}
 
 }
+
+.select_pcard_btn {
+	position: relative;
+	top: 20px;
+	z-index: 600;
+}

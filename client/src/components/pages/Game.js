@@ -120,7 +120,7 @@ export default class Game extends React.Component {
                     <div className='user_actionables'>
                         {this.canUploadImage() ? <Uploader upload={this.uploadImage} /> : null}
                         {this.canFlipAllPCards() ? <div className='green_home_btn' onClick={this.actions.flipAllPCards}>Flip All</div> : null}
-                        {this.canSelectPCard() ? <div className='green_home_btn' onClick={this.actions.selectPCard}>Select</div> : null}
+                        {this.canSelectPCard() && this.state.cardModal !== null ? <div className='green_home_btn select_pcard_btn' onClick={this.actions.selectPCard}>Select</div> : null}
                     </div>
 
                     <div className='chat_box_section'>
