@@ -212,6 +212,10 @@ $content_border_radius: 5px;
 			background-color: $white;
 			border: none;
 			resize: none;
+			font-family: 'Raleway', sans-serif;
+			text-align: center;
+			font-size: 1em;
+			color: $black;
 
 			&:focus {
 				outline: none;

@@ -72,7 +72,6 @@ export default class ImageEditor extends React.Component {
         const [visibleWidth, visibleHeight] = this.getVisibleDims();
         const hiddenX = this.viewCenterX + visibleWidth * (viewXProp - 0.5);
         const hiddenY = this.viewCenterY + visibleHeight * (viewYProp - 0.5);
-        console.log(hiddenX, hiddenY);
         return [hiddenX, hiddenY];
     };
 

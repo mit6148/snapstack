@@ -116,7 +116,9 @@ export default class Uploader extends React.Component {
     };
 
     clickUpload = async e => {
-        const image = await this.loadImage(document.getElementById("dragndrop_file_input").files[0]);
+        const fileInput = document.getElementById("dragndrop_file_input");
+        const image = await this.loadImage(fileInput.files[0]);
+        fileInput.value = null;
         this.props.upload(image);
     };
 
