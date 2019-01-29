@@ -87,14 +87,12 @@ export default class Game extends React.Component {
                         <CardBin    type='game'
                                     pCards={this.gameState.pCards}
                                     onClick={this.viewPCard}
-                                    save={this.actions.savePCard}
                                     judgeFocusIndex={this.gameState.pCardIndex} />
                     ) : (
                         <CardBin    type='game'
                                     pCards={this.gameState.pCards}
                                     creators={this.gameState.pCards.map(pCard => pCard.creator_id ? this.gameState.players[pCard.creator_id] : null)}
                                     onClick={this.viewPCard}
-                                    save={this.actions.savePCard}
                                     winnerIndex={this.gameState.pCardIndex} />
                     )}
 
@@ -135,7 +133,13 @@ export default class Game extends React.Component {
                                     enlarged={true} />
                     </Modal>
                 ) : null}
-                {this.state.cardModal}
+                {this.state.cardModal === null ? null : (
+                    <Modal onClose={() => this.setState({cardModal: null})}>
+                        <CardBin    type='pmodal'
+                                    pCards={[this.gameState.gamePhase === SUBMIT ? this.gameState.pCards[0] : this.gameState.pCards[this.state.cardModal]]}
+                                    save={this.actions.savePCard} />
+                    </Modal>
+                )}
                 {this.state.pCardEditModal}
                 {this.gameState.submitFailed === null ? null : (
                     <Modal withBox={true} onClose={this.actions.closeSubmitFailedModal} disableCloseByWindow={true}>
@@ -161,13 +165,7 @@ export default class Game extends React.Component {
 
         if (pCard.faceup !== false) {
             this.setState({
-                cardModal: (
-                    <Modal onClose={() => this.setState({cardModal: null})}>
-                        <CardBin    type='pmodal'
-                                    pCards={[pCard]}
-                                    save={this.actions.savePCard} />
-                    </Modal>
-                ),
+                cardModal: pCardIndex,
                 cardModalCreatedDuring: this.gameState.gamePhase
             });
         }
