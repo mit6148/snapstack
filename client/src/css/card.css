@@ -155,6 +155,7 @@
 .jcard > .content > * {
   width: 90%;
   height: 80%;
+  overflow: ellipsis;
 }
 
 .pcard, .pcard_editor {
@@ -197,6 +198,7 @@
 .pcard > .caption_content > *, .pcard_editor > .caption_content > * {
   width: 90%;
   height: 80%;
+  overflow: ellipsis;
 }
 
 .pcard_editor > .caption_content > textarea {
@@ -284,12 +286,48 @@
   font-size: 16px;
 }
 
+.save_btn_container {
+  height: 10%;
+  width: 14%;
+  border-radius: 50%;
+  background-color: #F4F4F4;
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 2px #636266;
+}
+
+#unsaved_status_btn {
+  font-size: 22px;
+  color: #0683E2;
+}
+#unsaved_status_btn:hover {
+  cursor: pointer;
+}
+
+#saving_status_btn {
+  transform: scale(0.4, 0.4);
+  position: absolute;
+  top: -4px;
+  left: -4px;
+}
+#saving_status_btn:hover {
+  cursor: pointer;
+}
+
+#saved_status_btn {
+  font-size: 22px;
+  color: #12B780;
+}
+
 .lds-spinner {
-  color: official;
   display: inline-block;
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 22px;
+  height: 22px;
 }
 
 .lds-spinner div {
@@ -298,6 +336,7 @@
 }
 
 .lds-spinner div:after {
+  background: #0683E2;
   content: " ";
   display: block;
   position: absolute;
@@ -306,7 +345,6 @@
   width: 5px;
   height: 14px;
   border-radius: 20%;
-  background: #fff;
 }
 
 .lds-spinner div:nth-child(1) {

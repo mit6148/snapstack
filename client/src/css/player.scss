@@ -3,12 +3,12 @@
 @import "./_variables.scss";
 
 .player_list {
-	justify-content: center;
+
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
 	flex-wrap: wrap;
-	justify-content: center;
+	justify-content: space-evenly;
 }
 
 h1 {
@@ -30,9 +30,10 @@ div {
 	display: flex;
 	width: 300px;
 	border-radius: 15px;
-	margin: 10px;
+	margin: 7px;
 
 	box-shadow: 0px 4px 0px $purple-dark;
+	transform: scale(0.9, 0.9);
 }
 
 .avatar_container {

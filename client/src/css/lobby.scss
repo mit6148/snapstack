@@ -14,11 +14,16 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	flex: 9;
+	flex: 19 0 95%;
+
+	margin: 10px;
+
+	justify-content: center;
+
 }
 
 .start_btn_div {
-	flex: 1;
+	flex: 1 0 5%;
 }
 
 .game_info {
@@ -29,7 +34,7 @@
 
 .whos_joined {
 	flex: 5 5 0;
-	margin: 20px;
+	margin: 15px;
 
 }
 
