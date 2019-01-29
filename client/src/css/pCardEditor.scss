@@ -1,0 +1,89 @@
+@import "./_variables.scss";
+
+.pcard_editor {
+    position: relative;
+    height: 80vh;
+    width: 50vh;
+    background-color: $background-v1;
+    border-radius: 0 15px 15px;
+    box-shadow: 0px 5px 0px 0px rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    > input[value='Pan'] {
+        position: absolute;
+        height: 10vh;
+        top: 0;
+        width: 10vh;
+        left: -10vh;
+        border-radius: 3vh 0 0 3vh;
+        border: none;
+        cursor: pointer;
+        background-color: darken($background-v1, 50%);
+
+        &[clicked='true'] {
+            background-color: $background-v1;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    > input[value="Draw"] {
+        position: absolute;
+        height: 10vh;
+        top: 10vh;
+        width: 10vh;
+        left: -10vh;
+        border-radius: 3vh 0 0 3vh;
+        border: none;
+        cursor: pointer;
+        background-color: darken($background-v1, 50%);
+
+        &[clicked='true'] {
+            background-color: $background-v1;
+        }
+
+        &:focus{
+            outline: none;
+        }
+    }
+
+    > .pan_tools {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        > span {
+
+        }
+        
+        > #zoom {
+            direction: rtl;
+        }
+    }
+
+    > .draw_tools {
+        width: 80%;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+
+        > #color {
+
+        }
+
+        > #pen_size {
+
+        }
+
+        > #pen_preview {
+            border-radius: 50%;
+        }
+    }
+}
