@@ -185,6 +185,10 @@
   background-color: #F4F4F4;
   border: none;
   resize: none;
+  font-family: "Raleway", sans-serif;
+  text-align: center;
+  font-size: 1em;
+  color: #3B3B3D;
 }
 .pcard_editor > .caption_content > textarea:focus {
   outline: none;
