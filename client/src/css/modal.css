@@ -10,7 +10,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: scroll;
+  overflow-y: auto;
 }
 .modal_window > .modal {
   position: relative;
@@ -45,7 +45,7 @@
   pointer-events: auto;
 }
 .modal_close_btn:hover {
-  color: #CCCCCC;
+  color: #DDDDDD;
   cursor: pointer;
 }
 

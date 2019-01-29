@@ -9,15 +9,15 @@ export default class SaveButton extends Component {
         switch (this.props.saveState) {
             case UNSAVED:
                 return (
-                    <div class="fas fa-plus" onClick={this.props.save}>Save</div>
-                );
-            case SAVING:
-                return (
-                    <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    <div class="fas fa-plus" id="unsaved_status_btn" onClick={this.props.save}></div>
                 );
             case SAVED:
                 return (
-                    <div class="fas fa-check saved_status_btn">Saved!</div>
+                    <div class="lds-spinner" id="saving_status_btn"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                );
+            case SAVING:
+                return (
+                    <div class="fas fa-check" id="saved_status_btn"></div>
                 );
             default:
                 return (

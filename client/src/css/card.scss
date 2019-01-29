@@ -318,18 +318,76 @@ $content_border_radius: 5px;
 	font-size: 16px;
 }
 
+
+//save buttons!!!
+
+.save_btn_container {
+	height: 32px;
+	width: 32px;
+	border-radius: 16px;
+	background-color: $white;
+	position: absolute;
+
+	top: 6px;
+	left: 6px;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	box-shadow: 1px 2px $dark-gray;
+
+}
+
+
+
+$save-font-size: 22px;
+
+#unsaved_status_btn {
+	font-size: $save-font-size;
+
+	color: $blue-light;
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+#saving_status_btn {
+	transform: scale(0.40, 0.40);
+	&:hover {
+		cursor: pointer;
+	}
+
+	position: absolute;
+	top: -4px;
+	left: -4px;
+
+}
+
+#saved_status_btn {
+	font-size: $save-font-size;
+
+	color: $green-light;
+
+}
+
+
+
+
 .lds-spinner {
-  color: official;
+
   display: inline-block;
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: $save-font-size;
+  height: $save-font-size;
 }
 .lds-spinner div {
   transform-origin: 32px 32px;
   animation: lds-spinner 1.2s linear infinite;
 }
 .lds-spinner div:after {
+  background: $blue-light;
   content: " ";
   display: block;
   position: absolute;
@@ -338,7 +396,8 @@ $content_border_radius: 5px;
   width: 5px;
   height: 14px;
   border-radius: 20%;
-  background: #fff;
+
+
 }
 .lds-spinner div:nth-child(1) {
   transform: rotate(0deg);
