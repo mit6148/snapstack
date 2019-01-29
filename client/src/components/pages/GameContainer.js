@@ -86,7 +86,7 @@ export default class GameContainer extends React.Component {
         }, 3000);
         this.setState({
             roundNotification: (
-                <div class="notification">
+                <div className="notification">
                     {text}
                 </div>
             ),
