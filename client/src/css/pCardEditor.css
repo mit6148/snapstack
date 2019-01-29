@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Questrial|Thasadith|Raleway");
 .pcard_editor {
   position: relative;
   height: 80vh;
@@ -12,6 +13,8 @@
 }
 .pcard_editor > input[value=Pan] {
   position: absolute;
+  font-family: "Raleway", sans-serif;
+  color: #F4F4F4;
   height: 10vh;
   top: 0;
   width: 10vh;
@@ -23,12 +26,15 @@
 }
 .pcard_editor > input[value=Pan][clicked=true] {
   background-color: #A5C3E5;
+  color: #3B3B3D;
 }
 .pcard_editor > input[value=Pan]:focus {
   outline: none;
 }
 .pcard_editor > input[value=Draw] {
+  font-family: "Raleway", sans-serif;
   position: absolute;
+  color: #F4F4F4;
   height: 10vh;
   top: 10vh;
   width: 10vh;
@@ -40,6 +46,7 @@
 }
 .pcard_editor > input[value=Draw][clicked=true] {
   background-color: #A5C3E5;
+  color: #3B3B3D;
 }
 .pcard_editor > input[value=Draw]:focus {
   outline: none;
@@ -62,6 +69,28 @@
 }
 .pcard_editor > .draw_tools > #pen_preview {
   border-radius: 50%;
+}
+.pcard_editor > .submit_card_btn {
+  color: #F4F4F4;
+  font-size: 15px;
+  background-color: #12B780;
+  box-shadow: 0px 5px 0px #10A070;
+  margin: 1em auto;
+  padding: 6px;
+  text-align: center;
+  width: 60px;
+  border-radius: 0.4em;
+  text-decoration: none;
+}
+.pcard_editor > .submit_card_btn:hover {
+  background: #10A070;
+  box-shadow: 0 5px #0E8C62;
+  cursor: pointer;
+}
+.pcard_editor > .submit_card_btn:active {
+  background-color: #10A070;
+  box-shadow: 0 2px #0E8C62;
+  transform: translateY(3px);
 }
 
 /*# sourceMappingURL=pCardEditor.css.map */
