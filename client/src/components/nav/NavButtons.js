@@ -21,7 +21,6 @@ export default class NavButtons extends React.Component {
             case 'Login':
                 return (
                     <React.Fragment>
-
                         <AboutNavBtn appState={this.props.appState} />
                     </React.Fragment>
                 );
@@ -36,7 +35,7 @@ export default class NavButtons extends React.Component {
                 return (
                     <React.Fragment>
                         <HomeNavBtn appState={this.props.appState} />
-                        {this.props.profileId === this.props.appState.userId ? <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} /> : null}
+                        {this.props.profileId === this.props.appState.userId ? <LogoutNavBtn appState={this.props.appState} logout={this.props.logout} /> : <ProfileNavBtn appState={this.props.appState} />}
                     </React.Fragment>
                 );
             case 'About':

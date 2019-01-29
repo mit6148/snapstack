@@ -125,9 +125,11 @@ h1:hover {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 10px;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  left: 50px;
+  right: 50px;
 }
 
 /*# sourceMappingURL=profile.css.map */

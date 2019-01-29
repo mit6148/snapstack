@@ -2,7 +2,7 @@
 .game_card_bin {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }
 .game_card_bin > .card_slot {
@@ -13,7 +13,7 @@
 .jmodal_card_bin {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }
 .jmodal_card_bin > .card_slot {
@@ -24,12 +24,35 @@
 .pmodal_card_bin {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }
 .pmodal_card_bin > .card_slot {
   height: 60vh;
   width: calc(60vh * 1.2 / 1.6);
+}
+
+.profile_card_bin {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+  justify-content: flex-start;
+}
+.profile_card_bin > .card_slot {
+  width: calc((100vw - 17px - 2 * 50px) / 4);
+  height: calc((100vw - 17px - 2 * 50px) / 4 * 1.6 / 1.2);
+}
+
+.jpmodal_card_bin {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.jpmodal_card_bin > .card_slot {
+  height: 80vh;
+  width: calc(80vh * 1.2 / 1.6);
 }
 
 @media (max-aspect-ratio: 63/38) {
@@ -53,9 +76,6 @@
     height: calc(1.2 * 25vh * 1.6 / 1.9);
     width: calc(1.2 * 25vh * 1.2 / 1.9);
   }
-}
-.card_slot {
-  margin: 0px 15px;
 }
 .card_slot > .card_area {
   position: relative;
@@ -91,6 +111,7 @@
 .jcard {
   border-radius: 7%/5%;
   background-color: #12B780;
+  background-image: linear-gradient(to bottom right, #14ce90, #12B780);
   box-shadow: 1px 3px 0px #0E8C62;
 }
 .jcard > [class$=content] {
@@ -116,19 +137,20 @@
   width: 100%;
 }
 
-.pcard {
+.pcard, .pcard_editor {
   border-radius: 7%/5%;
   background-color: #0683E2;
+  background-image: linear-gradient(to bottom right, #0991f8, #0683E2);
   box-shadow: 1px 3px 0px #056BBA;
 }
-.pcard > [class$=content] {
+.pcard > [class$=content], .pcard_editor > [class$=content] {
   background-color: #F4F4F4;
   border-style: solid;
   border-color: #056BBA;
   border-width: 2px;
   border-radius: 5px;
 }
-.pcard > .image_content {
+.pcard > .image_content, .pcard_editor > .image_content {
   position: absolute;
   width: calc(100% - 2 * 7%);
   height: 70%;
@@ -136,12 +158,12 @@
   top: calc(4% - 2px);
   overflow: hidden;
 }
-.pcard > .image_content > img {
+.pcard > .image_content > *, .pcard_editor > .image_content > * {
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
-.pcard > .caption_content {
+.pcard > .caption_content, .pcard_editor > .caption_content {
   position: absolute;
   width: calc(100% - 2 * 7%);
   height: 19%;
@@ -150,10 +172,22 @@
   align-items: center;
   justify-content: center;
   overflow-wrap: break-word;
+  display: flex;
 }
-.pcard > .caption_content > * {
+.pcard > .caption_content > *, .pcard_editor > .caption_content > * {
   padding: 5%;
   width: 100%;
+}
+
+.pcard_editor > .caption_content > textarea {
+  width: 90%;
+  height: 80%;
+  background-color: #F4F4F4;
+  border: none;
+  resize: none;
+}
+.pcard_editor > .caption_content > textarea:focus {
+  outline: none;
 }
 
 .jcard_back {
@@ -168,6 +202,7 @@
   width: calc(100% - 2 * 7%);
   height: calc(100% - 2 * 5%);
   background-color: #12B780;
+  background-image: linear-gradient(to bottom right, #14ce90, #12B780);
   border-style: solid;
   border-color: #0E8C62;
   border-width: 2px;
@@ -193,6 +228,7 @@
   width: calc(100% - 2 * 7%);
   height: calc(100% - 2 * 5%);
   background-color: #0683E2;
+  background-image: linear-gradient(to bottom right, #0991f8, #0683E2);
   border-style: solid;
   border-color: #056BBA;
   border-width: 2px;

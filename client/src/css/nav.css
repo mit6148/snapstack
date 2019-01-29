@@ -15,6 +15,7 @@
   text-align: center;
   font-size: 15px;
   margin: 5px;
+  z-index: 1;
 }
 .nav_btn:active, #leave_nav_btn:active, #logout_nav_btn:active, #profile_nav_btn:active, #about_nav_btn:active, #home_nav_btn:active {
   background-color: #9C81A8;

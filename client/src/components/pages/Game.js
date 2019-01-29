@@ -52,7 +52,7 @@ export default class Game extends React.Component {
                     <div className='judge_section'>
                         <CardBin    type='game'
                                     jCards={[this.gameState.gamePhase === JCHOOSE ? NO_CARD : this.gameState.jCards[this.gameState.jCardIndex]]}
-                                    owners={[this.gameState.players[this.gameState.playerIds[0]]]} />
+                                    creators={[this.gameState.players[this.gameState.playerIds[0]]]} />
                     </div>
 
                     <div className="notification_section">
@@ -81,7 +81,7 @@ export default class Game extends React.Component {
                                             playerId === this.props.appState.userId
                                             ? (this.gameState.pCards.length === 1 && this.gameState.pCards[0]._id ? this.gameState.pCards[0] : NO_CARD)
                                             : (this.gameState.players[playerId].hasPlayed ? CARDBACK : NO_CARD))}
-                                    owners={this.gameState.playerIds.slice(1).map(playerId => this.gameState.players[playerId])}
+                                    creators={this.gameState.playerIds.slice(1).map(playerId => this.gameState.players[playerId])}
                                     onClick={this.viewPCard} />
                     ) : this.gameState.gamePhase === JUDGE ? (
                         <CardBin    type='game'
@@ -92,7 +92,7 @@ export default class Game extends React.Component {
                     ) : (
                         <CardBin    type='game'
                                     pCards={this.gameState.pCards}
-                                    owners={this.gameState.pCards.map(pCard => pCard.creator_id ? this.gameState.players[pCard.creator_id] : null)}
+                                    creators={this.gameState.pCards.map(pCard => pCard.creator_id ? this.gameState.players[pCard.creator_id] : null)}
                                     onClick={this.viewPCard}
                                     save={this.actions.savePCard}
                                     winnerIndex={this.gameState.pCardIndex} />
