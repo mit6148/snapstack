@@ -6,6 +6,7 @@ import Uploader from "../game/Uploader";
 import PCard from "../univ/PCard";
 import PCardEditor from "../game/PCardEditor";
 import Modal from "../univ/Modal";
+import Link from "react-router-dom/es/Link";
 import { gamePhases, saveStates, specialCards, MIN_PLAYERS } from "../../../../config.js";
 const { LOBBY, JCHOOSE, SUBMIT, JUDGE, ROUND_OVER, GAME_OVER } = gamePhases;
 const { UNSAVED, SAVING, SAVED } = saveStates;
@@ -57,7 +58,7 @@ export default class Game extends React.Component {
 
                     <div className="notification_section">
                             {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
-                                <div className="round_skip notification">
+                                <div className="notification" id="alert">
                                     The judge has disconnected. Skip round?
                                     <div className="home_btn" onClick={this.actions.skipRound}> 
                                     Sure </div>
@@ -65,13 +66,20 @@ export default class Game extends React.Component {
                             ) : null}
                             
                             {this.gameState.roundSkipped ? (
-                                <div className="notification">
+                                <div className="alert notification" id="alert">
                                     Skipping to next round...
                                 </div>
                             ) : null}
-                            {this.gameState.gamePhase === GAME_OVER ? <div>{this.gameState.players[this.getWinner()].name} has won!</div> : null}
+                            
+                            {this.gameState.gamePhase === GAME_OVER ? 
+                                <div className="notification">
+                                    {this.gameState.players[this.getWinner()].name} has won!
+                                    <div className='home_btn' onClick={this.actions.quitGame}>
+                                        Home
+                                    </div>
+                                </div> 
+                            : null}
                     </div>
-
                 </div>
 
                 <div className="game_page_row2">
