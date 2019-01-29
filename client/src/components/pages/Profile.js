@@ -6,7 +6,7 @@ import PCard from "../univ/PCard";
 import PlayerMedia from "../univ/PlayerMedia";
 import Modal from "../univ/Modal";
 import CardBin from "../game/CardBin";
-import { specialCards } from "../../../../config.js";
+import { specialCards, MAX_DESCRIPTION_LENGTH, MAX_MEDIA_LENGTH, MAX_NAME_LENGTH } from "../../../../config.js";
 const { NO_CARD, CARDBACK, FACEDOWN_CARD, LOADING_CARD } = specialCards;
 
 import "../../css/profile.css";
@@ -27,7 +27,8 @@ export default class Profile extends React.Component {
             jCards: null,
             pCardIds: null,
             pCards: [],
-            cardModal: null
+            cardModal: null,
+            editModal: null
         };
     }
 
@@ -131,9 +132,14 @@ export default class Profile extends React.Component {
                                     {this.state.media.insta}
                                 </div>
                             </div>
-                            <div className='edit_btn'>
-                                Edit
-                            </div>
+
+                            {
+                                this.props.id === this.props.appState.userId ? (
+                                        <div className='edit_btn' onClick={this.openEditProfile}>
+                                            Edit
+                                        </div>
+                                    ) : null
+                            }
                         </div>
                     </div>
 
@@ -149,9 +155,45 @@ export default class Profile extends React.Component {
                     </div>
                 </div>
                 {this.state.cardModal}
+                {this.state.editModal}
             </div>
         );
     }
+
+
+    openEditProfile = () => {
+        this.setState({
+            editModal: (
+                <Modal onClose={() => this.setState({editModal: null})} disableCloseByWindow={true}>
+                    <form action="/api/update/profile" method="post" autoComplete="off">
+                        <h1> Edit Profile </h1>
+                        <label htmlFor="firstNameInput"> First Name: </label>
+                        <input type="text" id="firstNameInput" name="firstName"
+                                defaultValue={this.state.firstName} required
+                                maxLength={MAX_NAME_LENGTH} autoComplete="off" />
+                        <label htmlFor="lastNameInput"> Last Name: </label>
+                        <input type="text" id="lastNameInput" name="lastName"
+                                defaultValue={this.state.lastName} required
+                                maxLength={MAX_NAME_LENGTH} autoComplete="off" />
+                        <label htmlFor="fbInput"> Facebook Profile Link: </label>
+                        <input type="url" id="fbInput" name="fb" pattern="https://www.facebook.com/.*"
+                                defaultValue={this.state.media.fb}
+                                maxLength={MAX_MEDIA_LENGTH} autoComplete="off" />
+                        <label htmlFor="instaInput"> Instagram Handle: </label>
+                        <input type="text" id="instaInput" name="insta"
+                                defaultValue={this.state.media.insta}
+                                maxLength={MAX_MEDIA_LENGTH} autoComplete="off" />
+                        <label htmlFor="descriptionInput"> Description </label>
+                        <textarea id="descriptionInput" name="description"
+                                defaultValue={this.state.description}
+                                maxLength={MAX_DESCRIPTION_LENGTH} autoComplete="off"></textarea>
+                        <input type="submit" value="submit" />
+                    </form>
+                </Modal>
+            )
+        });
+    }
+
 
     viewSaved = index => {
         if (index >= this.state.pCards.length) return;
