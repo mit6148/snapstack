@@ -13,7 +13,8 @@ export default class App extends React.Component {
 
         this.state = {
             userId: null,
-            gameCode: null
+            gameCode: null,
+            isNew: true
         };
 
         this.resizeTimer = null;
@@ -33,7 +34,8 @@ export default class App extends React.Component {
         return (
             <div className="fill_parent">
                 <Switch>
-                    <Route exact path="/" render={() => <Root appState={this.state} enterGame={this.enterGame} quitGame={this.quitGame} />} />
+                    <Route exact path="/" render={() => <Root appState={this.state} enterGame={this.enterGame}
+                                                                quitGame={this.quitGame} markVisited={this.markVisited} seeTutorial={this.seeTutorial}/>} />
                     <Route exact path="/about" render={() => <About appState={this.state} />} />
                     <Route exact path="/profile/:id" render={(props) => <Profile appState={this.state} id={props.match.params.id} logout={this.logout} />} />
                     <Redirect from="*" to="/" />
@@ -42,10 +44,26 @@ export default class App extends React.Component {
         );
     }
 
+    seeTutorial = () => {
+        this.setState({
+            isNew: true
+        });
+    };
+
+    markVisited = () => {
+        this.setState({
+            isNew: false
+        });
+        fetch("/api/visit").catch(err => {
+            console.error("problem with marking visit: " + err);
+        });
+    };
+
     getUser = () => {
         fetch("/api/whoami").then(res => res.json()).then(userObj => {
             this.setState({
-                userId: userObj._id
+                userId: userObj._id,
+                isNew: userObj.isNew
             });
             console.log(userObj);
         }).catch(console.error);

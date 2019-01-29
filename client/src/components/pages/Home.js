@@ -41,10 +41,22 @@ export default class Home extends React.Component {
                 : null}
 
                 <NavButtons appState={this.props.appState} page='Home' />
+
+                {
+                    this.props.appState.isNew ? (
+                            <Modal withBox={true} onClose={this.closeTutorial}>
+                                Tutorial goes here!
+                            </Modal>
+                        ) : null
+                }
             </div>
 
         );
     };
+
+    closeTutorial = () => {
+        this.props.markVisited();
+    }
 
     enterGame = () => {
         this.props.enterGame(document.getElementById("game-code-input").value);
