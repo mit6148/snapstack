@@ -153,8 +153,8 @@
   overflow-wrap: break-word;
 }
 .jcard > .content > * {
-  padding: 5%;
-  width: 100%;
+  width: 90%;
+  height: 80%;
 }
 
 .pcard, .pcard_editor {
@@ -195,8 +195,8 @@
   display: flex;
 }
 .pcard > .caption_content > *, .pcard_editor > .caption_content > * {
-  padding: 5%;
-  width: 100%;
+  width: 90%;
+  height: 80%;
 }
 
 .pcard_editor > .caption_content > textarea {
