@@ -7,6 +7,12 @@
 --blue-medium: #0677CE;
 --blue-dark: #056BBA;
 
+--black: #3B3B3D;
+--dark-gray: #636266; 
+--medium-gray: #7E7C82;
+--light-gray: #DDDDDD;
+--white: #F4F4F4;
+
     width: 30%;
     height: 100%;
     max-width: 680px;
@@ -17,7 +23,7 @@
 
     position: relative;
     padding: 20px 20px;
-    outline: 2px dashed #92b0b3;
+    outline: 2px dashed var(--white);
     outline-offset: -10px;
 
     border-radius: 10px;
@@ -36,7 +42,7 @@
 #dragndrop_box.is-dragover
 {
     outline-offset: -20px;
-    outline-color: #c8dadf;
+    outline-color: var(--light-gray);
     background-color: var(--blue-medium);
     box-shadow: 0px 3px 0px 0px var(--blue-dark);
 }
