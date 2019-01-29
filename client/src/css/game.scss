@@ -25,10 +25,14 @@ html, body, #root, .fill_parent {
 
 	position: absolute;
 
-	top: 40px;
-	left: 40px;
+	top: 20px;
+	left: 20px;
 
 	font-family: 'Orbitron', sans-serif;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
 }
 
@@ -236,10 +240,18 @@ html, body, #root, .fill_parent {
 	  		font-size: 14px;
 	  		width: 80px;
 
-	  		bottom: 20px;
-	  		left: 20px; 
 
 		}
+	}
+
+	.timer {
+
+  		font-size: 22px;
+  		width: 80px;
+  		padding: 5px;
+
+
+
 	}
 
 

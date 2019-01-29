@@ -203,13 +203,15 @@
 .message {
     margin: 0;
     display: inline-block;
-    padding: 5px 10px 5px;
+    --chat-message-horz-padding: 10px;
+    padding: 5px var(--chat-message-horz-padding) 5px;
+
     font-size: var(--chat-font-size);
     font-weight: var(--chat-font-weight);
     color: var(--chat-white-replacement);
     word-wrap: break-word;
     overflow-wrap: break-word;
-    max-width: 100%;
+    max-width: calc(100% - 2 * var(--chat-message-horz-padding));
 }
 
 .chatBox-entry {
