@@ -71,6 +71,12 @@ export default class Game extends React.Component {
                                 </div>
                             ) : null}
                             
+                            {this.gameState.gamePhase === ROUND_OVER ? 
+                                <div className="notification">
+                                    {this.gameState.players[this.getWinner()].name} earns a point!
+                                </div>
+                            : null}
+
                             {this.gameState.gamePhase === GAME_OVER ? 
                                 <div className="notification">
                                     {this.gameState.players[this.getWinner()].name} has won!
