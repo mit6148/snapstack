@@ -40,8 +40,10 @@
     "react-dom": "^16.7.0",
     "react-fontawesome": "^1.6.1",
     "react-router-dom": "^4.3.1",
+    "react-textfit": "^1.1.0",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0"
+    "socket.io-client": "^2.2.0",
+    "textfit": "^2.3.1"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.0.0",

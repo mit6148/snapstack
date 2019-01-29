@@ -2,6 +2,7 @@ import React from "react";
 import Route from "react-router-dom/es/Route";
 import Redirect from "react-router-dom/es/Redirect";
 import Switch from "react-router-dom/es/Switch";
+import textFit from 'textfit';
 import Root from "./pages/Root";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
@@ -14,10 +15,18 @@ export default class App extends React.Component {
             userId: null,
             gameCode: null
         };
+
+        this.resizeTimer = null;
     }
 
     componentDidMount() {
         this.getUser();
+        window.addEventListener('resize', e => {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = setTimeout(() => {
+                textFit(document.getElementsByClassName('fit_resize'), {alignHoriz: true, alignVert: true, minFontSize: 8, maxFontSize: 16});
+            }, 25);
+        })
     }
 
     render() { // TODO don't render until user is fetched; TODO /profile doesn't redirect when not logged in

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import textFit from 'textfit';
 import Image from "./Image";
 import Caption from "./Caption";
 import Modal from "./Modal";
@@ -8,6 +9,20 @@ const { NO_CARD, CARDBACK, FACEDOWN_CARD, LOADING_CARD } = specialCards;
 import "../../css/card.css";
 
 export default class JCard extends Component {
+    constructor(props) {
+        super(props);
+
+        this.key = Math.floor(Math.random() * 100);
+    }
+
+    componentDidMount() {
+        this.componentDidUpdate();
+    }
+
+    componentDidUpdate() {
+        textFit(document.getElementsByClassName('fit'+this.key), {alignHoriz: true, alignVert: true, minFontSize: 8, maxFontSize: 16});
+    }
+
     render() {
         if (this.props.src === NO_CARD) {
             return (
@@ -25,7 +40,7 @@ export default class JCard extends Component {
             return (
                 <div className='jcard' onClick={this.props.onClick}>
                     <div className='content'>
-                        <div>
+                        <div className={'fit_resize fit'+this.key}>
                             {this.props.text}
                         </div>
                     </div>
