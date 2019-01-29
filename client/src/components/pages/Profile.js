@@ -157,8 +157,8 @@ export default class Profile extends React.Component {
                         <h2> My SnapStack </h2>
                         <div className="saved_cards">
                             <CardBin    type='profile'
-                                        pCards={this.state.pCardIds.map((pCardId, index) => index < this.state.pCards.length ? this.state.pCards[index] : LOADING_CARD)}
-                                        creators={this.state.pCards.map(pCard => ({_id: pCard.creator_id, name: pCard.creator_name}))}
+                                        pCards={this.state.pCardIds.map((pCardId, index) => index < this.state.pCards.length && this.state.pCards[index] ? this.state.pCards[index] : LOADING_CARD)}
+                                        creators={this.state.pCards.map(pCard => pCard ? ({_id: pCard.creator_id, name: pCard.creator_name}) : null)}
                                         userId={this.props.id}
                                         onClick={this.viewSaved} />
                         </div>
