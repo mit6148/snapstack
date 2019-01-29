@@ -9,6 +9,7 @@ import "../../css/card.css";
 
 export default class CardBin extends React.Component {
     render() {
+        console.log(this.props);
         return (
             <div className={this.props.type+'_card_bin'}>
                 {this.props.jCards ? this.props.jCards.map((jCard, index) => (
@@ -40,8 +41,8 @@ export default class CardBin extends React.Component {
                                     text={pCard.text}
                                     faceup={pCard.faceup}
                                     onClick={this.props.onClick ? (() => this.props.onClick(index, pCard)) : null}
-                                    saveState={pCard.saveState}
-                                    save={() => this.props.save(index)}
+                                    saveState={this.props.save ? pCard.saveState : null}
+                                    save={this.props.save ? (() => this.props.save(index)) : null}
                                     creator={['profile', 'jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index].name : null}
                                     creatorId={['profile', 'jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index]._id : null}
                                     userId={this.props.userId} />
