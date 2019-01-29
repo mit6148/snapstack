@@ -41,35 +41,3 @@ export default class PCard extends Component {
         }
     }
 }
-        // if (this.props.faceup) {
-        //     if (this.props.zoomed) {
-        //         return (
-        //         <Modal modalType="zoom_card">
-        //             <div className="container"> 
-        //                 <Image />
-        //             </div>
-        //             <Caption text=':chrissexy:' />
-        //         </Modal>
-        //         );
-        //     } else {
-        //         return (
-        //         <div className="card">
-        //             <div className="container"> 
-        //                 <Image />
-        //             </div>
-        //             <Caption text=':chrissexy:' />
-        //         </div>
-        //         );
-        //     }
-
-        // }
-        // else {
-        //     return (
-        //         null
-        //     );
-        //     // return (
-        //     //     <div>
-        //     //         <Cardback type={this.props.type} />
-        //     //     </div>
-        //     // );
-        // }

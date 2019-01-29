@@ -56,20 +56,20 @@ export default class Game extends React.Component {
                     </div>
 
                     <div className="notification_section">
-                        {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
-                            <div className="round_skip notification">
-                                The judge has disconnected. Skip round?
-                                <div className="home_btn" onClick={this.actions.skipRound}> 
-                                Sure </div>
-                            </div>
-                        ) : null}
-                        
-                        {this.gameState.roundSkipped ? (
-                            <div className="notification">
-                                Skipping to next round...
-                            </div>
-                        ) : null}
-                        {this.gameState.gamePhase === GAME_OVER ? <div>{this.gameState.players[this.getWinner()].name} has won!</div> : null}
+                            {this.isJudgeDisconnected() && !this.gameState.roundSkipped ? (
+                                <div className="round_skip notification">
+                                    The judge has disconnected. Skip round?
+                                    <div className="home_btn" onClick={this.actions.skipRound}> 
+                                    Sure </div>
+                                </div>
+                            ) : null}
+                            
+                            {this.gameState.roundSkipped ? (
+                                <div className="notification">
+                                    Skipping to next round...
+                                </div>
+                            ) : null}
+                            {this.gameState.gamePhase === GAME_OVER ? <div>{this.gameState.players[this.getWinner()].name} has won!</div> : null}
                     </div>
 
                 </div>
@@ -102,14 +102,16 @@ export default class Game extends React.Component {
 
                 <div className="game_page_row3">
                     <div className="game_code_section">
-                        Game Code: 
-                        {' ' + this.props.appState.gameCode}
+                        <div>
+                            Game Code: 
+                            {' ' + this.props.appState.gameCode}
+                        </div>
                     </div>
                     
                     <div className='user_actionables'>
                         {this.canUploadImage() ? <Uploader upload={this.uploadImage} /> : null}
-                        {this.canFlipAllPCards() ? <div className='home_btn' onClick={this.actions.flipAllPCards}>Flip All</div> : null}
-                        {this.canSelectPCard() ? <div onClick={this.actions.selectPCard}>Select</div> : null}
+                        {this.canFlipAllPCards() ? <div className='green_home_btn' onClick={this.actions.flipAllPCards}>Flip All</div> : null}
+                        {this.canSelectPCard() ? <div className='green_home_btn' onClick={this.actions.selectPCard}>Select</div> : null}
                     </div>
 
                     <div className='chat_box_section'>
