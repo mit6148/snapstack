@@ -5,7 +5,8 @@ export default class PlayerListCell extends React.Component {
     render() {
         return (
                 <PlayerInfo name={this.props.player.name} avatar={this.props.player.avatar}
-                    connected={this.props.player.connected} media={this.props.player.media} score={0}/>
+                    connected={this.props.player.connected} media={this.props.player.media}
+                    _id={this.props.player._id} score={0}/>
         );
     }
 }

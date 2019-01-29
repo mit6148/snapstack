@@ -16,6 +16,10 @@ div {
   color: #3B3B3D;
 }
 
+.player_info:hover {
+  cursor: pointer;
+}
+
 .player_list .player_info {
   border-width: 2;
   background-color: #BD9DCC;
@@ -59,6 +63,9 @@ div {
   padding: 5px;
   text-align: left;
   text-overflow: ellipsis;
+}
+.user_name:hover {
+  cursor: pointer;
 }
 
 .player_other {
