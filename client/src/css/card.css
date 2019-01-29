@@ -108,6 +108,26 @@
   box-shadow: 0px 4px 0px #8E7599;
 }
 
+@media (max-aspect-ratio: 32/19) {
+  .card_slot > .card_info_area > .player_info {
+    transform: scale(0.45, 0.45);
+  }
+}
+@media (max-aspect-ratio: 28/19) {
+  .card_slot > .card_info_area > .player_info {
+    transform: scale(0.4, 0.4);
+  }
+}
+@media (max-aspect-ratio: 25/19) {
+  .card_slot > .card_info_area > .player_info {
+    transform: scale(0.35, 0.35);
+  }
+}
+@media (max-aspect-ratio: 22/19) {
+  .card_slot > .card_info_area > .player_info {
+    transform: scale(0.3, 0.3);
+  }
+}
 .jcard {
   border-radius: 7%/5%;
   background-color: #12B780;
