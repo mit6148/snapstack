@@ -849,7 +849,7 @@ async function onConnection(socket) {
 
 if(DEVELOPER_MODE) {
     User.findOne({_id: LAZY_B_ID}).exec().then(async user => {
-        game = new Game(3, "XYZ");
+        game = new Game(CARDS_TO_WIN, "XYZ");
         await game.addPlayer(user);
         const other = await User.findOne({_id: LETHARGIC_B_ID}).exec();
         await game.addPlayer(other);

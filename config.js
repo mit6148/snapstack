@@ -51,7 +51,7 @@ const TIME_LIMIT_FORGIVE_MILLIS = 2000;
 
 const NUM_JCARDS = 3;
 
-const CARDS_TO_WIN = 3;
+const CARDS_TO_WIN = 1;
 
 const GAME_CODE_LENGTH = 3;
 
