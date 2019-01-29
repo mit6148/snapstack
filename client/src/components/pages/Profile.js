@@ -164,29 +164,29 @@ export default class Profile extends React.Component {
     openEditProfile = () => {
         this.setState({
             editModal: (
-                <Modal onClose={() => this.setState({editModal: null})}>
-                    <form action="/api/update/profile" method="post">
+                <Modal onClose={() => this.setState({editModal: null})} disableCloseByWindow={true}>
+                    <form action="/api/update/profile" method="post" autoComplete="off">
                         <h1> Edit Profile </h1>
                         <label htmlFor="firstNameInput"> First Name: </label>
                         <input type="text" id="firstNameInput" name="firstName"
                                 defaultValue={this.state.firstName} required
-                                maxLength={MAX_NAME_LENGTH} />
+                                maxLength={MAX_NAME_LENGTH} autoComplete="off" />
                         <label htmlFor="lastNameInput"> Last Name: </label>
                         <input type="text" id="lastNameInput" name="lastName"
                                 defaultValue={this.state.lastName} required
-                                maxLength={MAX_NAME_LENGTH} />
+                                maxLength={MAX_NAME_LENGTH} autoComplete="off" />
                         <label htmlFor="fbInput"> Facebook Profile Link: </label>
                         <input type="url" id="fbInput" name="fb" pattern="https://www.facebook.com/.*"
                                 defaultValue={this.state.media.fb}
-                                maxLength={MAX_MEDIA_LENGTH} />
+                                maxLength={MAX_MEDIA_LENGTH} autoComplete="off" />
                         <label htmlFor="instaInput"> Instagram Handle: </label>
                         <input type="text" id="instaInput" name="insta"
                                 defaultValue={this.state.media.insta}
-                                maxLength={MAX_MEDIA_LENGTH} />
+                                maxLength={MAX_MEDIA_LENGTH} autoComplete="off" />
                         <label htmlFor="descriptionInput"> Description </label>
                         <textarea id="descriptionInput" name="description"
                                 defaultValue={this.state.description}
-                                maxLength={MAX_DESCRIPTION_LENGTH}></textarea>
+                                maxLength={MAX_DESCRIPTION_LENGTH} autoComplete="off"></textarea>
                         <input type="submit" value="submit" />
                     </form>
                 </Modal>
