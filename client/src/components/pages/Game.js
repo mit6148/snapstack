@@ -71,6 +71,12 @@ export default class Game extends React.Component {
                                 </div>
                             ) : null}
                             
+                            {this.gameState.gamePhase === ROUND_OVER ? 
+                                <div className="notification">
+                                    {this.gameState.players[this.getWinner()].name} earns a point!
+                                </div>
+                            : null}
+
                             {this.gameState.gamePhase === GAME_OVER ? 
                                 <div className="notification">
                                     {this.gameState.players[this.getWinner()].name} has won!
@@ -120,7 +126,7 @@ export default class Game extends React.Component {
                     <div className='user_actionables'>
                         {this.canUploadImage() ? <Uploader upload={this.uploadImage} /> : null}
                         {this.canFlipAllPCards() ? <div className='green_home_btn' onClick={this.actions.flipAllPCards}>Flip All</div> : null}
-                        {this.canSelectPCard() ? <div className='green_home_btn' onClick={this.actions.selectPCard}>Select</div> : null}
+                        {this.canSelectPCard() && this.state.cardModal !== null ? <div className='green_home_btn select_pcard_btn' onClick={this.actions.selectPCard}>Select</div> : null}
                     </div>
 
                     <div className='chat_box_section'>
@@ -148,7 +154,8 @@ export default class Game extends React.Component {
                     <Modal onClose={() => this.setState({cardModal: null})}>
                         <CardBin    type='pmodal'
                                     pCards={[this.gameState.gamePhase === SUBMIT ? this.gameState.pCards[0] : this.gameState.pCards[this.state.cardModal]]}
-                                    save={this.actions.savePCard} />
+                                    save={this.actions.savePCard}
+                                    saveIndex={this.gameState.gamePhase === SUBMIT ? 0 : this.state.cardModal} />
                     </Modal>
                 )}
                 {this.state.pCardEditModal}
@@ -202,7 +209,9 @@ export default class Game extends React.Component {
     }
 
     getWinner = () => {
-        return [ROUND_OVER, GAME_OVER].includes(this.gameState.gamePhase) && this.gameState.pCards[this.gameState.pCardIndex].creator_id || null;
+        const ans = [ROUND_OVER, GAME_OVER].includes(this.gameState.gamePhase) && this.gameState.pCards[this.gameState.pCardIndex].creator_id || null;
+        console.log("winner: " + ans);
+        return ans;
     }
 
     // enable skip round

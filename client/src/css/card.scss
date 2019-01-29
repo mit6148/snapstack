@@ -250,6 +250,11 @@ $content_border_radius: 5px;
             overflow: ellipsis;
 		}
 	}
+
+    &[highlight='true'] {
+        border: $green-light 4px solid;
+        box-shadow: 1px 3px 0px $green-dark;
+    }
 }
 
 .pcard_editing {

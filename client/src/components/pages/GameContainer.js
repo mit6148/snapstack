@@ -148,9 +148,6 @@ export default class GameContainer extends React.Component {
 
     // judge action
     selectPCard = () => {
-        this.setState({
-            gamePhase: ROUND_OVER
-        });
         this.socket.emit('select', this.state.pCardIndex);
     }
 
@@ -312,6 +309,8 @@ export default class GameContainer extends React.Component {
             });
         });
         socket.on('select', (pCardIndex, creator_ids) => {
+            console.log("creator_ids: ");
+            console.log(creator_ids);
             this.setState({
                 gamePhase: ROUND_OVER,
                 players: update(this.state.players, {[creator_ids[pCardIndex]]: {score: (score => score + 1)}}),

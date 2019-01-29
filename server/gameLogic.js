@@ -3,7 +3,8 @@ const UserDetail = require('./models/user_detail');
 const PCardRef = require('./models/pcardref');
 const JCard = require('./models/jcard');
 const {gamePhases, endSubmitPhaseStatus, MAX_PLAYERS, TIME_LIMIT_MILLIS, TIME_LIMIT_FORGIVE_MILLIS, NUM_JCARDS, CARDS_TO_WIN,
-    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID, MAX_CAPTION_LENGTH} = require("../config");
+    GAME_CODE_LENGTH, WAIT_TIME, saveStates, DEVELOPER_MODE, MIN_PLAYERS, LAZY_B_ID, LETHARGIC_B_ID, MAX_CAPTION_LENGTH,
+    TIME_ROUND_OVER_MILLIS} = require("../config");
 const {uploadImagePromise, downloadImagePromise, deleteImagePromise} = require("./storageTalk");
 const {io} = require('./requirements');
 const db = require('./db');
@@ -296,9 +297,12 @@ class Game {
         const index = this.pCardRefPairs.map(pair => pair[0]._id.toString()).indexOf(pCardId);
 
         if(this.jCards.length === 1 && index >= 0 && pCardId.match(/^[a-zA-Z0-9]+$/)) {
-            if(this.userToPlayerMap[user._id].checkSaved([pCardId])[0]) {
+            const alreadySavedArray = await this.userToPlayerMap[user._id].checkSaved([pCardId]);
+            if(alreadySavedArray[0]) {
+                console.log("save attempt: already saved");
                 return; // already saved
             }
+            console.log("save attempt: card not already saved");
             const session = await db.startSession();
             await session.startTransaction();
             console.log(session.transaction);
@@ -817,7 +821,7 @@ async function onConnection(socket) {
             } catch(err) {
                 console.error("post-select-phase timeout in select had an error: " + err);
             }
-        }, WAIT_TIME);
+        }, TIME_ROUND_OVER_MILLIS);
     });
 
     createLockedListener(socket, 'disconnect', gameGetter, true, async () => {

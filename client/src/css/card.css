@@ -211,6 +211,10 @@
   height: 80%;
   overflow: ellipsis;
 }
+.pcard[highlight=true], [highlight=true].pcard_editing {
+  border: #12B780 4px solid;
+  box-shadow: 1px 3px 0px #0E8C62;
+}
 
 .pcard_editing > .caption_content > textarea {
   width: 90%;

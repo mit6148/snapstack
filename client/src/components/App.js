@@ -29,6 +29,17 @@ export default class App extends React.Component {
                 textFit(document.getElementsByClassName('fit_resize'), {alignHoriz: true, alignVert: true, minFontSize: 8, maxFontSize: 16, multiLine: true});
             }, 25);
         })
+        //window.onbeforeunload = () => {
+        //    return "Are you sure you want to navigate away?";
+        //}
+        document.addEventListener('dragover', e => {
+            e.preventDefault();
+            return false;
+        });
+        document.addEventListener('drop', e => {
+            e.preventDefault();
+            return false;
+        });
     }
 
     render() { // TODO don't render until user is fetched; TODO /profile doesn't redirect when not logged in

@@ -24,7 +24,7 @@ export default class PCard extends Component {
             );
         } else { // TODO loading card
             return (
-                <div className='pcard' onClick={this.props.onClick}>
+                <div className='pcard' highlight={this.props.highlight ? 'true' : 'false'} onClick={this.props.onClick}>
                     <div className='image_content'>
                         <img src={this.props.image} />
                     </div>
