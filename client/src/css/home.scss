@@ -17,11 +17,11 @@ div {
 	display: inline-block;
 	height: 160px;
 	width: 160px;
-	border-radius: 80px;
 	overflow: hidden;
-	box-shadow: 0px 5px 0px $medium-gray;
+	border-radius: 80px;
+	margin-top: 15px;
 
-
+	box-shadow: 2px 3px 0px 0px $medium-gray;
 }
 
 .logo {
@@ -34,8 +34,7 @@ body {
 }
 
 .logo:hover {
-	height: 100%;
-	width: 100%;
+	
 
 
 
