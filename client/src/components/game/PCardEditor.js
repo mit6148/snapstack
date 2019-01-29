@@ -48,7 +48,8 @@ export default class PCardEditor extends React.Component {
                                         <ImageEditor    image={this.props.image}
                                                         ref={this.imageEditor}
                                                         mode={this.state.isDrawing ? drawingMode.DRAW : drawingMode.MOVE}
-                                                        color={this.state.color} />
+                                                        color={this.state.color}
+                                                        lineWidth={this.state.lineWidth}/>
                                     </div>
                                     <div className='caption_content'>
                                         <textarea id="caption-input" maxLength={MAX_CAPTION_LENGTH} autoComplete="off" wrap="soft"/>
