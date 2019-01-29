@@ -91,6 +91,11 @@ div {
 	margin-right: 10px;
 }
 
+.media-missing {
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+}
+
 .fb_btn {
 
 	background-color: $fb_blue;
@@ -104,10 +109,9 @@ div {
 
 	margin-right: 16px;
 
-	&:hover {
-	cursor: pointer;
+	&:hover:not(.media-missing) {
+		cursor: pointer;
 	}
-
 }
 
 
@@ -138,8 +142,8 @@ div {
 	    linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);
 	border-radius: 10px;
 
-	&:hover {
-	cursor: pointer;
+	&:hover:not(.media-missing) {
+		cursor: pointer;
 	}
 
 }
