@@ -62,7 +62,7 @@ export default class PCardEditor extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div onClick={this.submit}>Submit</div>
+                <div className='submit_card_btn' onClick={this.submit}>Submit</div>
             </div>
         );
     }
