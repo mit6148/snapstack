@@ -41,7 +41,7 @@ export default class Lobby extends React.Component {
                             Time limit per round:
                         </h2>
                         <div className="game_settings">
-                            3 min
+                            2 min
                         </div>
                         <h2>
                             # players:
