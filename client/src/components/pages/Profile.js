@@ -32,6 +32,12 @@ export default class Profile extends React.Component {
         };
     }
 
+    componentWillUnmount() {
+        this.setState({
+            pCardIds: []
+        });
+    }
+
     getData = userId => {
         fetch('/api/profile/'+userId).then(res => res.json()).then(async profileObj => {
             this.setState({
