@@ -65,7 +65,7 @@ const LETHARGIC_B_ID = "5c4a8e621c9d44000084e078";
 
 const MAX_DESCRIPTION_LENGTH = 5000;
 const MAX_MEDIA_LENGTH = 100;
-const MAX_NAME_LENGTH = 200;
+const MAX_NAME_LENGTH = 100;
 const MAX_CAPTION_LENGTH = 100;
 
 module.exports = {gamePhases, saveStates, endSubmitPhaseStatus, specialCards, MAX_PLAYERS, TIME_LIMIT_MILLIS,
