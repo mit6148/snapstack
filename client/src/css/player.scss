@@ -91,7 +91,7 @@ div {
 	margin-right: 10px;
 }
 
-.media-missing {
+.gray-out {
 	-webkit-filter: grayscale(100%);
 	filter: grayscale(100%);
 }
@@ -109,7 +109,7 @@ div {
 
 	margin-right: 16px;
 
-	&:hover:not(.media-missing) {
+	&:hover:not(.gray-out) {
 		cursor: pointer;
 	}
 }
@@ -142,7 +142,7 @@ div {
 	    linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);
 	border-radius: 10px;
 
-	&:hover:not(.media-missing) {
+	&:hover:not(.gray-out) {
 		cursor: pointer;
 	}
 

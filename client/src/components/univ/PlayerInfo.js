@@ -8,7 +8,7 @@ export default class PlayerInfo extends React.Component {
 
     render() {
         return (
-            <div className="player_info">
+            <div className={"player_info" + (this.props.connected ? "" : " gray-out")}>
                 <div className="avatar_container">
                     <div className="cropped_avatar">
                         <img src={this.props.avatar}></img>

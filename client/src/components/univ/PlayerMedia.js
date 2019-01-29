@@ -4,9 +4,9 @@ export default class PlayerMedia extends React.Component {
     render() {
         return (
             <div className="player_media">
-				<div className={"fab fa-facebook-square fb_btn" + (this.props.media.fb ? "" : " media-missing")}
+				<div className={"fab fa-facebook-square fb_btn" + (this.props.media.fb ? "" : " gray-out")}
                         onClick={this.redirectFB}></div>
-                <div className={"fab fa-instagram insta_btn" + (this.props.media.insta ? "" : " media-missing")}
+                <div className={"fab fa-instagram insta_btn" + (this.props.media.insta ? "" : " gray-out")}
                         onClick={this.redirectInsta}></div>
 
             </div>
