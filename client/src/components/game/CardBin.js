@@ -46,7 +46,8 @@ export default class CardBin extends React.Component {
                                     save={this.props.save ? (() => this.props.save(this.props.saveIndex !== undefined ? this.props.saveIndex : index)) : null}
                                     creator={['jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index].name : null}
                                     creatorId={['jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index]._id : null}
-                                    userId={this.props.userId} />
+                                    userId={this.props.userId}
+                                    highlight={[this.props.judgeFocusIndex, this.props.winnerIndex].includes(index)} />
                         </div>
                         {this.props.type === 'game' ? (
                             <div className='card_info_area'>
