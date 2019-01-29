@@ -80,6 +80,7 @@ export default class ImageEditor extends React.Component {
             this.startPosition = [e.screenX, e.screenY];
         } else {
             this.startPosition = this.clientToHiddenCoords(e.clientX, e.clientY);
+            this.hiddenContext.beginPath();
             this.hiddenContext.moveTo(this.startPosition[0], this.startPosition[1]);
         }
         this.mouseDownCenter = [this.viewCenterX, this.viewCenterY];
