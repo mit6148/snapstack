@@ -22,7 +22,9 @@ export default class PCard extends Component {
                     </div>
                 </div>
             );
-        } else { // TODO loading card
+        } else if (this.props.src === LOADING_CARD) {
+            return null;
+        } else {
             return (
                 <div className='pcard' highlight={this.props.highlight ? 'true' : 'false'} onClick={this.props.onClick}>
                     <div className='image_content'>
