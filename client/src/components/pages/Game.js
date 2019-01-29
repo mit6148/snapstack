@@ -209,7 +209,9 @@ export default class Game extends React.Component {
     }
 
     getWinner = () => {
-        return [ROUND_OVER, GAME_OVER].includes(this.gameState.gamePhase) && this.gameState.pCards[this.gameState.pCardIndex].creator_id || null;
+        const ans = [ROUND_OVER, GAME_OVER].includes(this.gameState.gamePhase) && this.gameState.pCards[this.gameState.pCardIndex].creator_id || null;
+        console.log("winner: " + ans);
+        return ans;
     }
 
     // enable skip round
