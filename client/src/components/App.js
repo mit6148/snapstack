@@ -25,6 +25,7 @@ export default class App extends React.Component {
         window.addEventListener('resize', e => {
             clearTimeout(this.resizeTimer);
             this.resizeTimer = setTimeout(() => {
+                console.log('asdf');
                 textFit(document.getElementsByClassName('fit_resize'), {alignHoriz: true, alignVert: true, minFontSize: 8, maxFontSize: 16});
             }, 25);
         })

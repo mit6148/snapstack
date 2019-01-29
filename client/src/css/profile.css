@@ -19,6 +19,58 @@ h1:hover {
   animation: flash linear 1s;
 }
 
+h2 {
+  font-size: 26px;
+}
+
+.edit_profile {
+  padding: 5px;
+}
+.edit_profile > h2 {
+  margin-top: 5px;
+  font-size: 28px;
+}
+.edit_profile > div {
+  margin: 5px;
+  padding: 5px;
+  font-size: 16px;
+}
+.edit_profile > div > label {
+  color: #3B3B3D;
+}
+.edit_profile > div > input, .edit_profile > div textarea {
+  padding: 4px;
+  border-radius: 2px;
+  font-family: "Raleway", sans-serif;
+  color: #3B3B3D;
+  background-color: #F4F4F4;
+  font-size: 12px;
+}
+.edit_profile > input {
+  color: #F4F4F4;
+  font-size: 15px;
+  background-color: #12B780;
+  box-shadow: 0px 4px 0px #10A070;
+  margin: 1em auto;
+  padding: 8px;
+  text-align: center;
+  width: 70px;
+  font-family: "Raleway", sans-serif;
+  border-width: 0px;
+  border-radius: 0.4em;
+  text-decoration: none;
+}
+.edit_profile > input:hover {
+  background: #10A070;
+  box-shadow: 0 5px #0E8C62;
+  cursor: pointer;
+}
+.edit_profile > input:active {
+  background-color: #10A070;
+  box-shadow: 0 2px #0E8C62;
+  transform: translateY(3px);
+}
+
 .my_profile {
   margin-top: 40px;
   display: flex;
@@ -102,23 +154,50 @@ h1:hover {
 }
 
 .profile_name {
-  font-size: 25px;
   text-align: left;
+}
+.profile_name > h2 {
+  font-size: 36px;
+  margin-top: 20px;
+  margin-left: 0px;
+  margin-bottom: 5px;
 }
 
 .profile_description {
   word-wrap: break-word;
-  max-width: 400px;
+  max-width: 360px;
   text-align: left;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 14px;
-  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 .profile_social_media {
   text-align: left;
-  font-weight: bold;
+  display: inline;
+  overflow-wrap: break-word;
+}
+
+.profile_media_section {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.profile_media_section > div {
+  text-align: left;
+  padding: 5px 0px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.profile_media_section > div > div {
+  margin-right: 0px;
+}
+.profile_media_section > div > .media_text {
+  overflow-wrap: break-word;
+  width: 300px;
+  margin: 10px auto;
+  text-align: left;
 }
 
 .saved_cards {
