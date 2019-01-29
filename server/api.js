@@ -20,7 +20,7 @@ const downloadLockout = {}; // add user._id as key to prevent multiple requests 
 
 router.get('/whoami', function(req, res) {
     if(req.isAuthenticated()) {
-        res.send({_id: req.user._id, isNew: true || req.user.is_new !== false});
+        res.send({_id: req.user._id, isNew: req.user.is_new !== false});
     } else {
         res.send({_id: null});
     }
