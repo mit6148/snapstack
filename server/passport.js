@@ -43,6 +43,7 @@ passport.use(new FacebookStrategy({
                 user = new User({
                     facebookId: profile.id,
                     detail_id: userDetail._id,
+                    isNew: true,
                 });
 
                 const userSavePromise = user.save().catch(err => {
