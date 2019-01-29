@@ -71,6 +71,12 @@ export default class Game extends React.Component {
                                 </div>
                             ) : null}
                             
+                            {this.gameState.gamePhase === ROUND_OVER ? 
+                                <div className="notification">
+                                    {this.gameState.players[this.getWinner()].name} earns a point!
+                                </div>
+                            : null}
+
                             {this.gameState.gamePhase === GAME_OVER ? 
                                 <div className="notification">
                                     {this.gameState.players[this.getWinner()].name} has won!
@@ -148,7 +154,8 @@ export default class Game extends React.Component {
                     <Modal onClose={() => this.setState({cardModal: null})}>
                         <CardBin    type='pmodal'
                                     pCards={[this.gameState.gamePhase === SUBMIT ? this.gameState.pCards[0] : this.gameState.pCards[this.state.cardModal]]}
-                                    save={this.actions.savePCard} />
+                                    save={this.actions.savePCard}
+                                    saveIndex={this.gameState.gamePhase === SUBMIT ? 0 : this.state.cardModal} />
                     </Modal>
                 )}
                 {this.state.pCardEditModal}

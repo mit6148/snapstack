@@ -43,7 +43,7 @@ export default class CardBin extends React.Component {
                                     faceup={pCard.faceup}
                                     onClick={this.props.onClick ? (() => this.props.onClick(index, pCard)) : null}
                                     saveState={this.props.save ? pCard.saveState : null}
-                                    save={this.props.save ? (() => this.props.save(index)) : null}
+                                    save={this.props.save ? (() => this.props.save(this.props.saveIndex !== undefined ? this.props.saveIndex : index)) : null}
                                     creator={['jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index].name : null}
                                     creatorId={['jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index]._id : null}
                                     userId={this.props.userId} />
