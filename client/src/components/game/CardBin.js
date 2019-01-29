@@ -27,7 +27,8 @@ export default class CardBin extends React.Component {
                                                 avatar={this.props.creators[index].avatar}
                                                 media={this.props.creators[index].media}
                                                 score={this.props.creators[index].score}
-                                                connected={this.props.creators[index].connected} />
+                                                connected={this.props.creators[index].connected}
+                                                _id={this.props.creators[index]._id} />
                                 )}
                             </div>
                         ) : null}
@@ -54,7 +55,8 @@ export default class CardBin extends React.Component {
                                                 avatar={this.props.creators[index].avatar}
                                                 media={this.props.creators[index].media}
                                                 score={this.props.creators[index].score}
-                                                connected={this.props.creators[index].connected} />
+                                                connected={this.props.creators[index].connected}
+                                                _id={this.props.creators[index]._id} />
                                 )}
                             </div>
                         ) : null}

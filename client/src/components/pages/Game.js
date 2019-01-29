@@ -22,7 +22,7 @@ export default class Game extends React.Component {
         this.state = {
             cardModal: null,
             cardModalCreatedDuring: null,
-            pCardEditModal: null
+            pCardEditModal: null,
         };
     }
 
@@ -79,6 +79,9 @@ export default class Game extends React.Component {
                                     </div>
                                 </div> 
                             : null}
+                            
+                            {this.props.gameState.roundNotification}
+
                     </div>
                 </div>
 

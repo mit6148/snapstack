@@ -122,14 +122,18 @@ export default class Profile extends React.Component {
                             <div className="profile_description">
                                 {this.state.description}
                             </div>
-                            <div>
+                            <div className="profile_media_section">
                                 <div>
                                     <div className="fab fa-facebook-square fb_btn"></div>
-                                    {this.state.media.fb}
+                                    <div className="media_text">
+                                        {this.state.media.fb}
+                                    </div>
                                 </div>
                                 <div>
                                     <div className="fab fa-instagram insta_btn"></div>
-                                    {this.state.media.insta}
+                                    <div className="media_text">
+                                        {this.state.media.insta}
+                                    </div>
                                 </div>
                             </div>
 
@@ -164,29 +168,45 @@ export default class Profile extends React.Component {
     openEditProfile = () => {
         this.setState({
             editModal: (
-                <Modal onClose={() => this.setState({editModal: null})} disableCloseByWindow={true}>
-                    <form action="/api/update/profile" method="post" autoComplete="off">
-                        <h1> Edit Profile </h1>
-                        <label htmlFor="firstNameInput"> First Name: </label>
-                        <input type="text" id="firstNameInput" name="firstName"
-                                defaultValue={this.state.firstName} required
-                                maxLength={MAX_NAME_LENGTH} autoComplete="off" />
-                        <label htmlFor="lastNameInput"> Last Name: </label>
-                        <input type="text" id="lastNameInput" name="lastName"
-                                defaultValue={this.state.lastName} required
-                                maxLength={MAX_NAME_LENGTH} autoComplete="off" />
-                        <label htmlFor="fbInput"> Facebook Profile Link: </label>
-                        <input type="url" id="fbInput" name="fb" pattern="https://www.facebook.com/.*"
-                                defaultValue={this.state.media.fb}
-                                maxLength={MAX_MEDIA_LENGTH} autoComplete="off" />
-                        <label htmlFor="instaInput"> Instagram Handle: </label>
-                        <input type="text" id="instaInput" name="insta"
-                                defaultValue={this.state.media.insta}
-                                maxLength={MAX_MEDIA_LENGTH} autoComplete="off" />
-                        <label htmlFor="descriptionInput"> Description </label>
-                        <textarea id="descriptionInput" name="description"
-                                defaultValue={this.state.description}
-                                maxLength={MAX_DESCRIPTION_LENGTH} autoComplete="off"></textarea>
+                <Modal withBox={true} onClose={() => this.setState({editModal: null})}>
+                    <form className="edit_profile" action="/api/update/profile" method="post" autoComplete="off">
+                        <h2> Edit Profile </h2>
+                        
+                        <div>
+                            <label htmlFor="firstNameInput"> First Name: </label>
+                            <input type="text" id="firstNameInput" name="firstName"
+                                    defaultValue={this.state.firstName} required
+                                    maxLength={MAX_NAME_LENGTH} autoComplete="off" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="lastNameInput"> Last Name: </label>
+                            <input type="text" id="lastNameInput" name="lastName"
+                                    defaultValue={this.state.lastName} required
+                                    maxLength={MAX_NAME_LENGTH} autoComplete="off" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="fbInput"> Facebook Profile Link: </label>
+                            <input type="url" id="fbInput" name="fb" pattern="https://www.facebook.com/.*"
+                                    defaultValue={this.state.media.fb}
+                                    maxLength={MAX_MEDIA_LENGTH} autoComplete="off" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="instaInput"> Instagram Handle: </label>
+                            <input type="text" id="instaInput" name="insta"
+                                    defaultValue={this.state.media.insta}
+                                    maxLength={MAX_MEDIA_LENGTH} autoComplete="off" />
+                        </div>
+
+                        <div>
+                            <label htmlFor="descriptionInput"> Description </label>
+                            <textarea id="descriptionInput" name="description"
+                                    defaultValue={this.state.description}
+                                    maxLength={MAX_DESCRIPTION_LENGTH} autoComplete="off"></textarea>
+                        </div>
+
                         <input type="submit" value="submit" />
                     </form>
                 </Modal>

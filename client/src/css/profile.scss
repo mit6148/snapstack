@@ -25,17 +25,82 @@ h1 {
 	}
 }
 
-// div {
-// 	border-style: solid;
-// 	border-color: $black;
-// }
+h2 {
+
+	font-size: 26px;
+}
+
+.edit_profile {
+	padding: 5px;
+
+	> h2 {
+		margin-top: 5px;
+		font-size: 28px;
+	}
+
+	> div {
+		margin: 5px;
+		padding: 5px;
+		font-size: 16px;
+		
+		> label {
+			color: $black;
+		}
+
+		> input, textarea {
+			padding: 4px;
+			border-radius: 2px;
+			font-family: "Raleway", sans-serif;
+			color: $black;
+			background-color: $white;
+
+			font-size: 12px;
+
+		}
+	}
+
+	> input {
+		color: $white;
+		font-size: 15px;
+		background-color: $green-light;
+		box-shadow: 0px 4px 0px $green-medium;
+		margin: 1em auto;
+		padding: 8px;
+		text-align: center;
+		
+		width: 70px;
+		font-family: 'Raleway', sans-serif;
+		border-width: 0px;
+		border-radius: 0.4em;
+
+		text-decoration: none;
+
+
+		&:hover {
+		background: $green-medium;
+		box-shadow: 0 5px $green-dark;
+		cursor: pointer;
+		}
+
+		&:active {
+		  background-color: $green-medium;
+		  box-shadow: 0 2px $green-dark;
+		  transform: translateY(3px);
+		}
+	}
+
+}
+
 
 .my_profile{
 	margin-top: 40px;
+
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: center;
+
+
 
 }
 
@@ -58,10 +123,10 @@ h1 {
 
 .circle_picture_container {
 	display: inline-block;
-	height: 200px;
-	width: 200px;
+	height: 240px;
+	width: 240px;
 
-	border-radius: 100px;
+	border-radius: 120px;
 
 	overflow: hidden;
 
@@ -134,23 +199,68 @@ h1 {
 
 }
 .profile_name {
-	font-size: 25px;
+	
 	text-align: left;
+
+	> h2 {
+		font-size: 36px;
+		margin: 10px 0px;
+	}
 }
 
 .profile_description {
 	word-wrap: break-word;
-	max-width: 400px;
+	max-width: 360px;
 	text-align: left;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	font-size: 14px;
-	font-weight: bold;
+	margin-top: 0px;
+	margin-bottom: 10px;
+	font-size: 16px;
+
+
+	
 }
+
 
 .profile_social_media {
 	text-align: left;
-	font-weight: bold;
+	display: inline;
+
+	overflow-wrap: break-word;
+
+}
+
+.profile_media_section {
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+
+	> div {
+		text-align: left;
+
+		padding: 5px 0px;
+
+		display: flex;
+		flex-direction: row;
+
+		width: 100%;
+
+		> div {
+			margin-right: 0px;
+		}
+		> .media_text {
+			overflow-wrap: break-word;
+			width: 300px;
+			margin: 10px auto;
+
+			text-align: left;
+
+
+
+
+		}
+
+	}
+	
 }
 
 .my_snapstack {
