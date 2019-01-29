@@ -297,9 +297,12 @@ class Game {
         const index = this.pCardRefPairs.map(pair => pair[0]._id.toString()).indexOf(pCardId);
 
         if(this.jCards.length === 1 && index >= 0 && pCardId.match(/^[a-zA-Z0-9]+$/)) {
-            if(this.userToPlayerMap[user._id].checkSaved([pCardId])[0]) {
+            const alreadySavedArray = await this.userToPlayerMap[user._id].checkSaved([pCardId]);
+            if(alreadySavedArray[0]) {
+                console.log("save attempt: already saved");
                 return; // already saved
             }
+            console.log("save attempt: card not already saved");
             const session = await db.startSession();
             await session.startTransaction();
             console.log(session.transaction);
