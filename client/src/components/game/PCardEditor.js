@@ -13,33 +13,13 @@ export default class PCardEditor extends React.Component {
         this.imageEditor = React.createRef();
         this.zoomSlider = React.createRef();
         this.colorPicker = React.createRef();
+        this.lineWidthSlider = React.createRef();
 
         this.state = {
             color: "#000000",
-            isDrawing: false
+            isDrawing: false,
+            lineWidth: 10
         }
-    }
-
-
-    render() {
-        return (
-            <div style={{"backgroundColor": "blue" }}>
-                <div style={{width: "86px", height: "98px"}}>
-                    <ImageEditor image={this.props.image} ref={this.imageEditor}
-                            mode={this.state.isDrawing ? drawingMode.DRAW : drawingMode.MOVE}
-                            color={this.state.color}
-                        />
-                </div>
-                <input id="caption-input" type="text" maxLength={MAX_CAPTION_LENGTH} autoComplete="off"/>
-                <div onClick={this.submit}>Submit</div>
-                <input type="range" min="0" max="1" defaultValue="1" step="any"
-                        onChange={this.zoom} onInput={this.zoom} ref={this.zoomSlider}/>
-                <input type="color" defaultValue="#000000"
-                        onChange={this.pickColor} onInput={this.pickColor} ref={this.colorPicker}/>
-                <input type="button" value="Move mode" onClick={this.moveMode} />
-                <input type="button" value="Draw mode" onClick={this.drawMode} />
-            </div>
-        );
     }
 
     render() {
@@ -49,8 +29,13 @@ export default class PCardEditor extends React.Component {
                 <input type="button" value="Draw" onClick={this.drawMode} />
                 <div>
                     {this.state.isDrawing ? (
-                        <input type="color" defaultValue="#000000"
-                            onChange={this.pickColor} onInput={this.pickColor} ref={this.colorPicker} />
+                        <React.Fragment>
+                            <input type="color" defaultValue="#000000"
+                                onChange={this.pickColor} onInput={this.pickColor} ref={this.colorPicker} />
+                            <input type="range" min="1" max="25" defaultValue="10" step="any"
+                                onChange={this.changeLineWidth} onInput={this.changeLineWidth}
+                                ref={this.lineWidthSlider} />
+                        </React.Fragment>
                     ) : (
                         <input type="range" min="0" max="1" defaultValue="1" step="any"
                             onChange={this.zoom} onInput={this.zoom} ref={this.zoomSlider} />
@@ -77,6 +62,12 @@ export default class PCardEditor extends React.Component {
             </div>
         );
     }
+
+    changeLineWidth = e => {
+        this.setState({
+            lineWidth: parseFloat(this.lineWidthSlider.current.value)
+        });
+    };
 
     moveMode = e => {
         this.setState({
