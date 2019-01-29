@@ -112,4 +112,19 @@ body {
   display: inline-block;
 }
 
+.tutorial {
+  overflow-y: auto;
+  margin: 5px;
+  background-color: #A5C3E5;
+  padding: 15px;
+  width: 800px;
+  max-width: 90%;
+}
+.tutorial > h2 {
+  margin-top: 5px;
+}
+.tutorial > .tutorial_caption {
+  padding: 10px;
+}
+
 /*# sourceMappingURL=home.css.map */

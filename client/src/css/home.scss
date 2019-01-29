@@ -132,3 +132,28 @@ body {
 	display: inline-block;
 
 }
+
+
+// TUTORIAL STUFF GOES HERE
+
+
+.tutorial {
+	overflow-y: auto;
+	margin: 5px;
+
+	background-color: $background-v1;
+
+	padding: 15px;
+
+	width: 800px;
+
+	max-width: 90%;
+
+	> h2 {
+		margin-top: 5px;
+	}
+
+	> .tutorial_caption {
+		padding: 10px;
+	}
+}
