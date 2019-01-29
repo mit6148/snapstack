@@ -10,11 +10,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: scroll;
 }
 .modal_window > .modal {
   position: relative;
   height: auto;
   width: auto;
+  max-height: 90%;
+  max-width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
