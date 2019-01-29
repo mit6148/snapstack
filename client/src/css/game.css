@@ -152,6 +152,8 @@ html, body, #root, .fill_parent {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  z-index: 600;
 }
 
 .clickable:hover {
