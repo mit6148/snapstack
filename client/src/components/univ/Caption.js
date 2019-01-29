@@ -20,7 +20,9 @@ export default class Caption extends Component {
     render() {
         return this.props.creatorId && this.props.creatorId !== this.props.userId ? (
             <div className={'fit_resize fit'+this.key}>
-                {this.props.text + '  —  '}
+                {this.props.text}
+                <br/>
+                {'—  '}
                 <Link to={'/profile/'+this.props.creatorId}>{this.props.creator}</Link>
             </div>
         ) : (
