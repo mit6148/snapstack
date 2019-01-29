@@ -20,10 +20,19 @@ const downloadLockout = {}; // add user._id as key to prevent multiple requests 
 
 router.get('/whoami', function(req, res) {
     if(req.isAuthenticated()) {
-        res.send({_id: req.user._id});
+        res.send({_id: req.user._id, isNew: true || req.user.is_new !== false});
     } else {
         res.send({_id: null});
     }
+});
+
+router.get('/visit', connect.ensureLoggedIn(), function(req, res) {
+    req.user.is_new = false;
+    User.updateOne({_id: req.user._id}, {is_new: false}).exec().catch(err => {
+        console.error("/visit failed with error: " + err.stack);
+    }).then(() => {
+        res.send({}); // response is unimportant
+    });
 });
 
 

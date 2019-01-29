@@ -45,17 +45,17 @@ const MIN_PLAYERS = 3;
 
 const MAX_PLAYERS = 8;
 
-const TIME_LIMIT_MILLIS = 180000;
+const TIME_LIMIT_MILLIS = 120000;
 
 const TIME_LIMIT_FORGIVE_MILLIS = 2000;
 
 const NUM_JCARDS = 3;
 
-const CARDS_TO_WIN = 1;
+const CARDS_TO_WIN = 3;
 
 const GAME_CODE_LENGTH = 3;
 
-const WAIT_TIME = 2000; // between events that would otherwise be emitted concurrently
+const WAIT_TIME = 1000; // between events that would otherwise be emitted concurrently
 
 const DEVELOPER_MODE = true;
 

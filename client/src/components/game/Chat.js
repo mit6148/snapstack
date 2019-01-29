@@ -11,7 +11,7 @@ export default class Chat extends React.Component {
         super(props);
 
         this.state = {
-            minimized: true,
+            minimized: false,
         }
     }
 

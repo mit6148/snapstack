@@ -123,10 +123,10 @@ h2 {
 
 .circle_picture_container {
 	display: inline-block;
-	height: 240px;
-	width: 240px;
+	height: 200px;
+	width: 200px;
 
-	border-radius: 120px;
+	border-radius: 100px;
 
 	overflow: hidden;
 
@@ -204,7 +204,9 @@ h2 {
 
 	> h2 {
 		font-size: 36px;
-		margin: 10px 0px;
+		margin-top: 20px;
+		margin-left: 0px;
+		margin-bottom: 5px;
 	}
 }
 

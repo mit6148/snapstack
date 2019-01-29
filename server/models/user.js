@@ -6,6 +6,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId
 const UserSchema = new mongoose.Schema ({
     facebookId   : {type: String, index: {unique: true}},
     detail_id    : ObjectId,
+    is_new       : Boolean,
 });
 
 // compile model from schema

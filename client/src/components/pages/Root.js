@@ -27,7 +27,7 @@ export default class Root extends React.Component {
             return (
                 <React.Fragment>
                     {this.state.gameLoaded ? null : (
-                        <Home appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} />
+                        <Home appState={this.props.appState} enterGame={this.props.enterGame} quitGame={this.props.quitGame} markVisited={this.props.markVisited} seeTutorial={this.props.seeTutorial} />
                     )}
                     {this.props.appState.gameCode === null ? null : (
                         <GameContainer appState={this.props.appState} enterGame={this.enterGame} quitGame={this.quitGame} />
