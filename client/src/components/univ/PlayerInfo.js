@@ -7,15 +7,16 @@ export default class PlayerInfo extends React.Component {
    
 
     render() {
+
         return (
             <div className={"player_info" + (this.props.connected ? "" : " gray-out")}>
                 <div className="avatar_container">
-                    <div className="cropped_avatar">
+                    <div className="cropped_avatar" onClick={this.goToAvatar}>
                         <img src={this.props.avatar}></img>
                     </div>
                 </div>
                 <div className="player_details">
-                    <div className="user_name">
+                    <div className="user_name" onClick={this.goToAvatar}>
                         {this.props.name}
                     </div>
                     <div className="player_other">
@@ -33,6 +34,10 @@ export default class PlayerInfo extends React.Component {
                 </div>
             </div>
         );
+    }
+
+    goToAvatar = (e) => {
+        window.open('/profile/' + this.props._id, '_blank');
     }
 }
 

@@ -197,6 +197,7 @@ $content_border_radius: 5px;
 		> * {
 			width: 90%;
             height: 80%;
+            overflow: ellipsis;
 		}
 
 
@@ -237,6 +238,7 @@ $content_border_radius: 5px;
 		> * {
 			width: 90%;
             height: 80%;
+            overflow: ellipsis;
 		}
 	}
 }
@@ -322,14 +324,14 @@ $content_border_radius: 5px;
 //save buttons!!!
 
 .save_btn_container {
-	height: 32px;
-	width: 32px;
-	border-radius: 16px;
+	height: 10%;
+	width: 14%;
+	border-radius: 50%;
 	background-color: $white;
 	position: absolute;
 
-	top: 6px;
-	left: 6px;
+	top: 2%;
+	left: 2%;
 
 	display: flex;
 	justify-content: center;

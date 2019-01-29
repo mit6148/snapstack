@@ -27,7 +27,9 @@ export default class GameContainer extends React.Component {
             cardsToWin: null,
             roundSkipped: false, // if JCHOOSE, SUBMIT, or JUDGE
             chatMessages: [], // array of pairs of form [message, sender _id]
-            submitFailed: null // null or reason if SUBMIT
+            submitFailed: null, // null or reason if SUBMIT
+            roundNotification: null,
+            roundNotificationTimeout: null
         };
 
         this.actions = {
@@ -73,6 +75,24 @@ export default class GameContainer extends React.Component {
             </React.Fragment>
         );
     }
+
+    setRoundNotification = text => {
+        clearTimeout(this.state.roundNotificationTimeout);
+        const timeout = setTimeout(() => {
+            this.setState({
+                roundNotification: null,
+                roundNotificationTimeout: null
+            });
+        }, 3000);
+        this.setState({
+            roundNotification: (
+                <div class="notification">
+                    {text}
+                </div>
+            ),
+            roundNotificationTimeout: timeout
+        });
+    };
 
     startGame = () => {
         this.socket.emit('startGame');
@@ -178,6 +198,10 @@ export default class GameContainer extends React.Component {
         }
     }
 
+    isJudge = () => {
+        return this.props.appState.userId === this.state.playerIds[0];
+    }
+
     createSocket = () => {
         let socket = io();
         socket.on('connect', () => {
@@ -227,6 +251,9 @@ export default class GameContainer extends React.Component {
                 jCardIndex: jCardIndex,
                 endTime: endTime
             });
+            this.setRoundNotification(this.isJudge() ?
+                "Hang tight while everyone else makes cards for you to judge!"
+                : "The theme has been set! Make your card!");
         });
         socket.on('turnedIn', (creator_id, pCard_id) => {
             this.setState({
@@ -241,6 +268,9 @@ export default class GameContainer extends React.Component {
                             : pCard
                         )
             });
+            if(pCard_id) {
+                this.setRoundNotification("Hang tight while everyone else submits their card");
+            }
         });
         socket.on('pCards', pCards => {
             this.setState({
@@ -259,6 +289,9 @@ export default class GameContainer extends React.Component {
                 pCardIndex: null,
                 pCardsFacedown: pCards.length
             });
+            this.setRoundNotification(this.isJudge() ?
+                "Submissions are done! Now choose the best card!"
+                : "Submissions are done! Now the judge will pick the best card");
         });
         socket.on('flip', pCardIndex => {
             this.setState({

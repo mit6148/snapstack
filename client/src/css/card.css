@@ -155,6 +155,7 @@
 .jcard > .content > * {
   width: 90%;
   height: 80%;
+  overflow: ellipsis;
 }
 
 .pcard, .pcard_editor {
@@ -197,6 +198,7 @@
 .pcard > .caption_content > *, .pcard_editor > .caption_content > * {
   width: 90%;
   height: 80%;
+  overflow: ellipsis;
 }
 
 .pcard_editor > .caption_content > textarea {
@@ -285,13 +287,13 @@
 }
 
 .save_btn_container {
-  height: 32px;
-  width: 32px;
-  border-radius: 16px;
+  height: 10%;
+  width: 14%;
+  border-radius: 50%;
   background-color: #F4F4F4;
   position: absolute;
-  top: 6px;
-  left: 6px;
+  top: 2%;
+  left: 2%;
   display: flex;
   justify-content: center;
   align-items: center;
