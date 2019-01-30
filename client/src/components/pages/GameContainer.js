@@ -108,26 +108,26 @@ export default class GameContainer extends React.Component {
 
     // player action
     submitPCard = (image, text) => {
-        this.setState({
+        this.setState((prevState, props) => ({
             pCards: [{
                 image: image,
                 text: text,
-                creator_id: this.props.appState.userId,
+                creator_id: props.appState.userId,
                 faceup: true,
                 saveState: UNSAVED
             }]
-        });
+        }));
         this.socket.emit('submitCard', image, text);
     }
 
     // judge action
     viewPCard = pCardIndex => {
         if (!this.state.pCards[pCardIndex].faceup) {
-            this.setState({
-                pCards: update(this.state.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
+            this.setState((prevState, props) => ({
+                pCards: update(prevState.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
                 pCardIndex: pCardIndex,
-                pCardsFacedown: this.state.pCardsFacedown - 1
-            });
+                pCardsFacedown: prevState.pCardsFacedown - 1
+            }));
             this.socket.emit('flip', pCardIndex);
         } else {
             this.setState({
@@ -139,10 +139,10 @@ export default class GameContainer extends React.Component {
 
     // judge action
     flipAllPCards = () => {
-        this.setState({
-            pCards: this.state.pCards.map(pCard => update(pCard, {faceup: {$set: true}})),
+        this.setState((prevState, props) => ({
+            pCards: prevState.pCards.map(pCard => update(pCard, {faceup: {$set: true}})),
             pCardsFacedown: 0
-        });
+        }));
         this.socket.emit('flipAll');
     }
 
@@ -160,13 +160,13 @@ export default class GameContainer extends React.Component {
 
     savePCard = pCardIndex => {
         let pCardId = this.state.pCards[pCardIndex]._id;
-        this.setState({
-            pCards: this.state.pCards.map(pCard =>
+        this.setState((prevState, props) => ({
+            pCards: prevState.pCards.map(pCard =>
                         pCard._id === pCardId
                         ? update(pCard, {saveState: {$set: SAVING}})
                         : pCard
                     )
-        });
+        }));
         this.socket.emit('saveCard', pCardId);
     }
 
