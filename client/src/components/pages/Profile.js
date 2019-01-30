@@ -11,6 +11,7 @@ const { NO_CARD, CARDBACK, FACEDOWN_CARD, LOADING_CARD } = specialCards;
 
 import "../../css/profile.css";
 import "../../css/player.css";
+import "../../css/card.css";
 
 export default class Profile extends React.Component {
     constructor (props) {
@@ -101,6 +102,10 @@ export default class Profile extends React.Component {
             return (
                 <div className="profile_text profile_page">
                     <NavButtons appState={this.props.appState} page='Profile' profileId={this.props.id} logout={this.props.logout} />
+
+                    <Modal>
+                        <div className="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    </Modal>
                 </div>
             );
         }
