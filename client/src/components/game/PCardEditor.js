@@ -17,7 +17,7 @@ export default class PCardEditor extends React.Component {
         this.lineWidthSlider = React.createRef();
 
         this.state = {
-            color: "#000000",
+            color: "#ff0000",
             isDrawing: false,
             lineWidth: 10
         }
@@ -30,7 +30,7 @@ export default class PCardEditor extends React.Component {
                 <input type="button" value="Draw" clicked={this.state.isDrawing ? 'true' : 'false'} onClick={this.drawMode} />
                 {this.state.isDrawing ? (
                     <div className='draw_tools'>
-                        <input id='color' type="color" defaultValue="#000000"
+                        <input id='color' type="color" defaultValue="#ff0000"
                             onChange={this.pickColor} onInput={this.pickColor} ref={this.colorPicker} />
                         <input id='pen_size' type="range" min="1" max="25" defaultValue="10" step="any"
                             onChange={this.changeLineWidth} onInput={this.changeLineWidth}
@@ -70,17 +70,17 @@ export default class PCardEditor extends React.Component {
     makePenPreview = ref => {
         if (!ref) return;
         this.penPreview = ref;
-        this.penPreview.style.width = (42/588*this.state.lineWidth)+'vh'; // TODO use config
-        this.penPreview.style.height = (42/588*this.state.lineWidth)+'vh';
-        this.penPreview.style.backgroundColor = this.state.color;
+        this.penPreview.style.width = (42/588*this.lineWidthSlider.current.value)+'vh'; // TODO use config
+        this.penPreview.style.height = (42/588*this.lineWidthSlider.current.value)+'vh';
+        this.penPreview.style.backgroundColor = this.colorPicker.current.value;
     }
 
     changeLineWidth = e => {
         this.setState({
             lineWidth: parseFloat(this.lineWidthSlider.current.value)
         });
-        this.penPreview.style.width = (42/588*this.state.lineWidth)+'vh';
-        this.penPreview.style.height = (42/588*this.state.lineWidth)+'vh';
+        this.penPreview.style.width = (42/588*this.lineWidthSlider.current.value)+'vh';
+        this.penPreview.style.height = (42/588*this.lineWidthSlider.current.value)+'vh';
     };
 
     moveMode = e => {
@@ -99,7 +99,7 @@ export default class PCardEditor extends React.Component {
         this.setState({
             color: this.colorPicker.current.value
         });
-        this.penPreview.style.backgroundColor = this.state.color;
+        this.penPreview.style.backgroundColor = this.colorPicker.current.value;
     };
 
     zoom = e => {
