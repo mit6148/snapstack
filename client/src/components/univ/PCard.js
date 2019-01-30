@@ -26,19 +26,28 @@ export default class PCard extends Component {
             return null;
         } else {
             return (
-                <div className='pcard' highlight={this.props.highlight ? 'true' : 'false'} onClick={this.props.onClick}>
-                    <div className='image_content'>
-                        <img src={this.props.image} />
-                    </div>
-                    <div className='caption_content'>
-                        <Caption text={this.props.text} creator={this.props.creator} creatorId={this.props.creatorId} userId={this.props.userId} />
-
-                    </div>
-                    {![null, undefined].includes(this.props.saveState) ? (
-                        <div className='save_btn_container'>
-                            <SaveButton saveState={this.props.saveState} save={this.props.save} />
+                <div className='flipcard' flipped={this.props.faceup !== false ? 'true' : 'false'}>
+                    <div className='flipcard_inner'>
+                        <div className='pcard_back' onClick={this.props.onClick}>
+                            <div className='content'>
+                                <img src='/pancakes.png' />
+                            </div>
                         </div>
-                    ) : null}
+                        <div className='pcard' highlight={this.props.highlight ? 'true' : 'false'} onClick={this.props.onClick}>
+                            <div className='image_content'>
+                                <img src={this.props.image} />
+                            </div>
+                            <div className='caption_content'>
+                                <Caption text={this.props.text} creator={this.props.creator} creatorId={this.props.creatorId} userId={this.props.userId} />
+
+                            </div>
+                            {![null, undefined].includes(this.props.saveState) ? (
+                                <div className='save_btn_container'>
+                                    <SaveButton saveState={this.props.saveState} save={this.props.save} />
+                                </div>
+                            ) : null}
+                        </div>
+                    </div>
                 </div>
             );
         }

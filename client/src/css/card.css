@@ -9,6 +9,9 @@
   height: 37.5vh;
   width: calc(37.5vh * 1.2 / 1.9);
 }
+.game_card_bin .pcard, .game_card_bin .pcard_editing {
+  cursor: pointer;
+}
 
 .jmodal_card_bin {
   display: flex;
@@ -19,6 +22,9 @@
 .jmodal_card_bin > .card_slot {
   height: calc(1.2 * 37.5vh * 1.6 / 1.9);
   width: calc(1.2 * 37.5vh * 1.2 / 1.9);
+}
+.jmodal_card_bin .pcard, .jmodal_card_bin .pcard_editing {
+  cursor: pointer;
 }
 
 .pmodal_card_bin {
@@ -53,6 +59,9 @@
 .profile_card_bin > .card_slot {
   width: calc((100vw - 17px - 2 * 50px) / 4);
   height: calc((100vw - 17px - 2 * 50px) / 4 * 1.6 / 1.2);
+}
+.profile_card_bin .pcard, .profile_card_bin .pcard_editing {
+  cursor: pointer;
 }
 
 .jpmodal_card_bin {
@@ -139,6 +148,32 @@
     transform: scale(0.3, 0.3);
   }
 }
+.flipcard {
+  perspective: 1000px;
+}
+.flipcard > .flipcard_inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+}
+.flipcard > .flipcard_inner > * {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+.flipcard > .flipcard_inner > *:last-child {
+  transform: rotateY(180deg);
+}
+.flipcard[flipped=false] {
+  cursor: pointer;
+}
+.flipcard[flipped=true] > .flipcard_inner {
+  transform: rotateY(180deg);
+}
+
 .jcard {
   border-radius: 7%/5%;
   background-color: #12B780;
