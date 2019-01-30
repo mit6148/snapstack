@@ -209,7 +209,7 @@ export default class GameContainer extends React.Component {
         });
         socket.on('gameState', (players, gamePhase, jCards, pCards, pCardIndex, endTime, cardsToWin, roundSkipped, gameCode) => {
             this.props.enterGame(gameCode);
-            this.setState({
+            this.setState((prevState, props) => ({
                 gamePhase: gamePhase,
                 playerIds: players.map(player => player._id),
                 players: Object.assign({}, ...players.map(player => ({[player._id]: player}))),
@@ -220,73 +220,73 @@ export default class GameContainer extends React.Component {
                 endTime: endTime,
                 cardsToWin: cardsToWin,
                 roundSkipped: roundSkipped
-            });
+            }));
         });
         socket.on('nuj', player => {
             let playerIds = this.state.playerIds.includes(player._id)
                             ? this.state.playerIds
                             : update(this.state.playerIds, {$push: [player._id]});
-            this.setState({
+            this.setState((prevState, props) => ({
                 playerIds: playerIds,
-                players: update(this.state.players, {[player._id]: {$set: player}})
-            });
+                players: update(prevState.players, {[player._id]: {$set: player}})
+            }));
         });
         socket.on('judgeAssign', (playerIds, jCards) => {
-            this.setState({
+            this.setState((prevState, props) => ({
                 gamePhase: JCHOOSE,
                 playerIds: playerIds,
-                players: update(this.state.players, Object.assign({}, ...this.state.playerIds.map(playerId =>
+                players: update(prevState.players, Object.assign({}, ...prevState.playerIds.map(playerId =>
                             ({[playerId]: {hasPlayed: {$set: false}}})))),
                 jCards: jCards,
                 jCardsRevealed: 0,
                 pCards: [],
                 roundSkipped: false
-            });
+            }));
             const interval = setInterval(() => {
                 if (this.state.jCardsRevealed < this.state.jCards.length) {
-                    this.setState({
-                        jCardsRevealed: this.state.jCardsRevealed + 1
-                    });
+                    this.setState((prevState, props) => ({
+                        jCardsRevealed: prevState.jCardsRevealed + 1
+                    }));
                 } else {
                     clearInterval(interval);
                 }
             }, 500);
         });
         socket.on('roundStart', (jCardIndex, endTime) => {
-            this.setState({
+            this.setState((prevState, props) => ({
                 gamePhase: SUBMIT,
                 jCardIndex: jCardIndex,
                 endTime: endTime
-            });
+            }));
             this.setRoundNotification(this.isJudge() ?
                 "Hang tight while everyone else makes cards for you to judge!"
                 : "The theme has been set! Make your card!");
         });
         socket.on('turnedIn', (creator_id, pCard_id) => {
-            this.setState({
-                players: update(this.state.players, {[creator_id]: {hasPlayed: {$set: true}}}),
-                pCards: this.state.pCards.map(pCard =>
+            this.setState((prevState, props) => ({
+                players: update(prevState.players, {[creator_id]: {hasPlayed: {$set: true}}}),
+                pCards: prevState.pCards.map(pCard =>
                             (pCard.creator_id === creator_id ||
-                            pCard._id === pCard_id && this.state.gamePhase !== SUBMIT)
+                            pCard._id === pCard_id && prevState.gamePhase !== SUBMIT)
                             ? update(pCard, {
                                 _id: {$set: pCard_id},
                                 creator_id: {$set: creator_id}
                             })
                             : pCard
                         )
-            });
+            }));
             if(pCard_id) {
                 this.setRoundNotification("Hang tight while everyone else submits their card");
             }
         });
         socket.on('pCards', pCards => {
-            this.setState({
+            this.setState((prevState, props) => ({
                 gamePhase: JUDGE,
                 pCards: pCards.map(pCard => // TODO flip own card facedown first in animation
-                            this.state.pCards.length === 1 && pCard._id === this.state.pCards[0]._id
+                            prevState.pCards.length === 1 && pCard._id === prevState.pCards[0]._id
                             ? update(pCard, {
-                                creator_id: {$set: this.state.pCards[0].creator_id},
-                                saveState: {$set: this.state.pCards[0].saveState}
+                                creator_id: {$set: prevState.pCards[0].creator_id},
+                                saveState: {$set: prevState.pCards[0].saveState}
                             })
                             : update(pCard, {
                                 creator_id: {$set: null},
@@ -295,74 +295,72 @@ export default class GameContainer extends React.Component {
                         ),
                 pCardIndex: null,
                 pCardsFacedown: pCards.length
-            });
+            }));
             this.setRoundNotification(this.isJudge() ?
                 "Submissions are done! Now choose the best card!"
                 : "Submissions are done! Now the judge will pick the best card");
         });
         socket.on('flip', pCardIndex => {
-            this.setState({
-                pCards: update(this.state.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
+            this.setState((prevState, props) => ({
+                pCards: update(prevState.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
                 pCardIndex: pCardIndex,
-                pCardsFacedown: Math.max(this.state.pCardsFacedown - 1, 0)
-            });
+                pCardsFacedown: Math.max(prevState.pCardsFacedown - 1, 0)
+            }));
         });
         socket.on('flipAll', () => {
-            this.setState({
-                pCards: this.state.pCards.map(pCard => update(pCard, {faceup: {$set: true}})),
+            this.setState((prevState, props) => ({
+                pCards: prevState.pCards.map(pCard => update(pCard, {faceup: {$set: true}})),
                 pCardsFacedown: 0
-            });
+            }));
         });
         socket.on('look', pCardIndex => {
-            this.setState({
+            this.setState((prevState, props) => ({
                 pCardIndex: pCardIndex
-            });
+            }));
         });
         socket.on('select', (pCardIndex, creator_ids) => {
-            console.log("creator_ids: ");
-            console.log(creator_ids);
-            this.setState({
+            this.setState((prevState, props) => ({
                 gamePhase: ROUND_OVER,
-                players: update(this.state.players, {[creator_ids[pCardIndex]]: {score: (score => score + 1)}}),
-                pCards: this.state.pCards.map((pCard, index) => update(pCard, {creator_id: {$set: creator_ids[index]}})),
+                players: update(prevState.players, {[creator_ids[pCardIndex]]: {score: (score => score + 1)}}),
+                pCards: prevState.pCards.map((pCard, index) => update(pCard, {creator_id: {$set: creator_ids[index]}})),
                 pCardIndex: pCardIndex
-            });
+            }));
         });
         socket.on('gameOver', () => {
-            this.setState({
+            this.setState((prevState, props) => ({
                 gamePhase: GAME_OVER
-            });
+            }));
         });
         socket.on('disconnected', dcId => {
-            this.setState({
-                playerIds: this.state.gamePhase === LOBBY
-                            ? this.state.playerIds.filter(playerId => playerId !== dcId)
-                            : this.state.playerIds,
-                players: update(this.state.players, {[dcId]: {connected: {$set: false}}})
-            });
+            this.setState((prevState, props) => ({
+                playerIds: prevState.gamePhase === LOBBY
+                            ? prevState.playerIds.filter(playerId => playerId !== dcId)
+                            : prevState.playerIds,
+                players: update(prevState.players, {[dcId]: {connected: {$set: false}}})
+            }));
         });
         socket.on('skipped', () => {
-            this.setState({
+            this.setState((prevState, props) => ({
                 roundSkipped: true
-            });
+            }));
         });
         socket.on('cardSaved', pCardId => {
-            this.setState({
-                pCards: this.state.pCards.map(pCard =>
+            this.setState((prevState, props) => ({
+                pCards: prevState.pCards.map(pCard =>
                             pCard._id === pCardId
                             ? update(pCard, {saveState: {$set: SAVED}})
                             : pCard
                         )
-            });
+            }));
         });
         socket.on('cardSaveFailed', pCardId => {
-            this.setState({
-                pCards: this.state.pCards.map(pCard =>
+            this.setState((prevState, props) => ({
+                pCards: prevState.pCards.map(pCard =>
                             pCard._id === pCardId
                             ? update(pCard, {saveState: {$set: UNSAVED}})
                             : pCard
                         )
-            });
+            }));
         });
 
         socket.on('chat', (message, userId) => {
@@ -370,14 +368,14 @@ export default class GameContainer extends React.Component {
             if(chatMessages.length > 300) {
                 chatMessages = chatMessages.slice(150);
             }
-            this.setState({
+            this.setState((prevState, props) => ({
                 chatMessages: chatMessages
-            });
+            }));
         });
         socket.on('submitCardFailed', reason => {
-            this.setState({
+            this.setState((prevState, props) => ({
                 submitFailed: reason
-            });
+            }));
         });
         return socket;
     }

@@ -9,7 +9,6 @@ import "../../css/card.css";
 
 export default class CardBin extends React.Component {
     render() {
-        console.log(this.props);
         return (
             <div className={this.props.type+'_card_bin'}>
                 {this.props.jCards ? this.props.jCards.map((jCard, index) => (
