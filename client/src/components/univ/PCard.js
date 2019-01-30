@@ -14,7 +14,7 @@ export default class PCard extends Component {
             return (
                 <div className='pcard_empty' onClick={this.props.onClick}></div>
             );
-        } else if ([CARDBACK, FACEDOWN_CARD].includes(this.props.src) || this.props.faceup === false) {
+        } else if ([CARDBACK, FACEDOWN_CARD].includes(this.props.src)) {
             return (
                 <div className='pcard_back' onClick={this.props.onClick}>
                     <div className='content'>
