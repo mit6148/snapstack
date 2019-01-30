@@ -119,12 +119,22 @@ body {
   padding: 15px;
   width: 800px;
   max-width: 90%;
+
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+
 }
 .tutorial > h2 {
   margin-top: 5px;
 }
-.tutorial > .tutorial_caption {
+.tutorial > div {
   padding: 10px;
+}
+
+.tutorial > .tutorial_image {
+  transform: scale(0.8, 0.8);
+  margin: 10px;
 }
 
 /*# sourceMappingURL=home.css.map */

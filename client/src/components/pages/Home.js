@@ -53,9 +53,6 @@ export default class Home extends React.Component {
                                     <div className="tutorial_caption">
                                         Welcome to SnapStack, the party game where you match The Meme to the Theme!
                                     </div>
-                                    <div className="logo_container">
-                                        <img className="logo" src="/pancakes.jpg"/>
-                                    </div>
 
                                     <div className="tutorial_caption">
                                         This quick tutorial will explain the game, or you can skip it by clicking the X in the top right corner.
@@ -73,27 +70,28 @@ export default class Home extends React.Component {
                                     <div className="tutorial_caption">
                                         When the timer starts, all players will have 2 minutes to make a customized Meme to fit the prompt. Exploit your friends’ social media accounts to find the perfect, (just slightly) embarrassing photo of them!
                                     </div>
-                                    <img className="tutorial_image" src="/2.PNG"/>
+                                    <img className="tutorial_image" src="/10.PNG"/>
                                     
                                     <div className="tutorial_caption">
                                         Once you upload a photo, you can also go crazy with the caption and drawing editor. Make sure to submit your Meme before time runs out!
                                     </div>
-                                    
+                                    <img className="tutorial_image" src="/6.PNG"/>
                                     <div className="tutorial_caption">
-                                        After all Memes are submitted, the lucky judge will flip and view the cards (anonymously of course), and narrow them down until you have a winner. 
+                                        After all Memes are submitted, the lucky judge will flip and view the cards (anonymously of course), and narrow them down until you have a winner. This is the perfect time for everyone to squabble and totally not influence the judge’s decision!
                                     </div>
-                                    
-                                    <div className="tutorial_caption">
-                                        This is the perfect time for everyone to squabble and totally not influence the judge’s decision!
-                                    </div>
-                                    
+                                    <img className="tutorial_image" src="/7.PNG"/>
+
                                     <div className="tutorial_caption">
                                         Once a winner is declared, the Theme goes to them and another round commences. This process will continue f o r e v e r (jk, it ends when someone wins 3 Themes)
                                     </div>
+                                    <img className="tutorial_image" src="/9.PNG"/>
                                     
                                     <div className="tutorial_caption">
                                         Throughout the entire game, if you see any high-quality Memes, go ahead and save them to your personal SnapStack for future reference! 
                                     </div>
+
+                                    <img className="tutorial_image" src="/11.PNG"/>
+                                    <img className="tutorial_image" src="/12.PNG"/>
                                     
                                     <div className="tutorial_caption">
                                         Ready to play? Make sure to upload your social media links to your profile before you start!
