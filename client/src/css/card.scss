@@ -34,7 +34,16 @@ $card-zoom-scale: 1.2;
 }
 
 .pgame_card_bin {
-    .flipcard[flipped='true'], .pcard_back {
+    .flipcard {
+        z-index: 1;
+        transition: transform #{$card-zoom-time};
+
+        &:hover {
+            transform: scale(#{$card-zoom-scale});
+        }
+    }
+    
+    .pcard_back:not(.flipcard .pcard_back) {
         z-index: 1;
         transition: transform #{$card-zoom-time};
 

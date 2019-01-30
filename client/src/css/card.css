@@ -10,11 +10,18 @@
   width: calc(37.5vh * 1.2 / 1.9);
 }
 
-.pgame_card_bin .flipcard[flipped=true], .pgame_card_bin .pcard_back {
+.pgame_card_bin .flipcard {
   z-index: 1;
   transition: transform 0.3s;
 }
-.pgame_card_bin .flipcard[flipped=true]:hover, .pgame_card_bin .pcard_back:hover {
+.pgame_card_bin .flipcard:hover {
+  transform: scale(1.2);
+}
+.pgame_card_bin .pcard_back:not(.flipcard .pcard_back) {
+  z-index: 1;
+  transition: transform 0.3s;
+}
+.pgame_card_bin .pcard_back:not(.flipcard .pcard_back):hover {
   transform: scale(1.2);
 }
 
