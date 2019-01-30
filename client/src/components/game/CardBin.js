@@ -18,7 +18,7 @@ export default class CardBin extends React.Component {
                             <JCard  src={jCard}
                                     text={jCard}
                                     onClick={this.props.onClick ? (() => this.props.onClick(index, jCard)) : null}
-                                    enlarged={this.props.enlarged} />
+                                    faceup={this.props.jCardsRevealed !== undefined ? index < this.props.jCardsRevealed : true} />
                         </div>
                         {this.props.type === 'game' ? (
                             <div className="card_info_area">

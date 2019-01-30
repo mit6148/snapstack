@@ -238,9 +238,19 @@ export default class GameContainer extends React.Component {
                 players: update(this.state.players, Object.assign({}, ...this.state.playerIds.map(playerId =>
                             ({[playerId]: {hasPlayed: {$set: false}}})))),
                 jCards: jCards,
+                jCardsRevealed: 0,
                 pCards: [],
                 roundSkipped: false
             });
+            const interval = setInterval(() => {
+                if (this.state.jCardsRevealed < this.state.jCards.length) {
+                    this.setState({
+                        jCardsRevealed: this.state.jCardsRevealed + 1
+                    });
+                } else {
+                    clearInterval(interval);
+                }
+            }, 500);
         });
         socket.on('roundStart', (jCardIndex, endTime) => {
             this.setState({

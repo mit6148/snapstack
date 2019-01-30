@@ -42,7 +42,7 @@ $jmodal-scale: 1.2;
 		width: calc(#{$jmodal-scale} * 37.5vh * #{$card-slot-width} / #{$card-slot-height});
 	}
 
-    .pcard {
+    .jcard {
         cursor: pointer;
     }
 }
@@ -210,7 +210,9 @@ $jmodal-scale: 1.2;
     }
 
     &[flipped='false'] {
-        cursor: pointer;
+        .pcard_back {
+            cursor: pointer;
+        }
     }
 
     &[flipped='true'] {

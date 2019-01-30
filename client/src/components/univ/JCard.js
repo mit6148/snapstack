@@ -28,7 +28,7 @@ export default class JCard extends Component {
             return (
                 <div className='jcard_empty' onClick={this.props.onClick}></div>
             );
-        } else if ([CARDBACK, FACEDOWN_CARD].includes(this.props.src) || this.props.faceup === false) {
+        } else if ([CARDBACK, FACEDOWN_CARD].includes(this.props.src)) {
             return (
                 <div className='jcard_back' onClick={this.props.onClick}>
                     <div className='content'>
@@ -36,12 +36,23 @@ export default class JCard extends Component {
                     </div>
                 </div>
             );
-        } else { // TODO loading card
+        } else if (this.props.src === LOADING_CARD) {
+            return null;
+        } else {
             return (
-                <div className='jcard' onClick={this.props.onClick}>
-                    <div className='content'>
-                        <div className={'fit_resize fit'+this.key}>
-                            {this.props.text}
+                <div className='flipcard' flipped={this.props.faceup !== false ? 'true' : 'false'}>
+                    <div className='flipcard_inner'>
+                        <div className='jcard_back' onClick={this.props.onClick}>
+                            <div className='content'>
+                                <img src='/pancakes.png' />
+                            </div>
+                        </div>
+                        <div className='jcard' onClick={this.props.onClick}>
+                            <div className='content'>
+                                <div className={'fit_resize fit'+this.key}>
+                                    {this.props.text}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

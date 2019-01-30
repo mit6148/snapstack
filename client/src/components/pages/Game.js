@@ -146,6 +146,7 @@ export default class Game extends React.Component {
                         </h2>
                         <CardBin    type='jmodal'
                                     jCards={this.gameState.jCards}
+                                    jCardsRevealed={this.gameState.jCardsRevealed}
                                     onClick={this.isJudge() ? this.actions.selectJCard : null}
                                     enlarged={true} />
                     </Modal>

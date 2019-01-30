@@ -23,7 +23,7 @@
   height: calc(1.2 * 37.5vh * 1.6 / 1.9);
   width: calc(1.2 * 37.5vh * 1.2 / 1.9);
 }
-.jmodal_card_bin .pcard, .jmodal_card_bin .pcard_editing {
+.jmodal_card_bin .jcard {
   cursor: pointer;
 }
 
@@ -167,7 +167,7 @@
 .flipcard > .flipcard_inner > *:last-child {
   transform: rotateY(180deg);
 }
-.flipcard[flipped=false] {
+.flipcard[flipped=false] .pcard_back {
   cursor: pointer;
 }
 .flipcard[flipped=true] > .flipcard_inner {
