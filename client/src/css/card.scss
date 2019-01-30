@@ -28,10 +28,6 @@ $jmodal-scale: 1.2;
 		height: 37.5vh;
 		width: calc(37.5vh * #{$card-slot-width} / #{$card-slot-height});
 	}
-
-    .pcard {
-        cursor: pointer;
-    }
 }
 
 .jmodal_card_bin {
@@ -41,10 +37,6 @@ $jmodal-scale: 1.2;
 		height: calc(#{$jmodal-scale} * 37.5vh * #{$card-area-height} / #{$card-slot-height});
 		width: calc(#{$jmodal-scale} * 37.5vh * #{$card-slot-width} / #{$card-slot-height});
 	}
-
-    .jcard {
-        cursor: pointer;
-    }
 }
 
 .pmodal_card_bin {
@@ -73,10 +65,6 @@ $jmodal-scale: 1.2;
 		width: calc((100vw - 17px - 2 * 50px) / 4);
 		height: calc((100vw - 17px - 2 * 50px) / 4 * #{$card-area-height} / #{$card-slot-width});
 	}
-
-    .pcard {
-        cursor: pointer;
-    }
 }
 
 .jpmodal_card_bin {
@@ -209,16 +197,14 @@ $jmodal-scale: 1.2;
         }
     }
 
-    &[flipped='false'] {
-        .pcard_back {
-            cursor: pointer;
-        }
-    }
-
     &[flipped='true'] {
         > .flipcard_inner {
             transform: rotateY(180deg);
         }
+    }
+
+    &[clickable='true'] {
+        cursor: pointer;
     }
 }
 

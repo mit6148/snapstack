@@ -40,7 +40,7 @@ export default class JCard extends Component {
             return null;
         } else {
             return (
-                <div className='flipcard' flipped={this.props.faceup !== false ? 'true' : 'false'}>
+                <div className='flipcard' flipped={this.props.faceup !== false ? 'true' : 'false'} clickable={this.props.onClick ? 'true' : 'false'}>
                     <div className='flipcard_inner'>
                         <div className='jcard_back' onClick={this.props.onClick}>
                             <div className='content'>
