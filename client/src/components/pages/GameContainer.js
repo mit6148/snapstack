@@ -304,7 +304,7 @@ export default class GameContainer extends React.Component {
             this.setState({
                 pCards: update(this.state.pCards, {[pCardIndex]: {faceup: {$set: true}}}),
                 pCardIndex: pCardIndex,
-                pCardsFacedown: this.state.pCardsFacedown - 1
+                pCardsFacedown: Math.max(this.state.pCardsFacedown - 1, 0)
             });
         });
         socket.on('flipAll', () => {

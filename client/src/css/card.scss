@@ -14,6 +14,9 @@ $card-slot-height: 1.9;
 
 $jmodal-scale: 1.2;
 
+$card-zoom-time: 0.3s;
+$card-zoom-scale: 1.2;
+
 @mixin card_bin() {
 	display: flex;
 	flex-flow: row wrap;
@@ -21,13 +24,26 @@ $jmodal-scale: 1.2;
 	align-items: center;
 }
 
-.game_card_bin {
+.jgame_card_bin {
 	@include card_bin;
 
 	> .card_slot {
 		height: 37.5vh;
 		width: calc(37.5vh * #{$card-slot-width} / #{$card-slot-height});
 	}
+}
+
+.pgame_card_bin {
+    @extend .jgame_card_bin;
+
+    .flipcard[flipped='true'], .pcard_back {
+        z-index: 1;
+        transition: transform #{$card-zoom-time};
+
+        &:hover {
+            transform: scale(#{$card-zoom-scale});
+        }
+    }
 }
 
 .jmodal_card_bin {
@@ -37,6 +53,14 @@ $jmodal-scale: 1.2;
 		height: calc(#{$jmodal-scale} * 37.5vh * #{$card-area-height} / #{$card-slot-height});
 		width: calc(#{$jmodal-scale} * 37.5vh * #{$card-slot-width} / #{$card-slot-height});
 	}
+
+    .flipcard {
+        transition: transform #{$card-zoom-time};
+
+        &:hover {
+            transform: scale(#{$card-zoom-scale});
+        }
+    }
 }
 
 .pmodal_card_bin {
@@ -65,6 +89,14 @@ $jmodal-scale: 1.2;
 		width: calc((100vw - 17px - 2 * 50px) / 4);
 		height: calc((100vw - 17px - 2 * 50px) / 4 * #{$card-area-height} / #{$card-slot-width});
 	}
+
+    .flipcard {
+        transition: transform #{$card-zoom-time};
+
+        &:hover {
+            transform: scale(#{$card-zoom-scale});
+        }
+    }
 }
 
 .jpmodal_card_bin {

@@ -51,7 +51,7 @@ export default class Game extends React.Component {
                     </div>
 
                     <div className='judge_section'>
-                        <CardBin    type='game'
+                        <CardBin    type='jgame'
                                     jCards={[this.gameState.gamePhase === JCHOOSE ? NO_CARD : this.gameState.jCards[this.gameState.jCardIndex]]}
                                     creators={[this.gameState.players[this.gameState.playerIds[0]]]} />
                     </div>
@@ -93,7 +93,7 @@ export default class Game extends React.Component {
 
                 <div className="game_page_row2">
                     {[JCHOOSE, SUBMIT].includes(this.gameState.gamePhase) ? (
-                        <CardBin    type='game'
+                        <CardBin    type='pgame'
                                     pCards={this.gameState.playerIds.slice(1).map(playerId =>
                                             playerId === this.props.appState.userId
                                             ? (this.gameState.pCards.length === 1 && this.gameState.pCards[0]._id ? this.gameState.pCards[0] : NO_CARD)
@@ -101,15 +101,17 @@ export default class Game extends React.Component {
                                     creators={this.gameState.playerIds.slice(1).map(playerId => this.gameState.players[playerId])}
                                     onClick={this.viewPCard} />
                     ) : this.gameState.gamePhase === JUDGE ? (
-                        <CardBin    type='game'
+                        <CardBin    type='pgame'
                                     pCards={this.gameState.pCards}
                                     onClick={this.viewPCard}
+                                    isJudge={this.isJudge()}
                                     judgeFocusIndex={this.gameState.pCardIndex} />
                     ) : (
-                        <CardBin    type='game'
+                        <CardBin    type='pgame'
                                     pCards={this.gameState.pCards}
                                     creators={this.gameState.pCards.map(pCard => pCard.creator_id ? this.gameState.players[pCard.creator_id] : null)}
                                     onClick={this.viewPCard}
+                                    isJudge={this.isJudge()}
                                     winnerIndex={this.gameState.pCardIndex} />
                     )}
 

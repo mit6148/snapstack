@@ -20,7 +20,7 @@ export default class CardBin extends React.Component {
                                     onClick={this.props.onClick ? (() => this.props.onClick(index, jCard)) : null}
                                     faceup={this.props.jCardsRevealed !== undefined ? index < this.props.jCardsRevealed : true} />
                         </div>
-                        {this.props.type === 'game' ? (
+                        {['jgame', 'pgame'].includes(this.props.type) ? (
                             <div className="card_info_area">
                                 {!this.props.creators || !this.props.creators[index] ? null : (
                                     <PlayerInfo name={this.props.creators[index].name}
@@ -41,7 +41,7 @@ export default class CardBin extends React.Component {
                                     image={pCard.image}
                                     text={pCard.text}
                                     faceup={pCard.faceup}
-                                    onClick={this.props.onClick ? (() => this.props.onClick(index, pCard)) : null}
+                                    onClick={this.props.onClick ? (this.props.isJudge !== false || pCard.faceup ? () => this.props.onClick(index, pCard) : null) : null}
                                     saveState={this.props.save ? pCard.saveState : null}
                                     save={this.props.save ? (() => this.props.save(this.props.saveIndex !== undefined ? this.props.saveIndex : index)) : null}
                                     creator={['jpmodal'].includes(this.props.type) && index < this.props.creators.length ? this.props.creators[index].name : null}
@@ -49,7 +49,7 @@ export default class CardBin extends React.Component {
                                     userId={this.props.userId}
                                     highlight={[this.props.judgeFocusIndex, this.props.winnerIndex].includes(index)} />
                         </div>
-                        {this.props.type === 'game' ? (
+                        {['jgame', 'pgame'].includes(this.props.type) ? (
                             <div className='card_info_area'>
                                 {!this.props.creators || !this.props.creators[index] ? null : (
                                     <PlayerInfo name={this.props.creators[index].name}

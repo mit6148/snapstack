@@ -1,13 +1,21 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,600");
-.game_card_bin {
+.jgame_card_bin, .pgame_card_bin {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;
   align-items: center;
 }
-.game_card_bin > .card_slot {
+.jgame_card_bin > .card_slot, .pgame_card_bin > .card_slot {
   height: 37.5vh;
   width: calc(37.5vh * 1.2 / 1.9);
+}
+
+.pgame_card_bin .flipcard[flipped=true], .pgame_card_bin .pcard_back {
+  z-index: 1;
+  transition: transform 0.3s;
+}
+.pgame_card_bin .flipcard[flipped=true]:hover, .pgame_card_bin .pcard_back:hover {
+  transform: scale(1.2);
 }
 
 .jmodal_card_bin {
@@ -19,6 +27,12 @@
 .jmodal_card_bin > .card_slot {
   height: calc(1.2 * 37.5vh * 1.6 / 1.9);
   width: calc(1.2 * 37.5vh * 1.2 / 1.9);
+}
+.jmodal_card_bin .flipcard {
+  transition: transform 0.3s;
+}
+.jmodal_card_bin .flipcard:hover {
+  transform: scale(1.2);
 }
 
 .pmodal_card_bin {
@@ -53,6 +67,12 @@
 .profile_card_bin > .card_slot {
   width: calc((100vw - 17px - 2 * 50px) / 4);
   height: calc((100vw - 17px - 2 * 50px) / 4 * 1.6 / 1.2);
+}
+.profile_card_bin .flipcard {
+  transition: transform 0.3s;
+}
+.profile_card_bin .flipcard:hover {
+  transform: scale(1.2);
 }
 
 .jpmodal_card_bin {
