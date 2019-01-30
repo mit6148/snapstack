@@ -149,13 +149,23 @@ $card-zoom-scale: 1.2;
 			height: 100%;
 		}
 
-		> * {
+		> :not(.highlight) {
 			position: absolute;
 			left: calc(100% * #{$card-margin-side} / #{$card-slot-width});
 			right: calc(100% * #{$card-margin-side} / #{$card-slot-width});
 			top: calc(100% * #{$card-margin-top} / #{$card-area-height});
 			bottom: calc(100% * #{$card-margin-bottom} / #{$card-area-height});
 		}
+
+        > .highlight {
+            position: absolute;
+            left: calc(100% * #{$card-margin-side} / #{$card-slot-width} / 2);
+            right: calc(100% * #{$card-margin-side} / #{$card-slot-width} / 2);
+            top: calc(100% * #{$card-margin-top} / #{$card-area-height} / 2);
+            bottom: calc(100% * #{$card-margin-bottom} / #{$card-area-height} / 2);
+            border: $green-light 2px solid;
+            border-radius: 7%/5%;
+        }
 	}
 
 	> .card_info_area {
@@ -344,11 +354,6 @@ $content_border_radius: 5px;
             overflow: ellipsis;
 		}
 	}
-
-    &[highlight='true'] {
-        border: $green-light 4px solid;
-        box-shadow: 1px 3px 0px $green-dark;
-    }
 }
 
 .pcard_editing {

@@ -116,12 +116,21 @@
 .card_slot > .card_area:only-child {
   height: 100%;
 }
-.card_slot > .card_area > * {
+.card_slot > .card_area > :not(.highlight) {
   position: absolute;
   left: calc(100% * 0.1 / 1.2);
   right: calc(100% * 0.1 / 1.2);
   top: calc(100% * 0.1 / 1.6);
   bottom: calc(100% * 0.1 / 1.6);
+}
+.card_slot > .card_area > .highlight {
+  position: absolute;
+  left: calc(100% * 0.1 / 1.2 / 2);
+  right: calc(100% * 0.1 / 1.2 / 2);
+  top: calc(100% * 0.1 / 1.6 / 2);
+  bottom: calc(100% * 0.1 / 1.6 / 2);
+  border: #12B780 2px solid;
+  border-radius: 7%/5%;
 }
 .card_slot > .card_info_area {
   height: calc(100% * 0.3 / 1.9);
@@ -276,10 +285,6 @@
   width: 90%;
   height: 80%;
   overflow: ellipsis;
-}
-.pcard[highlight=true], [highlight=true].pcard_editing {
-  border: #12B780 4px solid;
-  box-shadow: 1px 3px 0px #0E8C62;
 }
 
 .pcard_editing > .caption_content > textarea {
