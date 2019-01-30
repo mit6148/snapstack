@@ -267,7 +267,7 @@ html, body, #root, .fill_parent {
   flex: 1 0;
   justify-content: center;
 }
-.game_page_row2 .game_card_bin {
+.game_page_row2 .pgame_card_bin {
   position: relative;
   top: 50%;
   transform: translateY(-50%);

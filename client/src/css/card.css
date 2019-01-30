@@ -87,7 +87,7 @@
 }
 
 @media (max-aspect-ratio: 63/38) {
-  .game_card_bin > .card_slot {
+  .jgame_card_bin > .card_slot, .pgame_card_bin > .card_slot {
     width: calc(100vw / 7);
     height: calc((100vw / 7) * 1.9 / 1.2);
   }
@@ -98,7 +98,7 @@
   }
 }
 @media (max-aspect-ratio: 21/19) {
-  .game_card_bin > .card_slot {
+  .jgame_card_bin > .card_slot, .pgame_card_bin > .card_slot {
     height: 25vh;
     width: calc(25vh * 1.2 / 1.9);
   }
@@ -155,6 +155,26 @@
   }
 }
 @media (max-aspect-ratio: 22/19) {
+  .card_slot > .card_info_area > .player_info {
+    transform: scale(0.3, 0.3);
+  }
+}
+@media (min-aspect-ratio: 40/19) {
+  .card_slot > .card_info_area > .player_info {
+    transform: scale(0.45, 0.45);
+  }
+}
+@media (min-aspect-ratio: 43/19) {
+  .card_slot > .card_info_area > .player_info {
+    transform: scale(0.4, 0.4);
+  }
+}
+@media (min-aspect-ratio: 49/19) {
+  .card_slot > .card_info_area > .player_info {
+    transform: scale(0.35, 0.35);
+  }
+}
+@media (min-aspect-ratio: 56/19) {
   .card_slot > .card_info_area > .player_info {
     transform: scale(0.3, 0.3);
   }
