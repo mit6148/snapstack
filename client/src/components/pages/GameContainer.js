@@ -217,6 +217,7 @@ export default class GameContainer extends React.Component {
                 jCardIndex: 0,
                 pCards: pCards,
                 pCardIndex: pCardIndex,
+                pCardsFacedown: pCards.reduce((num, pCard) => num + !pCard.faceup, 0),
                 endTime: endTime,
                 cardsToWin: cardsToWin,
                 roundSkipped: roundSkipped
