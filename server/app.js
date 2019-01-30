@@ -34,7 +34,7 @@ async function cleanUpOldPCards() {
   console.log("finished deleting old stuff from this server\n\n");
 }
 
-cleanUpOldPCards().catch(err => console.error("\n\n\n\nstorage cleanup error!!:" + err.stack));
+//cleanUpOldPCards().catch(err => console.error("\n\n\n\nstorage cleanup error!!:" + err.stack));
 
 
 // set up sessions

@@ -4,3 +4,5 @@ node_modules
 server/storage-secret.json
 .env
 client/dist/bundle.js
+app.yaml
+.gcloudignore
