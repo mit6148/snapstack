@@ -279,10 +279,6 @@ class Game {
         for(let player of this.players) {
             player.resetRoundState();
         }
-        const jCards = await JCard.aggregate([
-            {$match: {_id: {$not: {$in: this.jCardsSeen}}}},
-            {$sample: {size: NUM_JCARDS}}, // WARNING: try to prevent concurrent modification error & memory excess (100MB)
-            ]).exec();
 
         await this.generateJCards();
         this.pCardRefPairs = [];
@@ -335,7 +331,7 @@ class Game {
             await this.generateJCards();
         } else {
             this.jCards = newJCards;
-            this.jCardsSeen = this.jCardsSeen.concat(newJCards.map(jCard => jCard._in));
+            this.jCardsSeen = this.jCardsSeen.concat(newJCards.map(jCard => jCard._id));
         }
     }
 
