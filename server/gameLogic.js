@@ -589,15 +589,16 @@ async function generatePCardRef(user, image, text) {
 }
 
 async function dereferencePCards(pCardIds) {
-    const pCardRefs = await PCardRef.find({_id: {$in: pCardIds}, ref_count: 0}).exec();
-    const successes = await Promise.all(pCardRefs.map(pCardRef => deleteImagePromise(pCardRef.image_ref)));
-    const deletedIds = [];
-    for(let i = 0; i < pCardIds.length; i++) {
-        if(successes[i]) {
-            deletedIds.push(pCardIds[i]);
-        }
-    }
-    await PCardRef.deleteMany({_id: {$in: deletedIds}}).exec(); // WARNING: could make more efficient
+    // TODO: figure out bug in ref counting
+    // const pCardRefs = await PCardRef.find({_id: {$in: pCardIds}, ref_count: 0}).exec();
+    // const successes = await Promise.all(pCardRefs.map(pCardRef => deleteImagePromise(pCardRef.image_ref)));
+    // const deletedIds = [];
+    // for(let i = 0; i < pCardIds.length; i++) {
+    //     if(successes[i]) {
+    //         deletedIds.push(pCardIds[i]);
+    //     }
+    // }
+    // await PCardRef.deleteMany({_id: {$in: deletedIds}}).exec(); // WARNING: could make more efficient
     await PCardRef.updateMany({_id: {$in: pCardIds}}, {$set: {server: ""}}).exec(); // empty server string = not in play
 }
 
