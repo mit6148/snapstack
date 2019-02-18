@@ -1,7 +1,8 @@
 # SnapStack
 [snapstack.appspot.com](https://snapstack.appspot.com)
 
-A judge-based card game where players turn friends into memes by customizing images from their social media profiles.
+A judge-based card game where players turn friends into memes by customizing images from their social media profiles. <br/>
+MIT web.lab Semifinalist 2019.
 
 Lead UI/UX Designer: [@melodyphu](https://github.com/melodyphu) (Melody Phu) <br/>
 Lead Front-End Engineer: [@bunnybomb123](https://github.com/bunnybomb123) (Chris Chang) <br/>
